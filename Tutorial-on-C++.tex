@@ -215,7 +215,7 @@
 
 \begin{document}
 \maketitle
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[interior hidden, frame hidden, breakable, borderline west={3pt}{0pt}{shadecolor}, enhanced, sharp corners, boxrule=0pt]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, interior hidden, borderline west={3pt}{0pt}{shadecolor}, breakable, enhanced, sharp corners, boxrule=0pt]}{\end{tcolorbox}}\fi
 
 \renewcommand*\contentsname{Table of contents}
 {
@@ -275,8 +275,22 @@ There are types of path:
   change the normal execution path through the program.One example of
   the control flow is \texttt{if\ statements}.
 \item
-  When
+  \textbf{Branching}: when control flow statement causes execution point
+  to change to a non-sequential statement.
 \end{itemize}
+
+Figure Figure~\ref{fig-flowControl} below show the categories of
+\textbf{flow control statement}:
+
+\begin{figure}
+
+{\centering \includegraphics{./figure/c7_flow_categories.PNG}
+
+}
+
+\caption{\label{fig-flowControl}Categories of flow control statements}
+
+\end{figure}
 
 \bookmarksetup{startatroot}
 

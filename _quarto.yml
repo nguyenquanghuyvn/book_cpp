@@ -14,10 +14,13 @@ book:
   page-navigation: true
 
 bibliography: references.bib
+toc: true
+toc-depth: 3
 
 format:
   html:
     theme: cosmo
+    code-fold: true
   pdf:
     keep-tex: true
     documentclass: scrreprt
@@ -32,7 +35,11 @@ format:
       text: |
         \printindex
 
+execute: 
+  eval: false
+
 crossref: 
   appendix-title: "App."
   appendix-delim: ":"
+  fig-prefix: "Figure."
 

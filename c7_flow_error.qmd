@@ -1,3 +1,7 @@
+---
+free: true
+---
+
 # Control flow introduction
 
 In C++, CPU run the program from the beginning of main() function to its end. 
@@ -8,4 +12,542 @@ path:
 * C++ provides different **control flow statements**: allow us to change the 
 normal execution path through the program.One example of the control flow is 
 `if statements`.
-* When 
+* **Branching**: when control flow statement causes execution point to change
+to a non-sequential statement.
+
+Figure @fig-flow-categories below show the categories of **flow control statement**:
+
+```{r}
+#| label: fig-flow-categories
+#| fig-cap: Categories of flow control statements
+#| eval: true
+#| echo: false
+
+knitr::include_graphics("figure/c7_flow_categories.PNG", dpi = 100)
+```
+
+## Conditional flow control statement
+
+### If statements and blocks
+
+C++ have two kinds of conditional statement: `if statement` and `switch statement`.
+
+We already worked with `if statement` in previous chapters, one thing to be noted
+here is that the author recommends to use the '{}' for the statements, even if
+we just have single statement after `if` and/or `else`.
+
+### Common `if statement` problem
+
+1. `if_statements` within other `if statements`:
+
+```{r}
+#| label: c-if-nested
+#| eval: false
+
+#include <iostream>
+
+int main()
+{
+    std::cout << "Enter an integer: ";
+
+    int x{};
+    std::cin >> x;
+
+    if (x >= 0)
+        if (x <= 20)
+            std::cout << x << " is between 0 and 20\n";
+
+    return 0;
+}
+
+```
+
+The ambiguity arises when there is an `else statement`:
+
+```{r}
+#| label: c-if-ambiguity
+#| eval: false
+
+#include <iostream>
+
+int main()
+{
+    std::cout << "Enter an integer: ";
+
+    int x{};
+    std::cin >> x;
+
+    if (x >= 0)
+        if (x <= 20)
+            std::cout << x << " is between 0 and 20\n";
+        
+    else std::cout << x << " is negative\n"; #// else for which if?
+
+    return 0;
+}
+```
+
+C++ understands `else` for the last unmatched `if statement`. We should use the **block** for being clear:
+
+```{r}
+#| label: c-if-ambiguity-solved
+#| eval: false
+
+#include <iostream>
+
+int main()
+{
+    std::cout << "Enter an integer: ";
+
+    int x{};
+    std::cin >> x;
+
+    if (x >= 0)
+    {
+        if (x <= 20)
+            std::cout << x << " is between 0 and 20\n";
+        else std::cout << x << " is greater than 20\n"; #// else for which if?
+    }
+    else
+        std::cout << x << " is negative\n";
+
+    return 0;
+}
+```
+
+Nested `if statement` can be flattened by either restructuring the logic or
+by using local operators:
+
+```{r}
+#| label: c-nested-flattened
+
+#include <iostream>
+
+int main()
+{
+    std::cout << "Enter an integer: ";
+    int x{};
+    std::cin >> x;
+
+    if (x < 0)
+        std::cout << x << " is negative\n";
+    else if (x <= 20)
+        std::cout << x << " is between 0 and 20\n";
+    else
+        std::cout << x << " is greater than 20";
+
+    return 0;
+}
+```
+
+
+### Switch statement basics
+
+The idea behind a **switch statement** is that: an expression (condition) is
+evaluated to produce a value. If the expression's value is equal to the value
+after any of `case labels`, the statements after the matching  `case label` are
+executed. If there does not have any match, `default label` are executed instead.
+
+:::{.callout-note}
+
+* One restriction: condition has to be in **integral type**.
+
+* The `case` follows by a constant expression.
+
+* If matching, first statements after `case label` start and then continues
+sequentially.
+
+:::
+
+Here is an example:
+
+```{r}
+#| label: switch
+
+#include <iostream>
+
+void printDigitName(int x)
+{
+	switch (x)
+	{
+	case 1:
+		std::cout << "One";
+		return;
+	case 2:
+		std::cout << "Two";
+		return;
+	case 3:
+		std::cout << "Three";
+		return;
+	default:
+		std::cout << "Unknown";
+		break;
+	}
+}
+
+int main()
+{
+	printDigitName(2);
+	std::cout << '\n';
+
+	return 0;
+}
+```
+
+Using the `return` in `switch`, the program ends when there is a match or at default. We can use `break` to tell the program stop at the point matching or default and jump to the next statement next to `switch`.
+
+```{r}
+#| label: switch-break
+
+#include <iostream>
+
+void printDigitName(int x)
+{
+	switch (x)
+	{
+	case 1:
+		std::cout << "One";
+		break;
+	case 2:
+		std::cout << "Two";
+		break;
+	case 3:
+		std::cout << "Three";
+		break;
+	default:
+		std::cout << "Unknown";
+		break;
+	}
+
+	std::cout << "\nOut of switch!\n";
+}
+
+int main()
+{
+	printDigitName(3);
+	std::cout << '\n';
+
+	return 0;
+}
+```
+
+What does the execution of `switch` when we miss `return` or `break` statement? It will continue to the next case and have unexpected result.
+
+If we intentionally omit the end statement after the case, we can use the attribute `[[fallthrough]]`:
+
+```{r}
+#| label: switch-fallthrough
+
+#include <iostream>
+
+void printDigitName(int x)
+{
+	switch (x)
+	{
+	case 1:
+		std::cout << "One";
+		break;
+	case 2:
+		std::cout << "Two";
+		[[fallthrough]];
+	case 3:
+		std::cout << "Three";
+		break;
+	default:
+		std::cout << "Unknown";
+		break;
+	}
+
+	std::cout << "\nOut of switch!\n";
+}
+
+int main()
+{
+	printDigitName(2);
+	std::cout << '\n';
+
+	return 0;
+}
+```
+
+**Sequential case labels**: we can use switch statements by placing multiple case labels in sequence:
+
+```{r}
+#| label: switch-sequential
+
+bool isVowel(char c)
+{
+    switch (c)
+    {
+        case 'a': // if c is 'a'
+        case 'e': // or if c is 'e'
+        case 'i': // or if c is 'i'
+        case 'o': // or if c is 'o'
+        case 'u': // or if c is 'u'
+        case 'A': // or if c is 'A'
+        case 'E': // or if c is 'E'
+        case 'I': // or if c is 'I'
+        case 'O': // or if c is 'O'
+        case 'U': // or if c is 'U'
+            return true;
+        default:
+            return false;
+    }
+}
+```
+
+If defining variables used in a case statement, do so in a block inside the case.
+
+## Goto statements
+
+This is a type of unconditional jump. In C++, we use **goto statement** and the spot to jump by using **statement label**.
+
+Here is an example:
+
+```{r}
+#| label: goto
+
+#include <iostream>
+#include <cmath>
+
+int main()
+{
+	double x{};
+	int tryTime{ 0 };
+	
+tryHere:
+	std::cout << "Enter a non-negative number: ";
+	std::cin >> x;
+	
+	if (x < 0.0 && tryTime < 5)
+	{
+		++tryTime;
+		std::cout << "You entered a negative number.\n";
+		goto tryHere;
+	}
+		
+	if (tryTime < 5)
+		std::cout << "The square root of " << x << " is " << std::sqrt(x) << '\n';
+	else
+		std::cout << "You cannot enter more than 5 times. Closing program.\n";
+
+	return 0;
+}
+```
+
+
+:::{.callout-tip}
+
+Avoid using `goto statement`
+
+:::
+
+
+## Introduction to loops and while statements
+
+Loops are control flow statements that allow a group of code execute repeatedly *until meeting defined condition*.
+
+Here is an program that print integer number to 10:
+
+```{r}
+#| label: while-one-to-ten
+
+#include <iostream>
+
+int main()
+{
+	int count{1};
+	while (count <= 100)
+	{
+		std::cout << count << ' ';
+		++count;
+	}
+
+	std::cout << "done!\n";
+
+	return 0;
+}
+```
+
+If the condition in `while` is always true, the program run infinitely or we have **infinite loop**.
+
+**Intentional** infinite loop: we can add the break, return, or goto statement to end the infinite loop.
+
+**Loop variable**:: to count how many times a loop has executed. This is also called **counter**
+
+**Iteration**: each time loop executes. We write a program to count from 1 to 50, each line have 10 numbers:
+
+```{r}
+#| label: while-one-to-fifty
+
+#include <iostream>
+
+int main()
+{
+    int count{1};
+    while(count <= 50)
+    {
+        if (count < 10)
+        {
+            std::cout << '0';
+        }
+        
+        std::cout << count << ' ';
+        
+        if (count % 10 == 0)
+        {
+            std::cout << '\n';
+        }
+        
+        ++count;
+    }
+    
+    return 0;
+}
+```
+
+### Nested loop
+
+A loop can be inside other loop. The inner loop can use outer loop's counter. Here is an example:
+
+```{r}
+#| label: while-nested
+
+#include <iostream>
+
+int main()
+{
+    int outer{ 1 };
+    while (outer <= 10)
+    {
+        int inner{ 1 };
+        while (inner <= outer)
+        {
+            std::cout << inner << ' ';
+            ++inner;
+        }
+        std::cout << '\n';
+        ++outer;
+    }
+
+    return 0;
+}
+```
+
+In the exercise, we write a small program to print the characters from 'a' to 'z' and its ASCII code. From this, we need to recall the function `static_cast<type>(variable)` to transform characters to its integer:
+
+```{r}
+#| label: while-char-ascii
+
+#include<iostream>
+
+int main()
+{
+	char myChar{ 'a' };
+	while (myChar <= 'z')
+	{
+		std::cout << myChar << ' ' << static_cast<int>(myChar) << '\n';
+		++myChar;
+	}
+
+	return 0;
+}
+```
+
+The next exercise ask us to print an inverse triangle:
+
+```{r}
+#|label: while-inverse-triangle
+
+#include <iostream>
+
+int main()
+{
+	int outer{ 5 };
+	while (outer >= 1)
+	{
+		int inner{ outer };
+		while ((inner >= 1))
+		{
+			std::cout << inner-- << ' ';
+			#//--inner;
+		}
+
+		std::cout << '\n';
+		--outer;
+	}
+
+	return 0;
+}
+```
+
+The most exercise is to create a right-handside triangle:
+
+```{r}
+#| label: while-right-handside-triangle
+
+#include <iostream>
+
+int main()
+{
+	int outer{ 1 };
+	while (outer <= 5)
+	{
+		int inner{ 5 };
+		
+		while (inner >= 1)
+		{
+			if (inner <= outer)
+				std::cout << inner << ' ';
+			else
+				std::cout << "  ";
+			--inner;
+		}
+		
+		std::cout << '\n';
+		outer++;
+	}
+	
+	return 0;
+}
+```
+
+## Do while statement
+
+This is just like while loop but the statement always executes at least once. After the statement has been executed, the do-while loop checks the condition.
+
+```{r}
+#| label: do-while
+
+#include <iostream>
+
+int main()
+{
+    // selection must be declared outside of the do-while so we can use it later
+    int selection{};
+
+    do
+    {
+        std::cout << "Please make a selection: \n";
+        std::cout << "1) Addition\n";
+        std::cout << "2) Subtraction\n";
+        std::cout << "3) Multiplication\n";
+        std::cout << "4) Division\n";
+        std::cin >> selection;
+    }
+    while (selection != 1 && selection != 2 &&
+        selection != 3 && selection != 4);
+
+    // do something with selection here
+    // such as a switch statement
+
+    std::cout << "You selected option #" << selection << '\n';
+
+    return 0;
+}
+```
+
+The author recommend favor `while` loops over `do-while` when given equal choice.
+
+## For statements
+
