@@ -1,0 +1,38 @@
+project:
+  type: book
+
+book:
+  title: "Tutorial on C++"
+  author: "Huy NGUYEN"
+  date: "2023-02-16"
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - c7_flow_error.qmd
+    - summary.qmd
+    - references.qmd
+  page-navigation: true
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    keep-tex: true
+    documentclass: scrreprt
+    fontfamily: libertinus
+    number-sections: true
+    number-depth: 2
+    include-in-header: 
+      text: |
+        \usepackage{makeidx}
+        \makeindex
+    include-after-body: 
+      text: |
+        \printindex
+
+crossref: 
+  appendix-title: "App."
+  appendix-delim: ":"
+

@@ -1,0 +1,11 @@
+# Control flow introduction
+
+In C++, CPU run the program from the beginning of main() function to its end. 
+This running follows a sequence called **execution path**. There are types of
+path:
+
+* **Straight-line program**: take tge same path every time they are run
+* C++ provides different **control flow statements**: allow us to change the 
+normal execution path through the program.One example of the control flow is 
+`if statements`.
+* When 
