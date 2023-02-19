@@ -1,0 +1,252 @@
+# Operators
+
+## Introduction
+
+An **operation** is an mathematical calculation involving zero or more input values (called **operand**) to produce a new value. The specific operation to be performed is denoted by a construct (symbol or pair of symbols: +, -, "\*", "/", ....) called an **operator**.
+
+**Operator precedence:**
+
+-   In the compound expression (including more than 1 operators), C++ use the rule of **operator precedence**. Each operator is assigned one level, the higher level operator will be evaluate first.
+
+-   When the operators have the same level, C++ uses **operator associativity** that indicates whether the it analyzes from left-to-right or right-to-left.
+
+-   We can use the pasteurization for explicitly say the order of the operator
+
+::: callout-tip
+### Best practice
+
+Use parentheses to make it clear how a non-trivial expression should evaluate (even if they are technically unnecessary).
+:::
+
+For example
+
+```{r}
+
+x = (y + z + w);   // instead of this
+x = y + z + w;     // it's okay to do this
+
+x = ((y || z) && w); // instead of this
+x = (y || z) && w;   // it's okay to do this
+
+x = (y *= z); // expressions with multiple assignments still benefit from parenthesis
+
+```
+
+::: {.callout-warning style="color: orange"}
+In many cases, the operands in a compound expression may evaluate **in any order**. This includes function calls and the arguments to those function calls.
+:::
+
+We can have the mistakes that the compiler chooses the order differs from what we want:
+
+```{r}
+
+#include <iostream>
+
+int getValue()
+{
+    std::cout << "Enter an integer: ";
+    int x{};
+    std::cin >> x;
+
+    return x;
+}
+int main()
+{
+    std::cout << getValue() + (getValue() * getValue());
+
+    return 0;
+}
+```
+
+::: callout-tip
+### Best practice {style="color: green"}
+
+Outside of the operator precedence and associativity rules, assume that the parts of an expression could evaluate in any order. Ensure that the expressions you write are not dependent on the order of evaluation of those parts.
+:::
+
+Example for best practice:
+
+```{r}
+
+#include <iostream>
+
+int getValue()
+{
+    std::cout << "Enter an integer: ";
+    int x{};
+    std::cin >> x;
+
+    return x;
+}
+int main()
+{
+    int a{ getValue() };
+    int b{ getValue() };
+    int c{ getValue() };
+
+    std::cout << a + (b * c);
+
+    return 0;
+}
+
+```
+
+## Arithmetic operators
+
+There are two unary arithmetic operators:
+
+![Unary Arithmetic](figure/uniArithmetic.PNG){fig-align="left"}
+
+The binary arithmetic operators:
+
+![Binary Arithmetic](figure/binaryAri.PNG){fig-align="left"}
+
+Arithmetic assignment operators
+
+![Arithmetic Assignment operators](figure/assignArithmetic.PNG)
+
+## Increment/decrements operators, and side effects
+
+![Increment/decrement operators](figure/increment_decrement_operators.PNG)
+
+Let have an example:
+
+```{r}
+
+#include <iostream>
+
+int main()
+{
+    int x{ 5 };
+    int y{ 5 };
+
+    std::cout << x << ' ' << y << '\n';
+    std::cout << ++x << ' ' << --y << '\n'; // prefix make the calculation 
+                                           //  and assign directly
+    std::cout << x << ' ' << y << '\n';
+
+    std::cout << x++ << ' ' << y-- << '\n'; // postfix creates a copy, calcul, 
+                                            // and return the copy
+    std::cout << x << ' ' << y << '\n';
+
+    return 0;
+}
+
+```
+
+::: callout-tip
+#### Best practice
+
+Strongly favor the prefix version.
+:::
+
+### Side effects can cause undefined behavior
+
+> A function or expression is said to have a **side effect** if has some obervable effect beyond producing a return value.
+
+Common examples are assignment value of objects, doing input, output,... Most of the time, side effects are useful:
+
+```{r}
+#| label: side-effect
+
+x = 5;
+++x;
+std::cout << x
+```
+
+However, side effects can also lead to unexpected results:
+
+```{r}
+
+int add(int x, int y)
+{
+    return x + y;
+}
+
+int main()
+{
+    int x{ 5 };
+    
+    int value{ add(x, ++x) };
+    std::cout << value << '\n'; // value depends on how the above line evaluates
+
+    return 0;
+}
+```
+
+::: callout-warning
+-   C++ does not define the order of evaluation for function arguments or the operands of operators.
+
+-   Don't use a variable that has a side effect applied to it more than once in a given statement. If you do, the result may be undefined.
+:::
+
+## Comma and conditional operators
+
+![Comma operator](figure/commaOperator.PNG)
+
+The comma operator allows us to evaluate multiple expressions wherever a single expression is allowed.
+
+In almost every case, a statement written using the comma operator would be better written as a separate statements.
+
+::: callout-tip
+### Best practice
+
+Avoid using the comma operator, except within `for` loops
+:::
+
+### Comma as a separator
+
+In C++, comma symbol is often used as a separator, and does not invoke the comma operator:
+
+```{r}
+
+void foo(int x, int y) // Comma used to separate parameters in function definition
+{
+    add(x, y); // Comma used to separate arguments in function call
+    constexpr int z{ 3 }, w{ 5 }; // Comma used to separate multiple variables being defined on the same line (don't do this)
+}
+```
+
+### Conditional operator
+
+![Conditional operator](figure/conditionalOperator.PNG)
+
+Always parenthesize the conditional part of the conditional operator, and consider parenthesizing the whole thing as well.
+
+#### The conditional operator evaluates as an expression
+
+Because the conditional operator operands are expressions rather than statements, the conditional operator can be used in some places where `if/else` cannot.
+
+::: callout-warning
+The type of expressions in conditional operator must match or be convertible.
+:::
+
+The conditional operator gives us a convenient way to compact some if/else statements. It's most useful when we need a conditional initializer (or assignment) for a variable, or to pass a conditional value to a function.
+
+## Relational operators and floating point comparisons
+
+![Relational Operators](figure/relationalOperator.PNG)
+
+Comparison of **calculated** floating point values can be problematic.
+
+```{r}
+#include <iostream>
+
+int main()
+{
+    double d1{ 100.0 - 99.99 }; // should equal 0.01 mathematically
+    double d2{ 10.0 - 9.99 }; // should equal 0.01 mathematically
+
+    if (d1 == d2)
+        std::cout << "d1 == d2" << '\n';
+    else if (d1 > d2)
+        std::cout << "d1 > d2" << '\n';
+    else if (d1 < d2)
+        std::cout << "d1 < d2" << '\n';
+
+    return 0;
+}
+#> d1 > d2  : error
+```
+
+Avoid using operator== and operator!= to compare floating point values if there is any chance those values have been calculated.

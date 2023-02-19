@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Tutorial on C++ - 7&nbsp; Scope, duration and linkage</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./c7_flow_error.html" rel="next">
+<link href="./c5_operators.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Scope, duration and linkage</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Tutorial on C++</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C1_Introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to C++</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C2_function_file.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Funtions and Files</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c3_data_type.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fundamental Data Types</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c4_debug.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Debugging C++ Programs</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c5_operators.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Operators</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c6_scope_duration_linkage.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Scope, duration and linkage</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c7_flow_error.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Control flow and Error Handling</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summary</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#compound-statements" id="toc-compound-statements" class="nav-link active" data-scroll-target="#compound-statements"><span class="toc-section-number">7.1</span>  Compound statements</a></li>
+  <li><a href="#user-defined-namespaces-and-the-scope-resolution-operator" id="toc-user-defined-namespaces-and-the-scope-resolution-operator" class="nav-link" data-scroll-target="#user-defined-namespaces-and-the-scope-resolution-operator"><span class="toc-section-number">7.2</span>  User-defined namespaces and the scope resolution operator</a>
+  <ul>
+  <li><a href="#define-our-own-namespaces" id="toc-define-our-own-namespaces" class="nav-link" data-scroll-target="#define-our-own-namespaces"><span class="toc-section-number">7.2.1</span>  Define our own namespaces</a>
+  <ul class="collapse">
+  <li><a href="#accessing-namespace-with-the-scope-resolution-operator" id="toc-accessing-namespace-with-the-scope-resolution-operator" class="nav-link" data-scroll-target="#accessing-namespace-with-the-scope-resolution-operator"><span class="toc-section-number">7.2.1.1</span>  Accessing namespace with the scope resolution operator (::)</a></li>
+  <li><a href="#namespace-aliases" id="toc-namespace-aliases" class="nav-link" data-scroll-target="#namespace-aliases"><span class="toc-section-number">7.2.1.2</span>  Namespace aliases</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#local-variables" id="toc-local-variables" class="nav-link" data-scroll-target="#local-variables"><span class="toc-section-number">7.3</span>  Local variables</a></li>
+  <li><a href="#introduction-to-global-variables" id="toc-introduction-to-global-variables" class="nav-link" data-scroll-target="#introduction-to-global-variables"><span class="toc-section-number">7.4</span>  Introduction to global variables</a></li>
+  <li><a href="#varaible-shadowing-name-hiding" id="toc-varaible-shadowing-name-hiding" class="nav-link" data-scroll-target="#varaible-shadowing-name-hiding"><span class="toc-section-number">7.5</span>  Varaible shadowing (name hiding)</a></li>
+  <li><a href="#internal-linkage" id="toc-internal-linkage" class="nav-link" data-scroll-target="#internal-linkage"><span class="toc-section-number">7.6</span>  Internal linkage</a>
+  <ul>
+  <li><a href="#the-one-definition-rule-and-internal-linkage" id="toc-the-one-definition-rule-and-internal-linkage" class="nav-link" data-scroll-target="#the-one-definition-rule-and-internal-linkage">The one-definition rule and internal linkage</a></li>
+  </ul></li>
+  <li><a href="#external-linkage-and-variable-forward-declarations" id="toc-external-linkage-and-variable-forward-declarations" class="nav-link" data-scroll-target="#external-linkage-and-variable-forward-declarations"><span class="toc-section-number">7.7</span>  External linkage and variable forward declarations</a></li>
+  <li><a href="#why-non-const-global-variables-are-evil" id="toc-why-non-const-global-variables-are-evil" class="nav-link" data-scroll-target="#why-non-const-global-variables-are-evil"><span class="toc-section-number">7.8</span>  Why (non-const) global variables are evil</a></li>
+  <li><a href="#sec-sharConstVar" id="toc-sec-sharConstVar" class="nav-link" data-scroll-target="#sec-sharConstVar"><span class="toc-section-number">7.9</span>  Sharing global constants across multiple files</a>
+  <ul>
+  <li><a href="#global-constants-as-inline-variables" id="toc-global-constants-as-inline-variables" class="nav-link" data-scroll-target="#global-constants-as-inline-variables"><span class="toc-section-number">7.9.1</span>  Global constants as inline variables</a></li>
+  </ul></li>
+  <li><a href="#static-local-variables" id="toc-static-local-variables" class="nav-link" data-scroll-target="#static-local-variables"><span class="toc-section-number">7.10</span>  Static local variables</a>
+  <ul>
+  <li><a href="#static-local-constants" id="toc-static-local-constants" class="nav-link" data-scroll-target="#static-local-constants"><span class="toc-section-number">7.10.1</span>  Static local constants</a></li>
+  </ul></li>
+  <li><a href="#using-declarations-and-using-directives" id="toc-using-declarations-and-using-directives" class="nav-link" data-scroll-target="#using-declarations-and-using-directives"><span class="toc-section-number">7.11</span>  Using declarations and using directives</a></li>
+  <li><a href="#inline-function" id="toc-inline-function" class="nav-link" data-scroll-target="#inline-function"><span class="toc-section-number">7.12</span>  Inline function</a></li>
+  <li><a href="#constexpr-and-consteval-functions" id="toc-constexpr-and-consteval-functions" class="nav-link" data-scroll-target="#constexpr-and-consteval-functions"><span class="toc-section-number">7.13</span>  Constexpr and consteval functions</a></li>
+  <li><a href="#chapter-summary" id="toc-chapter-summary" class="nav-link" data-scroll-target="#chapter-summary"><span class="toc-section-number">7.14</span>  Chapter summary</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Scope, duration and linkage</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="compound-statements" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="compound-statements"><span class="header-section-number">7.1</span> Compound statements</h2>
+<p><strong>Compound statement (block)</strong>:</p>
+<ul>
+<li>Zero, one, or more statement that compiler treats as simple statement</li>
+<li>Between “{}”, not need semicolon at the and of “}”</li>
+<li>Be anywhere when the single statement is valid</li>
+</ul>
+<p>Function cannot be nested inside other function, but <em>block</em> can. Then we have</p>
+<ul>
+<li>Outer block: enclosing one</li>
+<li>Inner block: nested one</li>
+</ul>
+<p>Block is very useful with <code>if statements</code>: replace single statement with a block. For example,</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Enter an integer: "</span>;</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    int value{};</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cin <span class="sc">&gt;</span><span class="er">&gt;</span> value;</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (value <span class="sc">&gt;=</span> <span class="dv">0</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> value <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" is a positive integer (or zero)</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Double this number is "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> value <span class="sc">*</span> <span class="dv">2</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> value <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" is a negative integer</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"The positive of "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> value <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" is "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="sc">-</span>value <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Then, its double is "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> (<span class="sc">-</span>value) <span class="sc">*</span> <span class="dv">2</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><strong>Nesting level</strong> or <strong>nesting depth</strong> is the maximum numbers of nested blocks inside at any point in the function. For example,</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>{ <span class="sc">/</span><span class="er">/</span> block <span class="dv">1</span>, nesting level <span class="dv">1</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Enter an integer: "</span>;</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    int value {};</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cin <span class="sc">&gt;</span><span class="er">&gt;</span> value;</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (value <span class="sc">&gt;</span>  <span class="dv">0</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    { <span class="sc">/</span><span class="er">/</span> block <span class="dv">2</span>, nesting level <span class="dv">2</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> ((value % <span class="dv">2</span>) <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>        { <span class="sc">/</span><span class="er">/</span> block <span class="dv">3</span>, nesting level <span class="dv">3</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>            std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> value <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" is positive and even</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        { <span class="sc">/</span><span class="er">/</span> block <span class="dv">4</span>, also nesting level <span class="dv">3</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>            std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> value <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" is positive and odd</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>There are 4 blocks, and nesting level is 3.</p>
+<div class="callout-tip callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Best practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Keep the nesting level of our functions to <strong>3 or less</strong>. If greater, think to re-factor the function into sub-ones.</p>
+</div>
+</div>
+</section>
+<section id="user-defined-namespaces-and-the-scope-resolution-operator" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="user-defined-namespaces-and-the-scope-resolution-operator"><span class="header-section-number">7.2</span> User-defined namespaces and the scope resolution operator</h2>
+<p>The better way to solve the name collisions is to put our functions in our <strong>own namespaces</strong> eg, standard library moved into <code>std</code> namespace.</p>
+<section id="define-our-own-namespaces" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="define-our-own-namespaces"><span class="header-section-number">7.2.1</span> Define our own namespaces</h3>
+<p>We define namespace by using statement <code>namespace</code></p>
+<p>in foo.cpp file:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>namespace foo</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    int <span class="fu">doSomething</span>(int x, int y)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        return x <span class="sc">-</span> y;</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>in goo.cpp file:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>namespace goo</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    int <span class="fu">doSomething</span>(int x, int y)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        return x <span class="sc">-</span> y;</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>in main.cpp:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">doSomething</span>(int x, int y);</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Hello World!</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="fu">doSomething</span>(<span class="dv">4</span>, <span class="dv">3</span>) <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Running the program, there is “LINK ERROR”: cannot find the doSomething in global namespace because it is in either foo or goo namespace.</p>
+<p>=&gt; Solve this problem by: <code>scope resolution</code> or <code>using statements</code></p>
+<section id="accessing-namespace-with-the-scope-resolution-operator" class="level4" data-number="7.2.1.1">
+<h4 data-number="7.2.1.1" class="anchored" data-anchor-id="accessing-namespace-with-the-scope-resolution-operator"><span class="header-section-number">7.2.1.1</span> Accessing namespace with the scope resolution operator (::)</h4>
+<p>We use the operator (::) to tell exactly whose namespace of the called function. For example in main.cpp</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">doSomething</span>(int x, int y);</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Hello World!</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> foo<span class="sc">::</span><span class="fu">doSomething</span>(<span class="dv">4</span>, <span class="dv">3</span>) <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>If an identifier inside a namespace is used, without scope resolution, the compiler finds inside the namespace, if it cannot find, it goes to each containing namespace in sequence to find, the global namespace being checked last.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>void <span class="fu">print</span>() <span class="sc">/</span><span class="er">/</span> this print lives <span class="cf">in</span> the global namespace</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" there</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>namespace foo</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    void <span class="fu">print</span>() <span class="sc">/</span><span class="er">/</span> this print lives <span class="cf">in</span> the foo namespace</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Hello"</span>;</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    void <span class="fu">printHelloThere</span>()</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">print</span>(); <span class="sc">/</span><span class="er">/</span> calls <span class="fu">print</span>() <span class="cf">in</span> foo namespace</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        <span class="sc">::</span><span class="fu">print</span>(); <span class="sc">/</span><span class="er">/</span> calls <span class="fu">print</span>() <span class="cf">in</span> global namespace</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    foo<span class="sc">::</span><span class="fu">printHelloThere</span>();</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>If we define namsepace in different files to main.cpp:</p>
+<ul>
+<li>Create header file for the namespace. For example, namespace foo:</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#ifndef FOO_H</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#define FOO_H</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>namespace foo</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    int <span class="fu">add</span>(int x, int y);</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    int <span class="fu">substract</span>(int x, int y);</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">#endif</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<ul>
+<li>Include the header into the namespace file foo.cpp:</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include "foo.h"</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>namespace foo</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    int <span class="fu">add</span>(int x, int y)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        return x <span class="sc">+</span> y;</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    int <span class="fu">substract</span>(int x, int y)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>        return x <span class="sc">-</span> y;</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<ul>
+<li>Add header to main.cpp:</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include "foo.h"</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Hello World!</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> foo<span class="sc">::</span><span class="fu">add</span>(<span class="dv">4</span>, <span class="dv">3</span>) <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> foo<span class="sc">::</span><span class="fu">substract</span>(<span class="dv">10</span>, <span class="dv">7</span>) <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Namespace can be nested in other namespace by declaration <code>namespace foo::goo</code>.</p>
+</section>
+<section id="namespace-aliases" class="level4" data-number="7.2.1.2">
+<h4 data-number="7.2.1.2" class="anchored" data-anchor-id="namespace-aliases"><span class="header-section-number">7.2.1.2</span> Namespace aliases</h4>
+<p>For nested namespace, C++ allow to name the namespace for shortenning:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>namespace foo<span class="sc">::</span>goo</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  int <span class="fu">add</span>(int x, int y)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  {</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    return x <span class="sc">+</span> y;</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  namespace active <span class="ot">=</span> foo<span class="sc">::</span>goo;  <span class="sc">/</span><span class="er">/</span> active refers to foo<span class="sc">::</span>go</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> active<span class="sc">::</span><span class="fu">add</span>(<span class="dv">1</span>, <span class="dv">2</span>) <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>; <span class="sc">/</span><span class="er">/</span> This is really foo<span class="sc">::</span>goo<span class="sc">::</span><span class="fu">add</span>()</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  return <span class="dv">0</span>;</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout-note callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<ul>
+<li><p>In general, we should avoid deeply nested namespaces.</p></li>
+<li><p>We can separate application-specific code from code that might be reusable later .For example, one namespace for math: <code>math::</code>, language and localization: <code>lang::</code></p></li>
+<li><p>When sharing the code, should put it in a namespace.</p></li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="local-variables" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="local-variables"><span class="header-section-number">7.3</span> Local variables</h2>
+<p>Local variables have a <strong>block scope</strong>: <em>in scope</em> from point of definition to the end of the block they are defined within.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#|label: block-scope</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    int i{ <span class="dv">5</span> };         <span class="sc">/</span><span class="er">/</span> i enters scope</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    double d{ <span class="fl">4.0</span> };   <span class="sc">/</span><span class="er">/</span> d enters scope</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>}   <span class="sc">/</span><span class="er">/</span> d and i go out of scope here.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>All variable names within a scope must be unique.</p>
+<p>A local variable has a lifetime, called storage <strong>duration</strong>. This determine when and how a variable will be created and detroyed.</p>
+<p>Local variable has <strong>automatic storage duration</strong>: created and detroyed within the block</p>
+<p>=&gt; local variable == <strong>automatic variable</strong>.</p>
+<p>We can define variables inside nested block:</p>
+<ul>
+<li><p>They enters the scope at time of definition and go out at the end of the nested block. So do their lifetimes.</p></li>
+<li><p>Thus, it cannot be found from outer block</p></li>
+<li><p>But, variable in outer block can be used inside nested block.</p></li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>{ <span class="sc">/</span><span class="er">/</span> outer block</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    int x { <span class="dv">5</span> }; <span class="sc">/</span><span class="er">/</span> x enters scope and is created here</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    { <span class="sc">/</span><span class="er">/</span> nested block</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>        int y { <span class="dv">7</span> }; <span class="sc">/</span><span class="er">/</span> y enters scope and is created here</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>        <span class="sc">/</span><span class="er">/</span> x and y are both <span class="cf">in</span> scope here</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> x <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" + "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> y <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" = "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> x <span class="sc">+</span> y <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    } <span class="sc">/</span><span class="er">/</span> y goes out of scope and is destroyed here</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>    <span class="sc">/</span><span class="er">/</span> y can not be used here because it is out of scope <span class="cf">in</span> this block</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>} <span class="sc">/</span><span class="er">/</span> x goes out of scope and is destroyed here</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Variable should be defined in the most limited scope: inside the nested block that uses it.</p>
+<div class="callout-tip callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Define variables in the most limited existing scope. Avoid creating new blocks whose only purpose is to limit the scope of variables.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="introduction-to-global-variables" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="introduction-to-global-variables"><span class="header-section-number">7.4</span> Introduction to global variables</h2>
+<p>We define a variable outside of a function, this one is <strong>global variable</strong>. By convention:</p>
+<ul>
+<li><p>It is under the <code>#include</code> and above any function.</p></li>
+<li><p>Consider using prefix ‘g’ or ‘g_’ for global variables.</p></li>
+</ul>
+<p>Its properties:</p>
+<ul>
+<li><p>Has global scope (global namespace scope)</p></li>
+<li><p>Uses anywhere in the file</p></li>
+<li><p>Created when the program starts and detroyed when it ends =&gt; <strong>static duration</strong> So, it is <strong>static variable</strong>.</p></li>
+<li><p>Zero-initialized by default<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p></li>
+<li><p>Global variable can be defined as constant, but we have to initialize it:</p></li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>const int g_x;  <span class="sc">/</span><span class="er">/</span>error<span class="sc">:</span> no default initialized</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>const int g_w{<span class="dv">1</span>}; <span class="sc">/</span><span class="er">/</span> ok</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout-warning callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>We should avoid to use non-constant global variables.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="varaible-shadowing-name-hiding" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="varaible-shadowing-name-hiding"><span class="header-section-number">7.5</span> Varaible shadowing (name hiding)</h2>
+<p>When outer block and inner block have a variable with same name, the nested variable “hides” the outer variable when they are both in scope. This is called <strong>name hiding</strong> or <strong>shadowing</strong>.</p>
+<p>The same applies to global variable, but global variable is a part of namespace so we can use <code>::</code>prefix to indicate using global variable.</p>
+<div class="callout-tip callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Avoid variable shadowing</p>
+</div>
+</div>
+</div>
+</section>
+<section id="internal-linkage" class="level2" data-number="7.6">
+<h2 data-number="7.6" class="anchored" data-anchor-id="internal-linkage"><span class="header-section-number">7.6</span> Internal linkage</h2>
+<p>An identifer’s linkage determines whether the other declarations of that name refer to the same object or not.</p>
+<ul>
+<li>Local variable does not have linkage.</li>
+<li>Global variable has internal and external linkage</li>
+</ul>
+<p>An <strong>internal linkage</strong> is seen and used within a single file.</p>
+<p>A global variable has external linkage as default, so we define internal linkage by use <code>static ...</code>.</p>
+<p>But const global variable or constexpr global variable are internal linkage by default.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>static int g_x{};   <span class="sc">/</span><span class="er">/</span> internal linkage</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>const int g_y{ <span class="dv">2</span> }; <span class="sc">/</span><span class="er">/</span> internal linkage by default</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>constexpr int g_z{ <span class="dv">3</span> }; <span class="sc">/</span><span class="er">/</span>internal linkage by default</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="the-one-definition-rule-and-internal-linkage" class="level3 unnumbered">
+<h3 class="unnumbered anchored" data-anchor-id="the-one-definition-rule-and-internal-linkage">The one-definition rule and internal linkage</h3>
+<p>One-definition rule says that an object or function cannot have more than one definition, either within a file or a program. But, internal object are defined in different files are considered to be independent entities.</p>
+<p>We can apply the same to function by using <code>static</code>:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This function is declared as static, and can now be used only within this file</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Attempts to access it from another file via a function forward declaration will</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># fail</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>[[maybe_unused]] static int <span class="fu">add</span>(int x, int y)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    return x <span class="sc">+</span> y;</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="external-linkage-and-variable-forward-declarations" class="level2" data-number="7.7">
+<h2 data-number="7.7" class="anchored" data-anchor-id="external-linkage-and-variable-forward-declarations"><span class="header-section-number">7.7</span> External linkage and variable forward declarations</h2>
+<p>Identifier with <strong>external linkage</strong> can be used and seen from its file and other code files (via a forward declaration).</p>
+<ul>
+<li>Function have <em>external linkage by default</em> so we can use a forward declaration</li>
+<li>Non-const global variable are external by default</li>
+<li>Const global variable defined through <code>extern</code> keyword</li>
+<li>To use global variable in other file, we also forward declaration like in function,</li>
+</ul>
+<p>The following code are example of using external linkage for global variable (const and non-const one). First, we have global variable in one source file a.cpp:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>int g_x{ <span class="dv">3</span> };                   <span class="co">#// internal by default</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>extern const int g_y { <span class="dv">4</span> };     <span class="co">#// okie</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>extern constexpr int g_z{<span class="dv">3</span>};    <span class="co">#// can, but useless</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>We use them in the main.cpp by their declarations:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>int g_x;                   <span class="co">#// internal by default</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>extern const int g_y;     <span class="co">#// okie</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>extern constexpr int g_z;    <span class="co">#// can, but useless</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> g_x <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>; <span class="sc">/</span><span class="er">/</span> prints <span class="dv">2</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout-warning callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Do not use <code>extern</code> keyword if we define an unitialized non-const global variable. C++ will think it is a declaration.</p>
+</div>
+</div>
+</div>
+<p>We should be clear about <strong>file scope</strong> and <strong>global scope</strong>: all global variable can be used within the file that defines them; if it can be seen by other files too, it has global scope (with proper declarations).</p>
+</section>
+<section id="why-non-const-global-variables-are-evil" class="level2" data-number="7.8">
+<h2 data-number="7.8" class="anchored" data-anchor-id="why-non-const-global-variables-are-evil"><span class="header-section-number">7.8</span> Why (non-const) global variables are evil</h2>
+<ul>
+<li><p>Their values can be changed by any function that is called =&gt; Make program state is <em>unpredictable</em>.</p></li>
+<li><p>A function that utilizes nothing but its parameters and has no side effects is <em>perfectly modular</em>.</p></li>
+<li><p>Modularity helps both in understanding what a program does, as well as reusability.</p></li>
+<li><p>Global variables make the program less modular.</p></li>
+</ul>
+<div class="callout-tip callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Use local variables instead of global variables whenever possible.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-sharConstVar" class="level2" data-number="7.9">
+<h2 data-number="7.9" class="anchored" data-anchor-id="sec-sharConstVar"><span class="header-section-number">7.9</span> Sharing global constants across multiple files</h2>
+<ol type="1">
+<li>Create a .cpp file for a constants namespace includes all the const global variables.</li>
+<li>Create a header file for that namespace</li>
+<li>Include the header file in other files using the constants</li>
+</ol>
+<p>This solution has downside. The compiler does not evaluate the const global variables at compile-time because it only recognizes the declarations. There may impact the performance maximization. To have a better solution, C++17 introduce a new keyword <code>inline</code> that allow an object can be defined in different files without violating the <em>one definition rule</em>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; In constant.cpp</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#include "constant.h"</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>namespace constants</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    extern const double pi{ <span class="fl">3.14159</span> };</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    extern const double avogadro{ <span class="fl">6.0221413e23</span> };</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    extern const double myGravity{ <span class="fl">9.2</span> };</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; In constant.h</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="co">#ifndef CONSTANT_H</span></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="co">#define CONSTANT_H</span></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>namespace constants</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>    extern const double pi;</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>    extern const double avogadro;</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>    extern const double myGravity;</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="co">#endif // !CONSTANT_H</span></span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; In main.Cpp</span></span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a><span class="co">#include "constant.h"</span></span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb19-32"><a href="#cb19-32" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb19-33"><a href="#cb19-33" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Enter a radius: "</span>;</span>
+<span id="cb19-34"><a href="#cb19-34" aria-hidden="true" tabindex="-1"></a>    int radius{};</span>
+<span id="cb19-35"><a href="#cb19-35" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cin <span class="sc">&gt;</span><span class="er">&gt;</span> radius;</span>
+<span id="cb19-36"><a href="#cb19-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-37"><a href="#cb19-37" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"The circumfence is "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="fl">2.0</span> <span class="sc">*</span> radius <span class="sc">*</span> constants<span class="sc">::</span>pi <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb19-38"><a href="#cb19-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-39"><a href="#cb19-39" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb19-40"><a href="#cb19-40" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="global-constants-as-inline-variables" class="level3" data-number="7.9.1">
+<h3 data-number="7.9.1" class="anchored" data-anchor-id="global-constants-as-inline-variables"><span class="header-section-number">7.9.1</span> Global constants as inline variables</h3>
+<p>In C++, the term <code>inline</code> has evolved to mean “multiple definitions are allowed”. An <strong>inline variable</strong> is one that is allowed to be defined in multiple files without violating one definition rule.</p>
+<p>Inline variables have <strong>two primary restrictions</strong> that must be obeyed:</p>
+<ol type="1">
+<li>All definitions of the inline variable must be identical.</li>
+<li>The inline variable definitions (not a forward declaration) must be present <strong>in any file</strong> that uses the variable.</li>
+</ol>
+<p>We see the differences with the sharing constant global variables mentioned at the session’s beginning:</p>
+<ul>
+<li>For inline const var, we do not need to have separate .cpp file for header because we define (not only declare) all in the header file.</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># In constants.h</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#ifndef CONSTANTS_H</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co">#define CONSTANTS_H</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>namespace constants</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  inline constexpr double pi{<span class="fl">3.14159</span>};</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  inline constexpr double avogadro{<span class="fl">6.0221413e23</span>};</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a><span class="co">#endif</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a><span class="co"># In main cpp</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a><span class="co">#include "constants.h"</span></span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Enter a radius: "</span>;</span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>    int radius{};</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cin <span class="sc">&gt;</span><span class="er">&gt;</span> radius;</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"The circumference is: "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="fl">2.0</span> <span class="sc">*</span> radius <span class="sc">*</span> constants<span class="sc">::</span>pi <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout-tip callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>If you need global constants and your compiler is C++17 capable, prefer defining inline constexpr global variables in a header file.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="static-local-variables" class="level2" data-number="7.10">
+<h2 data-number="7.10" class="anchored" data-anchor-id="static-local-variables"><span class="header-section-number">7.10</span> Static local variables</h2>
+<p><strong>Local variable</strong>, by its definition, has the scope within its block or <em>automatic duration</em>. When we want a local variable exists in whole the program, we use <strong>static local variables</strong> by adding <code>static</code> before local variable’s definition.</p>
+<p>Let have the examples:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>void <span class="fu">incrementAndPrint</span>()</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    int value{ <span class="dv">1</span> };</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="sc">++</span>value;</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> value <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">incrementAndPrint</span>();</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">incrementAndPrint</span>();</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">incrementAndPrint</span>();</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Now, we modify for static local variable:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#label: static-local-var</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>void <span class="fu">incrementAndPrint</span>()</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    static int value{ <span class="dv">1</span> };</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="sc">++</span>value;</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> value <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">incrementAndPrint</span>();</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">incrementAndPrint</span>();</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">incrementAndPrint</span>();</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>We use static local variable to keep track of variable like IDs for object.</p>
+<section id="static-local-constants" class="level3" data-number="7.10.1">
+<h3 data-number="7.10.1" class="anchored" data-anchor-id="static-local-constants"><span class="header-section-number">7.10.1</span> Static local constants</h3>
+<div class="callout-tip callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Avoid <code>static</code> local variables unless the variable never needs to be reset</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="using-declarations-and-using-directives" class="level2" data-number="7.11">
+<h2 data-number="7.11" class="anchored" data-anchor-id="using-declarations-and-using-directives"><span class="header-section-number">7.11</span> Using declarations and using directives</h2>
+</section>
+<section id="inline-function" class="level2" data-number="7.12">
+<h2 data-number="7.12" class="anchored" data-anchor-id="inline-function"><span class="header-section-number">7.12</span> Inline function</h2>
+<p>Codes of called function are expanded in caller. Modern compiler decides this.</p>
+</section>
+<section id="constexpr-and-consteval-functions" class="level2" data-number="7.13">
+<h2 data-number="7.13" class="anchored" data-anchor-id="constexpr-and-consteval-functions"><span class="header-section-number">7.13</span> Constexpr and consteval functions</h2>
+<p>A <strong>constexpr function</strong>: can be evaluated at compile-time. Simply by supplying <code>constexpr</code> keyword in front of the return type.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>constexpr int <span class="fu">greater</span>(int x, int y)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span> (x <span class="sc">&gt;</span> y ? x <span class="sc">:</span> y);</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    constexpr int x{ <span class="dv">5</span> };</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>    constexpr int y{ <span class="dv">6</span> };</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>    constexpr int g{ <span class="fu">greater</span>(x, y) };</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> g <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" is greater!</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>To be a constexpr function, a function has to:</p>
+<ul>
+<li>Have a constexpr return type</li>
+<li>Do not have any non-constexpr functions</li>
+</ul>
+<p>Constexpr function can be evaluated at <em>runtime</em>.</p>
+</section>
+<section id="chapter-summary" class="level2" data-number="7.14">
+<h2 data-number="7.14" class="anchored" data-anchor-id="chapter-summary"><span class="header-section-number">7.14</span> Chapter summary</h2>
+<p>A <strong>compound statement</strong> or <strong>block</strong> is a group of statements is treated as a single statement by compiler.</p>
+
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>local variables have uninitialized default<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./c5_operators.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Operators</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./c7_flow_error.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Control flow and Error Handling</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

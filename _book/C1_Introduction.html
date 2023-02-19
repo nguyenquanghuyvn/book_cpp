@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Tutorial on C++ - 2&nbsp; Introduction to C++</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./C2_function_file.html" rel="next">
+<link href="./intro.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to C++</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Tutorial on C++</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C1_Introduction.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to C++</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C2_function_file.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Funtions and Files</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c3_data_type.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fundamental Data Types</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c4_debug.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Debugging C++ Programs</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c5_operators.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Operators</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c6_scope_duration_linkage.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Scope, duration and linkage</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c7_flow_error.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Control flow and Error Handling</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summary</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-statements" id="toc-sec-statements" class="nav-link active" data-scroll-target="#sec-statements"><span class="toc-section-number">2.1</span>  Statements</a></li>
+  <li><a href="#function" id="toc-function" class="nav-link" data-scroll-target="#function"><span class="toc-section-number">2.2</span>  Function</a></li>
+  <li><a href="#syntax-and-syntax-error" id="toc-syntax-and-syntax-error" class="nav-link" data-scroll-target="#syntax-and-syntax-error"><span class="toc-section-number">2.3</span>  Syntax and syntax error</a></li>
+  <li><a href="#comments" id="toc-comments" class="nav-link" data-scroll-target="#comments"><span class="toc-section-number">2.4</span>  Comments</a></li>
+  <li><a href="#sec-intro_var" id="toc-sec-intro_var" class="nav-link" data-scroll-target="#sec-intro_var"><span class="toc-section-number">2.5</span>  Objects and Variables</a></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data"><span class="toc-section-number">2.6</span>  Data</a>
+  <ul>
+  <li><a href="#objects-and-variables" id="toc-objects-and-variables" class="nav-link" data-scroll-target="#objects-and-variables"><span class="toc-section-number">2.6.1</span>  Objects and variables</a></li>
+  <li><a href="#variable-instantiation" id="toc-variable-instantiation" class="nav-link" data-scroll-target="#variable-instantiation"><span class="toc-section-number">2.6.2</span>  Variable instantiation</a></li>
+  <li><a href="#data-types" id="toc-data-types" class="nav-link" data-scroll-target="#data-types"><span class="toc-section-number">2.6.3</span>  Data types</a></li>
+  <li><a href="#define-multiple-variables" id="toc-define-multiple-variables" class="nav-link" data-scroll-target="#define-multiple-variables"><span class="toc-section-number">2.6.4</span>  Define multiple variables</a></li>
+  </ul></li>
+  <li><a href="#variable-assignment-and-initialization" id="toc-variable-assignment-and-initialization" class="nav-link" data-scroll-target="#variable-assignment-and-initialization"><span class="toc-section-number">2.7</span>  Variable assignment and initialization</a>
+  <ul>
+  <li><a href="#variable-assignment" id="toc-variable-assignment" class="nav-link" data-scroll-target="#variable-assignment"><span class="toc-section-number">2.7.1</span>  Variable assignment</a></li>
+  <li><a href="#initialization" id="toc-initialization" class="nav-link" data-scroll-target="#initialization"><span class="toc-section-number">2.7.2</span>  Initialization</a>
+  <ul class="collapse">
+  <li><a href="#default-initialization" id="toc-default-initialization" class="nav-link" data-scroll-target="#default-initialization"><span class="toc-section-number">2.7.2.1</span>  Default initialization</a></li>
+  <li><a href="#copy-initialization" id="toc-copy-initialization" class="nav-link" data-scroll-target="#copy-initialization"><span class="toc-section-number">2.7.2.2</span>  Copy initialization</a></li>
+  <li><a href="#direct-initialization" id="toc-direct-initialization" class="nav-link" data-scroll-target="#direct-initialization"><span class="toc-section-number">2.7.2.3</span>  Direct initialization</a></li>
+  <li><a href="#list-initialization" id="toc-list-initialization" class="nav-link" data-scroll-target="#list-initialization"><span class="toc-section-number">2.7.2.4</span>  List initialization</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#introduction-to-iostream-cout-cin-and-endl" id="toc-introduction-to-iostream-cout-cin-and-endl" class="nav-link" data-scroll-target="#introduction-to-iostream-cout-cin-and-endl"><span class="toc-section-number">2.8</span>  Introduction to iostream: cout, cin, and endl</a>
+  <ul>
+  <li><a href="#the-input-and-output-io-library" id="toc-the-input-and-output-io-library" class="nav-link" data-scroll-target="#the-input-and-output-io-library"><span class="toc-section-number">2.8.1</span>  The input and output (io) library</a></li>
+  <li><a href="#stdcout-is-buffered" id="toc-stdcout-is-buffered" class="nav-link" data-scroll-target="#stdcout-is-buffered"><span class="toc-section-number">2.8.2</span>  std::cout is buffered</a></li>
+  <li><a href="#stdendl-vs-n" id="toc-stdendl-vs-n" class="nav-link" data-scroll-target="#stdendl-vs-n"><span class="toc-section-number">2.8.3</span>  std::endl vs <code>\n</code></a></li>
+  <li><a href="#stdcin" id="toc-stdcin" class="nav-link" data-scroll-target="#stdcin"><span class="toc-section-number">2.8.4</span>  std::cin</a></li>
+  </ul></li>
+  <li><a href="#uninitialized-variables-and-undefined-behavior" id="toc-uninitialized-variables-and-undefined-behavior" class="nav-link" data-scroll-target="#uninitialized-variables-and-undefined-behavior"><span class="toc-section-number">2.9</span>  Uninitialized variables and undefined behavior</a>
+  <ul>
+  <li><a href="#undefined-behavior" id="toc-undefined-behavior" class="nav-link" data-scroll-target="#undefined-behavior"><span class="toc-section-number">2.9.1</span>  Undefined behavior</a></li>
+  </ul></li>
+  <li><a href="#basic-formatting" id="toc-basic-formatting" class="nav-link" data-scroll-target="#basic-formatting"><span class="toc-section-number">2.10</span>  Basic formatting</a></li>
+  <li><a href="#literals-and-operators" id="toc-literals-and-operators" class="nav-link" data-scroll-target="#literals-and-operators"><span class="toc-section-number">2.11</span>  Literals and operators</a>
+  <ul>
+  <li><a href="#literals" id="toc-literals" class="nav-link" data-scroll-target="#literals"><span class="toc-section-number">2.11.1</span>  Literals</a></li>
+  <li><a href="#operators" id="toc-operators" class="nav-link" data-scroll-target="#operators"><span class="toc-section-number">2.11.2</span>  Operators</a></li>
+  <li><a href="#return-values-and-side-effects" id="toc-return-values-and-side-effects" class="nav-link" data-scroll-target="#return-values-and-side-effects"><span class="toc-section-number">2.11.3</span>  Return values and side effects</a></li>
+  </ul></li>
+  <li><a href="#expression" id="toc-expression" class="nav-link" data-scroll-target="#expression"><span class="toc-section-number">2.12</span>  Expression</a>
+  <ul>
+  <li><a href="#expression-statement" id="toc-expression-statement" class="nav-link" data-scroll-target="#expression-statement"><span class="toc-section-number">2.12.1</span>  Expression statement</a></li>
+  <li><a href="#useless-expression-statements" id="toc-useless-expression-statements" class="nav-link" data-scroll-target="#useless-expression-statements"><span class="toc-section-number">2.12.2</span>  Useless expression statements</a></li>
+  </ul></li>
+  <li><a href="#developing-first-program" id="toc-developing-first-program" class="nav-link" data-scroll-target="#developing-first-program"><span class="toc-section-number">2.13</span>  Developing first program</a>
+  <ul>
+  <li><a href="#multiply-by-2" id="toc-multiply-by-2" class="nav-link" data-scroll-target="#multiply-by-2"><span class="toc-section-number">2.13.1</span>  Multiply by 2</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to C++</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="sec-statements" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="sec-statements"><span class="header-section-number">2.1</span> Statements</h2>
+<p><strong>Statements</strong> are the instructions that cause the program to <em>perform some actions</em>. Most of the statements end with <em>semicolon</em>.</p>
+</section>
+<section id="function" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="function"><span class="header-section-number">2.2</span> Function</h2>
+<p>In C++, statements are typically grouped into units called <strong>functions</strong>. Function is a collection of statements that execute sequentially (in order, from top to bottom).</p>
+<p>Functions are written to do a <strong>specific tasks</strong>.</p>
+</section>
+<section id="syntax-and-syntax-error" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="syntax-and-syntax-error"><span class="header-section-number">2.3</span> Syntax and syntax error</h2>
+<p><strong>Syntax</strong> is the rules how the programs must be constructed in order to be considered valid. If we violate a rule, the compiler will complain and issue a <strong>syntax error</strong>.</p>
+<p>Program’s compilation will only complete once <strong>all</strong> syntax errors are resolved.</p>
+</section>
+<section id="comments" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="comments"><span class="header-section-number">2.4</span> Comments</h2>
+<p>A comment is a programmer-readable note inserted directly into a source code of the program (compiler ignores the comments).</p>
+<p><em>Single-line comments:</em> <code>//</code> symbol begins a C++ single-line comment.</p>
+<p><em>Multi-line comments</em>: <code>/*</code> and <code>*/</code> pair of symbols denotes a multi-line comment.</p>
+<p><strong>Proper use of comments</strong></p>
+<ul>
+<li><p>Describe <em>what</em> the library, program, or functions, do. These are typically placed on the top of the file or library.</p></li>
+<li><p>Second, inside the lib, program, or function, comments are used to describe <em>how</em> the code is going to accomplish the goal.</p></li>
+<li><p>Third, at the <em>statement</em> level, comments can describe <em>why</em> the code is doing something. The <strong>bad</strong> statement comment describe <em>what</em> the code is doing.</p></li>
+</ul>
+<p>Comments are good way to remind the reason a programmer made one decision instead of another.</p>
+<div class="callout-tip callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Best practice
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Comment your code liberally, and write your comments as if speakings to someone who has <em>no idea</em> what the code does. Don’t assume that you’ll remember why you mad specific choices.</p>
+</div>
+</div>
+</div>
+<p>You can also <em>comment out</em> the code block if:</p>
+<ol type="1">
+<li>You’re working on a new piece of code that won’t compile yet.</li>
+<li>You have written a new code that results the errors and you do not have time to fix it.</li>
+<li>To find the source of the errors.</li>
+<li>You want to replace one piece of code with another piece of code.</li>
+</ol>
+<p><strong>Summary</strong></p>
+<ul>
+<li>At the library, program, or function level, use comments to describe <em>what</em>.</li>
+<li>Inside them, use comments to describe <em>how</em>.</li>
+<li>At the statement level, use comments to describe <em>why</em>.</li>
+</ul>
+</section>
+<section id="sec-intro_var" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="sec-intro_var"><span class="header-section-number">2.5</span> Objects and Variables</h2>
+</section>
+<section id="data" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="data"><span class="header-section-number">2.6</span> Data</h2>
+<p>In <a href="#sec-statements"><span>Section&nbsp;2.1</span></a>, statements inside function perform actions that generate whatever result the program was designed to produce.</p>
+<p>But, <strong>how do programs actually produce results?</strong>: bref, by <em>manipulating</em> data.</p>
+<p>In computing, <strong>data</strong> is <em>any information</em> that can be moved, processed and stored by computer.</p>
+<div class="callout-note callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Key insight
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Programs are collections of instructions that manipulate data to produce a desired results.</p>
+</div>
+</div>
+</div>
+<p>A program can acquire data to work in many ways: file, database, network, user providing input on keyboard, or from the programmer putting data directly into a source code.</p>
+<p>Data on computer is typically stored in a efficient format (and thus is not human readable).</p>
+<section id="objects-and-variables" class="level3" data-number="2.6.1">
+<h3 data-number="2.6.1" class="anchored" data-anchor-id="objects-and-variables"><span class="header-section-number">2.6.1</span> Objects and variables</h3>
+<ul>
+<li>A single piece of data stored in memory somewhere is called <strong>value</strong>.</li>
+<li>An <strong>object</strong> is a region of storage that has a value and other associated properties. We use the object to store and retrieve values.</li>
+<li>Objects can be named or unnamed. A named object is called <strong>variable</strong>, the name of object is call <strong>identifier</strong>.</li>
+</ul>
+</section>
+<section id="variable-instantiation" class="level3" data-number="2.6.2">
+<h3 data-number="2.6.2" class="anchored" data-anchor-id="variable-instantiation"><span class="header-section-number">2.6.2</span> Variable instantiation</h3>
+<p>To create a <strong>variable</strong>, we have to <strong>define</strong> it. Here is an example of defining a variable named x:</p>
+<div class="cell" data-labels="cd-var_define">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>int x;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>When the program run, it will instantiate the <strong>variable</strong>: object will be created and assigned a memory address. Variable must be instantiated <em>before</em> they can be used to store value.</p>
+</section>
+<section id="data-types" class="level3" data-number="2.6.3">
+<h3 data-number="2.6.3" class="anchored" data-anchor-id="data-types"><span class="header-section-number">2.6.3</span> Data types</h3>
+<p>Variables are named region of storage that can store value. A <strong>data type</strong> tells the compiler what type of value the variable will be store.</p>
+</section>
+<section id="define-multiple-variables" class="level3" data-number="2.6.4">
+<h3 data-number="2.6.4" class="anchored" data-anchor-id="define-multiple-variables"><span class="header-section-number">2.6.4</span> Define multiple variables</h3>
+<p>We can define muliple variables in one statement by separating them by <code>,</code>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>int a, b;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>But, variables of different types must be defined in separate statements:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>int a, double b;  <span class="co"># false</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>int a; double b;  <span class="co"># correct</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Correct and recommended</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>int a;</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>double b;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout-tip callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Best practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Avoid defining multiple variables of the same type in a simple statement. Instead, define each variable in a separate statement on it own line</p>
+</div>
+</div>
+</section>
+</section>
+<section id="variable-assignment-and-initialization" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="variable-assignment-and-initialization"><span class="header-section-number">2.7</span> Variable assignment and initialization</h2>
+<p>In previous session <a href="#sec-intro_var"><span>Section&nbsp;2.5</span></a>, we know how to define a variable. In this session, we’ll explore how to actually <em>put values into variables</em> and use those values.</p>
+<p>Recall the variable’s definitions:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>int x;</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>int y;</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>int z;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="variable-assignment" class="level3" data-number="2.7.1">
+<h3 data-number="2.7.1" class="anchored" data-anchor-id="variable-assignment"><span class="header-section-number">2.7.1</span> Variable assignment</h3>
+<p>After variable has been defined, you can give it a value by using <code>=</code>, <strong>copy assignment</strong> or <strong>assignment</strong>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>() {</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  int width;</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  width <span class="ot">=</span> <span class="dv">5</span>;  <span class="sc">/</span><span class="er">/</span> copy assignment of value <span class="dv">5</span> into variable width</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  width <span class="ot">=</span> <span class="dv">7</span>;</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  return <span class="dv">0</span>;</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="initialization" class="level3" data-number="2.7.2">
+<h3 data-number="2.7.2" class="anchored" data-anchor-id="initialization"><span class="header-section-number">2.7.2</span> Initialization</h3>
+<p>With <em>initialization</em>, we can define and assign value to variable as the same time. There are many ways to initiate:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>int a;</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>int a <span class="ot">=</span> <span class="dv">5</span>;  <span class="co">#copy initialization</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">c</span>( <span class="dv">6</span> )  <span class="co"># direct initialization</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># List initialization methods</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>int d { <span class="dv">7</span> };</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>int e <span class="ot">=</span> { <span class="dv">8</span> };</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>int f {}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="default-initialization" class="level4" data-number="2.7.2.1">
+<h4 data-number="2.7.2.1" class="anchored" data-anchor-id="default-initialization"><span class="header-section-number">2.7.2.1</span> Default initialization</h4>
+<p>We do not provide any initialization value.</p>
+</section>
+<section id="copy-initialization" class="level4" data-number="2.7.2.2">
+<h4 data-number="2.7.2.2" class="anchored" data-anchor-id="copy-initialization"><span class="header-section-number">2.7.2.2</span> Copy initialization</h4>
+<p>With <code>=</code>: copy the value on the right-hand side of the equals into the variable being created. It does not use much in modern C++.</p>
+</section>
+<section id="direct-initialization" class="level4" data-number="2.7.2.3">
+<h4 data-number="2.7.2.3" class="anchored" data-anchor-id="direct-initialization"><span class="header-section-number">2.7.2.3</span> Direct initialization</h4>
+<p>Similar to copy initialization, not popular in modern C++.</p>
+</section>
+<section id="list-initialization" class="level4" data-number="2.7.2.4">
+<h4 data-number="2.7.2.4" class="anchored" data-anchor-id="list-initialization"><span class="header-section-number">2.7.2.4</span> List initialization</h4>
+<p>This is the modern way to initialize. Prior to this, some types of initialization require using the direct one, and other types required indirect one. The <em>list initialization</em> introduce to provide more consistent initialization syntax.</p>
+<p>List initialization disallows “narrowing conversion”: return errors if we initialize a variable using a value that the variable cannot safely hold:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>int width { <span class="fl">4.5</span>};   <span class="co"># return error</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout-tip callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Best practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Favor list initialization whenever possible.</li>
+<li>Initialize your variables upon creation.</li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="introduction-to-iostream-cout-cin-and-endl" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="introduction-to-iostream-cout-cin-and-endl"><span class="header-section-number">2.8</span> Introduction to iostream: cout, cin, and endl</h2>
+<section id="the-input-and-output-io-library" class="level3" data-number="2.8.1">
+<h3 data-number="2.8.1" class="anchored" data-anchor-id="the-input-and-output-io-library"><span class="header-section-number">2.8.1</span> The input and output (io) library</h3>
+<p><code>io</code> library is part of C++ standard library that works with inpur and output. We use the functionality in <code>iostream</code> to get <em>input</em> from keyboard and <em>output</em> data to console.</p>
+<p>We use the library by including it:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>One of the most useful is <code>std::cout</code>: send data to the console to be printed as text</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Hello World!</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  return <span class="dv">0</span>;</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>It can print a <em>number</em> too:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="dv">4</span>;</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  return <span class="dv">0</span>;</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>It can print value of a variable:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  int x{ <span class="dv">5</span> };</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> x;</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  return <span class="dv">0</span>;</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>To print more than one thing in the same line:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    int x{ <span class="dv">5</span> };</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"x is equal to "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> x;</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Use <code>std::endl</code> to make the cursor in the next line.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    int x{ <span class="dv">5</span> };</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Hi!"</span> <span class="sc">&lt;</span><span class="er">&lt;</span> std<span class="sc">::</span>endl;</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"My name is Huy."</span> <span class="sc">&lt;</span><span class="er">&lt;</span> std<span class="sc">::</span>endl;</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout-tip callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Best practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Output a newline whenever a line of output is complete.</p>
+</div>
+</div>
+</section>
+<section id="stdcout-is-buffered" class="level3" data-number="2.8.2">
+<h3 data-number="2.8.2" class="anchored" data-anchor-id="stdcout-is-buffered"><span class="header-section-number">2.8.2</span> std::cout is buffered</h3>
+<p>Statements request that output be sent to the console. However, output is typically not sent to the console immediately. Instead, the requested output <em>gets in line</em>, and is stored in a region of memory set aside to collect later, called <strong>buffer</strong>. Periodically, buffer is <strong>flushed</strong>, all data is transferred to its destination.</p>
+</section>
+<section id="stdendl-vs-n" class="level3" data-number="2.8.3">
+<h3 data-number="2.8.3" class="anchored" data-anchor-id="stdendl-vs-n"><span class="header-section-number">2.8.3</span> std::endl vs <code>\n</code></h3>
+<p><code>std::endl</code> move the cursor to the next line and <em>flushes</em> the buffer. Sometimes, we do not need to flush the buffer and prefer the system do it periodically.</p>
+<p>Thus, use of <code>\n</code> is preferred instead:</p>
+<div class="callout-tip callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Best practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Prefer <code>\n</code> over std::endl when ouputing text to the console.</p>
+</div>
+</div>
+</section>
+<section id="stdcin" class="level3" data-number="2.8.4">
+<h3 data-number="2.8.4" class="anchored" data-anchor-id="stdcin"><span class="header-section-number">2.8.4</span> std::cin</h3>
+<p><code>std::cin</code> reads the data from keyboard using extraction operator <code>&gt;&gt;</code>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Enter a number: "</span>;</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    int x{ };</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cin <span class="sc">&gt;</span><span class="er">&gt;</span> x;</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"You endtered: "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> x <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>We can input many variables in the same line:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Enter two numbers separated by a space: "</span>;</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    int x{ };</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    int y{ };</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cin <span class="sc">&gt;</span><span class="er">&gt;</span> x <span class="sc">&gt;</span><span class="er">&gt;</span> y;</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"You entered "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> x <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" and "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> y <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">".</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Thank you!</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout-note callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Best practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Initialize variable first, then use <code>std::in</code>.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="uninitialized-variables-and-undefined-behavior" class="level2" data-number="2.9">
+<h2 data-number="2.9" class="anchored" data-anchor-id="uninitialized-variables-and-undefined-behavior"><span class="header-section-number">2.9</span> Uninitialized variables and undefined behavior</h2>
+<p>C++ does not initialize the variable automatically. Thus, when a variable is given a memory address to use to store data, the default value of that variable is whatever value happens to already be in that memory address.</p>
+<p>Let be clear that:</p>
+<ul>
+<li>Initialization = the object is given a known value at the point of definition.</li>
+<li>Assignment = The object is given a known value beyond the point of definition</li>
+<li>Uninitialized = The object has not been given a known value yet.</li>
+</ul>
+<p>In some case, we do not know what the value printed from the following code because uninitialized <code>x</code> is given any value.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    int x;</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> x <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="callout-warning callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Using uninitialized is one of the most common mistakes</p>
+</div>
+</div>
+</div>
+<section id="undefined-behavior" class="level3" data-number="2.9.1">
+<h3 data-number="2.9.1" class="anchored" data-anchor-id="undefined-behavior"><span class="header-section-number">2.9.1</span> Undefined behavior</h3>
+<p>Uninitialized variables are one example of undefined behavoir: we cannot know the results, or they can change, be incorrect, sometime correct, or crash.</p>
+</section>
+</section>
+<section id="basic-formatting" class="level2" data-number="2.10">
+<h2 data-number="2.10" class="anchored" data-anchor-id="basic-formatting"><span class="header-section-number">2.10</span> Basic formatting</h2>
+<p>The recommendations for basic formatting:</p>
+<ol type="1">
+<li>It fine to use either tab or spaces for indentation.</li>
+<li>Function braces can be:</li>
+</ol>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>() {</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>or</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>() </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The author recommended the later.</p>
+<ol start="3" type="1">
+<li>Each statement should start one tab from the opening space.</li>
+<li>Line should not be too long. Typically, 80 characters is the maximum length in a line.</li>
+<li>If line is too long, split with an operator (eg. +, -). The operator should be placed at the beginning of the next line.</li>
+<li>Use whitespaces to make the code easier to read.</li>
+</ol>
+</section>
+<section id="literals-and-operators" class="level2" data-number="2.11">
+<h2 data-number="2.11" class="anchored" data-anchor-id="literals-and-operators"><span class="header-section-number">2.11</span> Literals and operators</h2>
+<section id="literals" class="level3" data-number="2.11.1">
+<h3 data-number="2.11.1" class="anchored" data-anchor-id="literals"><span class="header-section-number">2.11.1</span> Literals</h3>
+<p><strong>Literal</strong> is a fixed value that has been inserted directly into the source code.</p>
+</section>
+<section id="operators" class="level3" data-number="2.11.2">
+<h3 data-number="2.11.2" class="anchored" data-anchor-id="operators"><span class="header-section-number">2.11.2</span> Operators</h3>
+<p><strong>Operator</strong> is the specific operation to be performed.</p>
+</section>
+<section id="return-values-and-side-effects" class="level3" data-number="2.11.3">
+<h3 data-number="2.11.3" class="anchored" data-anchor-id="return-values-and-side-effects"><span class="header-section-number">2.11.3</span> Return values and side effects</h3>
+<p>An operator that has some observable effect beyond producing return value is said to have a side effect. For example, <code>x = 5</code> is evaluated, side effect is to assign 5 to <code>x</code>; the changed value of <code>x</code> is observable, or <code>std::cout &lt;&lt;</code> too.</p>
+</section>
+</section>
+<section id="expression" class="level2" data-number="2.12">
+<h2 data-number="2.12" class="anchored" data-anchor-id="expression"><span class="header-section-number">2.12</span> Expression</h2>
+<p><strong>Expression</strong> is a combination of literals, variables, operators, and function calls that calculates a single value.</p>
+<p>The process of executing an expression is called <strong>evaluation</strong>. The single value is called <strong>result</strong>.</p>
+<p>Expressions do not end in a semicolon, and cannot be compiled by themselves (they must exist within a statement), example that</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>int x{ <span class="dv">2</span> <span class="sc">+</span> <span class="dv">3</span> } ;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p><code>2 + 3</code> is an expression and do not need a semicolon.</p>
+<p>Expressions also involve operators with side effects:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="dv">5</span>;</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="dv">2</span> <span class="sc">+</span> <span class="dv">3</span>;</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> x;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="expression-statement" class="level3" data-number="2.12.1">
+<h3 data-number="2.12.1" class="anchored" data-anchor-id="expression-statement"><span class="header-section-number">2.12.1</span> Expression statement</h3>
+<p>Expression cannot compile by itself. We can add <code>=</code> to make it compile. We call this <strong>expression statement</strong>, an expression following by a semicolon.</p>
+</section>
+<section id="useless-expression-statements" class="level3" data-number="2.12.2">
+<h3 data-number="2.12.2" class="anchored" data-anchor-id="useless-expression-statements"><span class="header-section-number">2.12.2</span> Useless expression statements</h3>
+<p>We can make an expression without assigning or having any side effect, such that</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="sc">*</span> <span class="dv">3</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="developing-first-program" class="level2" data-number="2.13">
+<h2 data-number="2.13" class="anchored" data-anchor-id="developing-first-program"><span class="header-section-number">2.13</span> Developing first program</h2>
+<section id="multiply-by-2" class="level3" data-number="2.13.1">
+<h3 data-number="2.13.1" class="anchored" data-anchor-id="multiply-by-2"><span class="header-section-number">2.13.1</span> Multiply by 2</h3>
+<div class="callout-tip callout callout-style-simple callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Best practice
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>New programmers often try to write an entire program all at once, and then get overwhelmed when it produces a lot of errors. A better strategy is to add one piece at a time, make sure it compiles, and test it. Then when you’re sure it’s working, move on to the next piece.</p>
+</div>
+</div>
+<p>There are many solutions, from bad to good. Let take time to find the good one (not override input value, avoid complexity).</p>
+<ul>
+<li>We should firstly try to make the program work</li>
+<li>Then, spend time to cleanup the code.</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Enter an integer: "</span>;</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    int num{ };</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cin <span class="sc">&gt;</span><span class="er">&gt;</span> num;</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Double "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> num <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" is: "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> num <span class="sc">*</span> <span class="dv">2</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">".</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Triple "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> num <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" is: "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> num <span class="sc">*</span> <span class="dv">3</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">".</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./intro.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./C2_function_file.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Funtions and Files</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

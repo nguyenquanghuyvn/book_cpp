@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Tutorial on C++ - 9&nbsp; Summary</title>
+<title>Tutorial on C++ - 5&nbsp; Debugging C++ Programs</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -93,8 +93,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
-<link href="./c7_flow_error.html" rel="prev">
+<link href="./c5_operators.html" rel="next">
+<link href="./c3_data_type.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -133,7 +133,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summary</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Debugging C++ Programs</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -183,7 +183,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./c4_debug.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Debugging C++ Programs</span></a>
+  <a href="./c4_debug.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Debugging C++ Programs</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -203,7 +203,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./summary.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summary</span></a>
+  <a href="./summary.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summary</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -216,14 +216,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </nav>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#syntax-and-semantic-errors" id="toc-syntax-and-semantic-errors" class="nav-link active" data-scroll-target="#syntax-and-semantic-errors"><span class="toc-section-number">5.1</span>  Syntax and semantic errors</a></li>
+  <li><a href="#the-debugging-process" id="toc-the-debugging-process" class="nav-link" data-scroll-target="#the-debugging-process"><span class="toc-section-number">5.2</span>  The debugging process</a>
+  <ul>
+  <li><a href="#debugger" id="toc-debugger" class="nav-link" data-scroll-target="#debugger"><span class="toc-section-number">5.2.1</span>  Debugger</a></li>
+  <li><a href="#the-call-stack" id="toc-the-call-stack" class="nav-link" data-scroll-target="#the-call-stack"><span class="toc-section-number">5.2.2</span>  The call stack</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summary</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Debugging C++ Programs</span></h1>
 </div>
 
 
@@ -238,16 +249,117 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 </header>
 
-<p>In summary, this book has no content whatsoever.</p>
-<p>Markdown allows you to write using an easy-to-read, easy-to-write plain text format.</p>
+<section id="syntax-and-semantic-errors" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="syntax-and-semantic-errors"><span class="header-section-number">5.1</span> Syntax and semantic errors</h2>
+<blockquote class="blockquote">
+<p>Software errors are prevalent. It’s easy to make them, and it’s hard to find them</p>
+</blockquote>
+<p>Two catergories of errors:</p>
+<ul>
+<li><strong>Syntax error</strong>: write a statement that is not valid according to the grammar of C++ (missing semicolons, using undeclared variables, missing braces, etc…). A compiler will catch these errors, so we identify and fix them. For example:</li>
+</ul>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span> <span class="st">"Hi there"</span>; <span class="sc">&lt;</span><span class="er">&lt;</span> x <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>; <span class="sc">/</span><span class="er">/</span> invalid <span class="fu">operator</span> (<span class="sc">&lt;</span>), extraneous semicolon, undeclared <span class="fu">variable</span> (x)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span> <span class="sc">/</span><span class="er">/</span> missing semicolon at end of statement</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<ul>
+<li><p><strong>Semantic error</strong> occurs when a statement is syntactically valid, does not do what the we want.</p>
+<ul>
+<li>Sometimes it cause the program to crash</li>
+</ul></li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    int a { <span class="dv">10</span> };</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    int b { <span class="dv">0</span> };</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> a <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" / "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> b <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" = "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> a <span class="sc">/</span> b <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>; <span class="sc">/</span><span class="er">/</span> division by <span class="dv">0</span> is undefined</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<ul>
+<li>Or wrong value</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    int x;</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> x <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>; <span class="sc">/</span><span class="er">/</span> Use of uninitialized variable leads to undefined result</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<ul>
+<li>Or</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>; <span class="sc">/</span><span class="er">/</span> <span class="cf">function</span> returns here</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Hello, world!</span><span class="sc">\n</span><span class="st">"</span>; <span class="sc">/</span><span class="er">/</span> so this never executes</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="the-debugging-process" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="the-debugging-process"><span class="header-section-number">5.2</span> The debugging process</h2>
+<p>Generally, there are 5 steps:</p>
+<ol type="1">
+<li>Find the root cause of the problem</li>
+<li>Ensure you understand why the issue is occuring</li>
+<li>Determine how you’ll fix the issue</li>
+<li>Repair the issue causing the problem</li>
+<li>Retest to ensure the problem has been fixed and no new problems have emerged</li>
+</ol>
+<section id="debugger" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="debugger"><span class="header-section-number">5.2.1</span> Debugger</h3>
+<p>A <strong>debugger</strong> is a computer program that allows the programmer to control how another program executes and examine the program state while that program is <strong>running</strong>. For example, a programmer can use debugger to execute a program line by line, examining the value of variables along the way.</p>
+<p>The advantage:</p>
+<ul>
+<li>The ability to precisely control execution of program</li>
+<li>To view the program state</li>
+</ul>
+<div class="callout-tip callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Do not neglect learning to use a debugger. As your programs get more complicated, the amount of time you spend learning to use the integrated debugger effectively will pale in comparison to amount of time you save finding and fixing issues.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="the-call-stack" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="the-call-stack"><span class="header-section-number">5.2.2</span> The call stack</h3>
+<p>The <strong>call stack</strong> is a list of all active functions that have been called to get to the current point of execution. It includes an entry for each function called, as well as which line code will be returned to when the function returns. Whenever a new functions is called, that function is added to the top of the call stack.</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -385,13 +497,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./c7_flow_error.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Control flow and Error Handling</span></span>
+      <a href="./c3_data_type.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fundamental Data Types</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link">
-        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./c5_operators.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Operators</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

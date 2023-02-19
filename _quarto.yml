@@ -4,29 +4,38 @@ project:
 book:
   title: "Tutorial on C++"
   author: "Huy NGUYEN"
-  date: "2023-02-16"
+  date: last-modified
   chapters:
     - index.qmd
     - intro.qmd
+    - C1_Introduction.qmd
+    - C2_function_file.qmd
+    - c3_data_type.qmd
+    - c4_debug.qmd
+    - c5_operators.qmd
+    - c6_scope_duration_linkage.qmd
     - c7_flow_error.qmd
     - summary.qmd
     - references.qmd
-  page-navigation: true
-
+  
+page-navigation: true
 bibliography: references.bib
 toc: true
-toc-depth: 3
+toc-depth: 4
+callout-appearance: simple
 
 format:
   html:
     theme: cosmo
     code-fold: true
+    
   pdf:
     keep-tex: true
     documentclass: scrreprt
     fontfamily: libertinus
     number-sections: true
     number-depth: 2
+    code-block-bg: true
     include-in-header: 
       text: |
         \usepackage{makeidx}
@@ -37,6 +46,7 @@ format:
 
 execute: 
   eval: false
+  freeze: auto
 
 crossref: 
   appendix-title: "App."

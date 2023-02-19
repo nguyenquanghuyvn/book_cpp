@@ -1,0 +1,1111 @@
+# Funtions and Files
+
+## Introduction to functions
+
+A **function** is a reusable sequence of statements designed to do a *particular job*. Function allows us to split the program into small, modular chunks which are easier to organize, test, and use. Besides the standard library of C++, we can write our own function, called **user-defined function**.
+
+When a program is executing the statements sequentially inside one function and encounters a function call. A **function call** is an expression that tells CPU to **interrupt** the current function and *execute another function*. The CPU put a *bookmark* at the current point of execution, and then **calls** the function.
+
+The function initiating the function call is the **caller**, the other is **called function**.
+
+### An example of a user-defined function
+
+The general syntax of function:
+
+```{r}
+
+#| label: func_syntax
+returnType functionName() # This is function header
+{
+  # This is body of the function
+}
+```
+
+The first line is **function header** telling the compile that the function exists.
+
+* In this session, *returnType* of `int` for `main()` and *void* otherwise.
+* *functionName* is name of user-defined function.
+
+Let see the example function:
+
+```{r}
+
+#| label: func_doPrint
+
+#include <iostream>		// for std::cout
+
+// Definition of user-defined function doPrint()
+void doPrint()
+{
+	std::cout << "In doPrint() \n";
+}
+
+int main()
+{
+	std::cout << "Starting main() \n";
+	doPrint();
+	std::cout << "Ending main() \n";
+
+	return 0;
+}
+```
+
+::: {.callout-warning}
+
+Do not forget to include parentheses `()` after the function's name when making a function call.
+
+:::
+
+* Function can be called more than **one** time in a *caller*. 
+* Any functions can call any other functions:
+
+```{r}
+
+#| label: func_call_func
+
+#include <iostream>		// for std::cout
+
+// Definition of user-defined function doPrint()
+void doB()
+{
+	std::cout << "In doB() \n";
+}
+
+void doA()
+{
+	std::cout << "Starting doA()\n";
+	doB();
+	std::cout << "Ending doA()\n";
+}
+
+int main()
+{
+	std::cout << "Starting main() \n";
+	doA();
+	std::cout << "Ending main() \n";
+
+	return 0;
+}
+
+```
+
+* **Nested functions** are not supported: we cannot decide a function inside another function.
+
+```{r}
+#| label: illegal_func
+
+
+#include <iostream>
+
+int main() 
+{
+  void foo()  # Illegal: this function is nested inside function main()
+  {
+    std::cout << "foo!\n";
+  }
+  
+  foo();
+  return 0;
+}
+```
+
+The right way to write is
+
+```{r}
+#| label: correct_illegal
+
+
+void foo() 
+{
+    std::cout << "foo!\n";
+}
+
+int main()
+{
+    foo();
+    return 0;
+}
+
+```
+
+### Function return values (value-returning functions)
+
+If we want to write a program that get number from user, then double it and return value to the console, we can start with:
+
+```{r}
+#include <iostream>		// for std::cout
+
+int main()
+{
+	// get a value from user
+	std::cout << "Enter an integer: ";
+	int num{};
+	std::cin >> num;
+
+	// print the value doubled
+	std::cout << num << " doubled is: " << num * 2 << '\n';
+
+	return 0;
+}
+
+```
+
+We can also write a function that get value from user and let `main()` calls that function to double it:
+
+```{r}
+#include <iostream>		// for std::cout
+
+#| label: cod_problem
+void getValueFromUser()
+{
+	std::cout << "Enter an integer: ";
+	int input{};
+	std::cin >> input;
+}
+
+int main()
+{
+	getValueFromUser();
+
+	int num{};
+
+	std::cout << num << " double is: " << num * 2 << '\n';
+
+	return 0;
+}
+```
+
+While this program is a good solution, it always returns 0 because the value from `getValueFromUser()` is not stored. We need that function return a value.
+
+The function return a value require two conditions:
+
+* Define the **return type** before the name of the function.
+* A **return statement** in the body of the function. The function exits immediately, and a copy of return value backs to the *caller*. This is *return by value* process.
+
+Let look at an example:
+
+```{r}
+
+#include <iostream>
+
+int returnValueFive()
+{
+  return 5;
+}
+
+int main()
+{
+  std::cout << returnValueFive() << '\n';
+  std::cout << returnValueFive() + 2 << '\n';
+  
+  returnValueFive();
+  
+  return 0;
+}
+```
+
+::: {.callout-tip}
+
+When a called function returns a value, the caller may decide to use that value in an expression or statement(e.g by assigning it to a variable, or sending it to `std::cout`).
+
+:::
+
+### Fixing our challange program
+
+Now, we return to the problem and use the code:
+
+```{r}
+
+#include <iostream>
+
+int getValueFromUser() // this function now returns an integer value
+{
+ 	std::cout << "Enter an integer: ";
+	int input{};
+	std::cin >> input;
+
+	return input; // return the value the user entered back to the caller
+}
+
+int main()
+{
+	int num { getValueFromUser() }; // initialize num with the return value of getValueFromUser()
+
+	std::cout << num << " doubled is: " << num * 2 << '\n';
+
+	return 0;
+}
+```
+
+### Revisiting `main()`
+
+When we run a program, the operating system calls the function `main()`. It executes the `main()` from the top to bottom sequentially. Finally, `main()` returns an integer value (usually 0), and the program terminates. The return value from `mmain()` is called **status code**, and indicates that the program is successful or fail.
+
+::: {.callout-tip}
+
+#### Best practice
+
+* The `main` function should return the value `0` if the program an normally.
+* Make sure the functions with non-void return types return a value in all cases.
+* Failure to return a value from a value-returning function will cause undefined behavior.
+
+:::
+
+:::{.callout-note}
+
+* Function `main` will implicitly return 0 if no return statement is provided. Thus, it is recommended to explicitly state the return value.
+* Function can only return a **single value**. It can return not only literal, but also a variable or a call to function that return single value.
+* The function author can decide what the return value means (status code, single value). It is good to document the function with a comment indicating what the return values mean.
+
+:::
+
+### Reusing functions
+
+We can illustrate a good case for function reuse:
+
+```{r}
+
+#include <iostream>
+
+// Create a function that return an integer value from user's keyboard
+int main()
+{
+	int x{};
+	std::cout << "Enter an integer: ";
+	std::cin >> x;
+
+	int y{};
+	std::cout << "Enter second integer: ";
+	std::cin >> y;
+
+	std::cout << x << " + " << y << " = " << x + y << '\n';
+
+	return 0;
+}
+```
+
+The central tenets of good programming: **Don't Repeat Yourself** (DRY). Let create a function:
+
+```{r}
+
+#include <iostream>
+
+// Create a function that return an integer value from user's keyboard
+int getValueFromUser()
+{
+	int input{};
+	std::cout << "Enter an integer: ";
+	std::cin >> input;
+
+	return input;
+
+}
+
+// main function return the sum of two integers from user
+int main()
+{
+	int x{ getValueFromUser() };
+	int y{ getValueFromUser() };
+
+	std::cout << x << " + " << y << " = " << x + y << '\n';
+
+	return 0;
+}
+```
+
+::: {.callout-tip}
+
+#### Best practice
+
+**Don't repeat yourself**. IF you need to do something more than once time, consider how to modify the code to remove as much as redundancy as possible.
+:::
+
+## Void functions
+
+Functions are not required to return a value to the caller, we use the return type of **void**. For example:
+
+```{r}
+
+#include <iostream>
+
+void printHi()
+{
+	std::cout << "Hi!\n";
+}
+
+int main()
+{
+	printHi();
+
+	return 0;
+}
+```
+
+The function `printHi()` prints "Hi!", but does not need to return anything back to the caller. A function that does not return a value is called a **non-value returning function (void-function)**.
+
+::: {.callout-tip}
+
+### Best practice
+
+Do not put a return statement at the end of a non-value returning function.
+
+:::
+
+
+### Void functions can't be used in expression that require a value {.unnumbered}
+
+Consider the following program:
+
+```{r}
+#include <iostream>
+
+void printHi()
+{
+	std::cout << "Hi!\n";
+}
+
+int main()
+{
+	printHi();
+
+	std::cout << printHi();
+
+	return 0;
+}
+```
+
+An error occurs because the `printHi()` does not return value so it cannot provide the value to `std::cout` to print out.
+
+**Returning a value from a void function is a compile error.**
+
+Early return
+: a return statement that is not the last statement in a function is called an **early return**. For example:
+
+```{r}
+
+#include <iostream>
+
+void print()
+{
+	std::cout << "A";
+
+	return;
+
+	std::cout << "B";
+}
+
+int main()
+{
+	print();
+
+	return 0;
+}
+```
+
+The program returns "A" because it does not reach to second statements in ``print()`.
+
+
+## Introduction to function parameters and arguments
+### The problem
+
+We start by the codes:
+
+```{r}
+#include <iostream>
+
+void print()
+{
+	std::cout << "A";
+
+	return;
+
+	std::cout << "B";
+}
+
+int main()
+{
+	print();
+
+	return 0;
+}
+```
+
+We want to have a function that prints a doubled number:
+
+```{r}
+
+#include <iostream>
+
+int getValueFromUser()
+{
+	std::cout << "Enter an integer: ";
+	int input{};
+	std::cin >> input;
+
+	return input;
+}
+
+void printDouble()
+{
+	std::cout << num << " doubled is: " << num * 2 << '\n';
+}
+
+int main()
+{
+	int num{ getValueFromUser() };
+
+	std::cout << num << " doubled is: " << num * 2 << '\n';
+
+	return 0;
+}
+
+```
+
+The compiler does not know the definition of `num` in the function. Then, we can
+
+```{r}
+
+#include <iostream>
+
+int getValueFromUser()
+{
+	std::cout << "Enter an integer: ";
+	int input{};
+	std::cin >> input;
+
+	return input;
+}
+
+void printDouble()
+{
+	int num{};
+	std::cout << num << " doubled is: " << num * 2 << '\n';
+}
+
+int main()
+{
+	int num{ getValueFromUser() };
+
+	printDouble();
+
+	return 0;
+}
+
+```
+
+The function run normally, but always returns 0 because function `printDouble()` does not access the input from user. Thus, we need some way to pass the value of variable to `printDouble()`.
+
+### Function parameters and arguments
+
+A **function parameter**: a variable used in header of a function, identically to variables defined inside the function, one difference: *they are initialized with a value provided by the caller of the function.*
+
+An **argument** is a value that is passed from the *caller* to the function when a function call is made:
+
+```{r}
+int main()
+{
+	doPrint();
+	printValue(10);
+	add(2, 3);
+
+	return 0;
+}
+```
+
+Use the commas for separation multiple arguments, and parameters.
+
+**Pass by value**: when a function is called, all of the parameters are created as variables, and the value of each of the arguments is copied into the matching parameters.
+
+```{r}
+
+// This function takes one parameter named x
+// The caller will supply the value of x
+void printValue(int x, int y)
+{
+	std::cout << x << '\n';
+	std::cout << y << '\n';
+}
+
+int main()
+{
+	printValue(10, 20);
+
+	return 0;
+}
+```
+
+Now, we come back to our challenge program:
+
+```{r}
+#include <iostream>
+
+int getValueFromUser()
+{
+	std::cout << "Enter an integer: ";
+	int input{};
+	std::cin >> input;
+
+	return input;
+}
+
+void printDouble(int input)
+{
+	std::cout << input << " doubled is: " << input * 2 << '\n';
+}
+
+int main()
+{
+	int num{ getValueFromUser() };
+	printDouble(num);
+
+	// printDouble(getValueFromUser());
+
+	return 0;
+}
+```
+
+The arguments can be also the expression, the variable:
+
+```{r}
+
+#include <iostream>
+
+int add(int x, int y)
+{
+	return x + y;
+}
+
+int multiply(int z, int w)
+{
+	return z * w;
+}
+
+int main()
+{
+	std::cout << add(5, 6) << '\n';
+	std::cout << add(2 + 3, 3 * 4) << '\n';
+
+	int a{ 5 };
+	std::cout << add(a, a) << '\n';
+
+	std::cout << add(2, multiply(2, a)) << '\n';
+	std::cout << multiply(add(1, 3), multiply(2, 3)) << '\n';
+
+	return 0;
+}
+
+```
+
+
+## Introduction to local scope {#sec-localScope}
+
+### Local variables {#sec-localVariable}
+
+Function parameters as well as all variables defined inside the function body, are **local variables**.
+
+Local variables are *created* at the point of definition and *destroyed* no earlier than the end of the set of the curly braces in which they are defined. We have definition of object's *lifetime* to be the time between its creation and destruction which happen when the program is running (calling runtime), not at compile time.
+
+```{r}
+
+int add(int x, int y)
+{
+    int z{ x + y };
+
+    return z;
+} // z, y, and x destroyed here
+```
+
+Here is an example:
+
+```{r}
+
+#include <iostream>
+
+void doSomething()
+{
+	std::cout << "Hello!\n";
+}
+
+int main()
+{
+	int x{ 0 };
+	doSomething();
+
+	return 0;
+} // x's lifetime ends here
+
+```
+
+### Local scope
+
+An identifiers' **scope** determines where the identifier can be accessed within the source code. When an identifiers can be accessed, it is **in scope**, while it we cannot access, it is **out of scope**. Scope is *compile-time* property.
+
+A local variables' scope begins at the point of value definition, and stops at the end of the set of curly braces in which it is defined. Local variables defined in one function are also **not in scope** in other functions that are called.
+
+Here is an example:
+
+```{r}
+#include <iostream>
+
+// x is not in scope anywhere in this function
+void doSomething()
+{
+    std::cout << "Hello!\n";
+}
+
+int main()
+{
+    // x can not be used here because it's not in scope yet
+
+    int x{ 0 }; // x enters scope here and can now be used within this function
+
+    doSomething();
+
+    return 0;
+} // x goes out of scope here and can no longer be used
+```
+
+::: {.callout-note}
+
+* *Out of scope*: an identifier cannot be accessed anywhere within the code
+* *Going out of scope*: for objects, an object goes out of the scope at the end of the scope. A local variable's lifetime ends at the point where it goes out of scope.
+* Not all types of variable are destroyed when they go out of scope.
+
+:::
+
+Another example:
+
+```{r}
+#include <iostream>
+
+int add(int x, int y) // x and y are created and enter scope here
+{
+    // x and y are visible/usable within this function only
+    return x + y;
+} // y and x go out of scope and are destroyed here
+
+int main()
+{
+    int a{ 5 }; // a is created, initialized, and enters scope here
+    int b{ 6 }; // b is created, initialized, and enters scope here
+
+    // a and b are usable within this function only
+    std::cout << add(a, b) << '\n'; // calls function add() with x=5 and y=6
+
+    return 0;
+} // b and a go out of scope and are destroyed here
+```
+
+::: {.callout-tip}
+
+#### Key insight
+
+Names used for function parameters or variables declared in a function body *only visible within the function that declares them*. Local variables within a function can be named without regard for the names of variables in other functions. This helps keep functions independent.
+
+:::
+
+::: {.callout-tip}
+
+#### Best practice
+
+Define the local variables as close to their first use as reasonable.
+
+:::
+
+## Why functiona are useful, and how to use them effectively
+
+### Why use functions?
+
+* *Organization*: 
+  - Simpler the `main()` function
+  - A function is a mini-program that we can write separately
+  - Help us to have more manageable chunks
+* *Re-usability*:
+  - Function can be called many times within a program
+  - Follow "Do not repeat yourself" to minimize the copy/paste error
+  - Can be shared with other program
+* *Testing*:
+  - Functions reduces code redundancy, so less code to test
+  - Function is self-contained, when it is tested, we do not need to test it again unless we change it.
+  - Make easier to find bugs
+* *Extensibility*:
+  - When we need to extend the program to handle case it didn't handle before, function allow us to make change in one place
+* *Abstraction*:
+  - We only need: name, inputs, outputs and where it lives.
+  - Do not need to know how it works, what other code it's dependent
+  - Reduce the amount of knowledge
+  
+### Effectively using functions
+
+* When there are repeated group of statements
+* Generally perform one and only one task
+
+## Forward declarations and definitions
+
+We start by the simple program:
+
+```{r}
+
+#include <iostream>
+
+int main()
+{
+	std::cout << "The sum of 3 and 4 is: " << add(3, 4) << '\n';
+
+	return 0;
+}
+
+int add(int x, int y)
+{
+	return x + y;
+}
+```
+
+The compiler returns *error*: identifier `add` is not found. In the program, we defined `add` after `main`, and compiler reads the code sequentially so it cannot find `add` in `main`.  There are two ways to address the issu:
+
+### Reorder the function definitions
+
+We defined `add` before `main`:
+
+```{r}
+
+#include <iostream>
+
+int add(int x, int y)
+{
+	return x + y;
+}
+
+int main()
+{
+	std::cout << "The sum of 3 and 4 is: " << add(3, 4) << '\n';
+
+	return 0;
+}
+```
+
+
+It is good in the program. But in larger program, it is difficult to know which functions call which functions. For example, A calls B and B also calls A; we have trouble to find the appropriate order of functions. The second option will solve this problem.
+
+### Use a forward declaration
+
+A **forward declaration** allows us to tell the compiler about the existence of a function before we define the function's body. The compiler encounter a call to the function, it will understanding and check whether we are calling function correctly, it doesn't know how or where the function is *defined*[^1].
+
+[^1]: There is difference between declaration and definition.
+
+Here is an example of forward function declaration:
+
+```{r}
+#include <iostream>
+
+int add(int x, int y);
+
+int main()
+{
+	std::cout << "The sum of 3 and 4 is: " << add(3, 4) << '\n';
+
+	return 0;
+}
+
+int add(int x, int y)
+{
+	return x + y;
+}
+
+```
+
+
+Forward declaration also helps to read the code from different files.
+
+### Declaration and definition
+
+A **definition** actually implement (for function or types) or instantiates (for variables) the identifier.
+
+```{r}
+
+int add(int x, int y)    // implement function add()
+{
+  int x{ }  // instantiates variable
+}
+
+```
+
+A definition is needed to satisfy the *linker*. The **one definition rule** (ODR):
+
+1.  Within a file, a function, a variable, type, or template can only have one definition.
+2.  Within a given program, a variable or normal function can only have one definition
+3. Types, templates, inline functions, and inline variables are allowed to have identical definitions in different files
+ 
+
+## Programs with multiple code files
+
+We can create a another code file in the Solution Explorer. The code file contains the function called in `main` code file. Remember to declare the function in `main` source code so that the compiler checks and passes successfully.
+
+After compiling, the program will link on the compiled files in the solution to execute.
+
+In the project, we created a code file named *Add.cpp* to define the function `add`.
+
+```{r}
+
+# In the add.cpp
+int add(int x, int y)
+{
+	return x + y;
+}
+```
+
+Together with the code file:
+
+```{r}
+
+# In the main source code
+#include <iostream>
+
+int add(int x, int y);
+
+int main()
+{
+	std::cout << "The sum of 3 and 4 is: " << add(3, 4) << '\n';
+
+	return 0;
+}
+```
+
+:::{.callout-tip}
+
+* Because the compiler compiles each code file individually, each code files that uses `std::cout`, `std::cin` needs to `#include<iostream>`. Similarly, we includes other libraries if we use the functions in them.
+
+* Whenever you create a new code (.cpp) file, you will need to add it to your project so that it gets compiled.
+
+:::
+
+## Naming collisions and an introfuction to namespaces
+
+C++ requires that all identifiers be **non-ambiguous**, otherwise the program produces an error as **name collision**. If the names conflict in the same file, there is a compile error; if it is in the separate files in the same program, there is a linker error.
+
+C++ provides plenty of mechanisms for avoiding naming collisions.
+
+* Local scopes: keep local variables defined inside functions from conflicting with each other
+* But local scopes does not work for function names.
+
+### Namespace
+
+**Namespace** is a region that allows us to declare names inside of it for the purpose of disambiguation; it provides a scope region called **namespace scope**.
+
+:::{.callout-note}
+
+* A name declared in a namespace will not be mistaken for an identical name declared in another scope.
+* Within a namespace, all names are unique.
+* Namespace often groups related identifiers in a large project to avoid collide with other identifiers.
+
+:::
+
+#### The global namespace
+
+Any name that is not defined inside a class, function, or a namespace is considered to be part of an implicitly defined namespace, **global namespace**.
+
+Only declaration and definition statements can appear in the global namespace. We can define variable in the global namespace, *but this should generally be avoided.*. Let read carefully the example code below:
+
+```{r}
+
+#include <iostream> // handled by preprocessor
+
+# All of the following statements are part of the global namespace
+void foo();    # okay: function forward declaration in the global namespace
+int x;         # compiles but strongly discouraged: uninitialized variable definition in the global namespace
+int y { 5 };   # compiles but discouraged: variable definition with initializer in the global namespace
+x = 5;         # compile error: executable statements are not allowed in the global namespace
+
+int main()     # okay: function definition in the global namespace
+{
+    return 0;
+}
+
+void goo();    # okay: another function forward declaration in the global namespace
+```
+
+#### The std namespace
+
+We usually typed `std::cout`: we tell the compiler to search for the function `cout` inside the namespace `std`. This approach avoid any collide with any functions in other library or namespace.
+
+:::{.callout-tip}
+
+When you use an identifier that is defined a namespace (such as the `std` namespace), you have to tell the compiler that the identifier lives inside the namespace.
+
+:::
+
+:::{.callout-warning}
+
+Avoid using-directives (such as `using namespace std;`) at the top of your program or in header files. They vioalate the reason why namespace were added in the firest place.
+
+:::
+
+
+
+## Introduction to the preprocessor
+
+Each code file goes through a preprocessing phase; a program called preprocessor make various changes to the text of the code file.
+
+This phase works with the `#include`, `#define`. When we use `#include`, the preprocessor copies all the files to the compiler.
+
+## Header files
+
+What do we do if we want to store all the declaration in one files? That the important role of **header file** (extension .h).
+
+Header file contains the function and variable declarations, not *definitions*. We can create our own header file (paired with the function code) and `#include nameOfFile.h` in the `main` and in the functions that declared in the header file.
+
+:::{.callout-tip}
+
+### Best practice
+
+* Use a .h suffix when naming your header files.
+
+* If a header file is paired with a code file (e.g. add.h with add.cpp), they should both have the same base name (add).
+
+* Source files should #include their paired header file (if one exists).
+
+* Use double quotes to include header files that you’ve written or are expected to be found in the current directory. Use angled brackets to include headers that come with your compiler, OS, or third-party libraries you’ve installed elsewhere on your system.
+
+* When including a header file from the standard library, use the version without the .h extension if it exists. User-defined headers should still use a .h extension.
+
+* Each file should explicitly #include all of the header files it needs to compile. Do not rely on headers included transitively from other headers.
+
+* Each header file should have a specific job, and be as independent as possible. For example, you might put all your declarations related to functionality A in A.h and all your declarations related to functionality B in B.h. That way if you only care about A later, you can just include A.h and not get any of the stuff related to B.
+
+* Be mindful of which headers you need to explicitly include for the functionality that you are using in your code files
+
+* Every header you write should compile on its own (it should #include every dependency it needs)
+
+* Only #include what you need (don’t include everything just because you can).
+* Do not #include .cpp files.
+:::
+
+The author discuss the use of **Header Guard** helps to avoid the problem of collission between files in the program when creating headers.
+
+## How to design your first programs
+
+The most important to remember is to design the program *before you start coding*. It is like architecture. A little up-front planning saves both time and frustation in th long run.
+
+### Design step 1: Define your goal
+
+Should address the goal in one or two sentences, often useful to express this as a user-facting outcome. Example:
+
+* Allow the user to organize a list of names and associated phone numbers
+* Model how long it takes for a ball dropped off a tower to hit the ground
+
+### Design step 2: Define requirements
+
+This focuses on the "what", not the "how". For example:
+
+* Phone numbers should be saved, so they can be recalled later
+* The program should produce results within 10 seconds of the user submitting their request
+
+A single problem may yield many requirements, and the solution is not “done” until it satisfies all of them.
+
+### Design step 3: Define your tools, targets, and backup plan
+
+As a new programmer, the answers are simple:
+
+* Writing a program for own use
+* On own system
+* Using IDE purchased or downloaded
+
+### Design step 4: Break hard problems down into easy problems
+
+Try split the complex task to sub-task and continuing define smaller sub-task until they are manageable.
+
+### Design step 5: Figure out the sequence of events
+
+Then, we determine how to link all tasks together. For example, if we are writing a calculator, we might do things in this order:
+
+* Get first number from user
+* Recognize the operator from user
+* Get second number from user
+* Calculate result
+* Print result back to user
+
+Then, we can implement them
+
+### Implementation step 1: Outlining the main function
+
+Do not worry about input and outphut for the time being
+
+```{r}
+
+int main() {
+  // Get first number from user
+      // getUserNumer();
+  
+  // Recognize the operator from user
+      // getMathOperation()
+  
+  //  Get second number from user
+      // getUserNumer();
+  
+  // Calculate result
+      // calculateResult();
+  
+  //  Print result
+      // printResult();
+  
+  return 0;
+}
+```
+
+### Implementation step 2: Implement each function
+
+In this step, for each function, we do three things:
+
+* Define the function prototypes (input, output)
+* Write the function
+* Test the function
+
+```{r}
+
+#include <iostream>
+
+int getUserNumber() {
+
+	std::cout << "Enter an integer: ";
+	
+	int number{};
+	std::cin >> number;
+
+	return number;
+}
+
+int main() {
+
+	// Get first number from user
+	int value{ getUserNumber() };
+	std::cout << value << '\n';		//debug code
+
+	// Recognize the operator from user
+
+	return 0;
+}
+```
+
+:::{.callout-warning}
+
+Do not implement your entire program in one go. Work on it in steps, testing each step along the way before proceeding.
+
+:::
+
+### Implementation step 3: Final testing
+
+Once your program is “finished”, the last step is to test the whole program and ensure it works as intended. If it doesn’t work, fix it.
+
+:::{.callout-tip}
+
+#### Word of advice
+
+* **Keep your programs simple to start**: make your first goal as simple as possible.
+* **Add features over time**: Once you have your simple program working and working well, then you can add features to it
+* **Focus on one area at a time**:  Focus on one task at a time
+* **Test each piece of code as you go.**
+* **Do not invest in perfecting early code**
+
+:::
+
+The good news is that once you become comfortable with all of these concepts, they will start coming more naturally to you. Eventually you will get to the point where you can write entire functions without any pre-planning at all.

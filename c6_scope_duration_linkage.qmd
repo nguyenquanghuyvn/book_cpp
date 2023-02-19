@@ -1,0 +1,768 @@
+# Scope, duration and linkage
+
+## Compound statements
+
+**Compound statement (block)**:
+
+* Zero, one, or more statement that compiler treats as simple statement
+* Between "{}", not need semicolon at the and of "}"
+* Be anywhere when the single statement is valid
+
+Function cannot be nested inside other function, but *block* can. Then we have
+
+* Outer block: enclosing one
+* Inner block: nested one
+
+Block is very useful with `if statements`: replace single statement with a block.
+For example,
+
+```{r}
+#| label: nest-if
+
+
+#include <iostream>
+
+int main()
+{
+	std::cout << "Enter an integer: ";
+	int value{};
+	std::cin >> value;
+
+	if (value >= 0)
+	{
+		std::cout << value << " is a positive integer (or zero)\n";
+		std::cout << "Double this number is " << value * 2 << '\n';
+	}
+	else
+	{
+		std::cout << value << " is a negative integer\n";
+		std::cout << "The positive of " << value << " is " << -value << '\n';
+		std::cout << "Then, its double is " << (-value) * 2 << '\n';
+	}
+
+	return 0;
+}
+```
+
+**Nesting level** or **nesting depth** is the maximum numbers of nested blocks 
+inside at any point in the function. For example,
+
+```{r}
+#| label: nest-level
+
+
+#include <iostream>
+
+int main()
+{ // block 1, nesting level 1
+    std::cout << "Enter an integer: ";
+    int value {};
+    std::cin >> value;
+
+    if (value >  0)
+    { // block 2, nesting level 2
+        if ((value % 2) == 0)
+        { // block 3, nesting level 3
+            std::cout << value << " is positive and even\n";
+        }
+        else
+        { // block 4, also nesting level 3
+            std::cout << value << " is positive and odd\n";
+        }
+    }
+
+    return 0;
+}
+```
+
+There are 4 blocks, and nesting level is 3.
+
+:::{.callout-tip}
+
+### Best practice
+
+Keep the nesting level of our functions to **3 or less**. If greater, think to 
+re-factor the function into sub-ones.
+
+:::
+
+## User-defined namespaces and the scope resolution operator
+
+The better way to solve the name collisions is to put our functions in our 
+**own namespaces** eg, standard library moved into `std` namespace.
+
+### Define our own namespaces
+
+We define namespace by using statement `namespace`
+
+in foo.cpp file:
+
+```{r}
+#| label: foo-namspace
+
+
+namespace foo
+{
+	int doSomething(int x, int y)
+	{
+		return x - y;
+	}
+}
+```
+
+in goo.cpp file:
+
+```{r}
+#| label: goo-namespace
+
+namespace goo
+{
+	int doSomething(int x, int y)
+	{
+		return x - y;
+	}
+}
+```
+
+in main.cpp:
+
+```{r}
+#| label: main-problem
+
+
+#include <iostream>
+
+int doSomething(int x, int y);
+
+int main()
+{
+    std::cout << "Hello World!\n";
+
+    std::cout << doSomething(4, 3) << '\n';
+    
+    return 0;
+}
+```
+
+Running the program, there is "LINK ERROR": cannot find the doSomething in global
+namespace because it is in either foo or goo namespace.
+
+=> Solve this problem by: `scope resolution` or `using statements`
+
+#### Accessing namespace with the scope resolution operator (::)
+
+We use the operator (::) to tell exactly whose namespace of the called function.
+For example in main.cpp
+
+```{r}
+#| label: main-scopeResolution
+
+
+#include <iostream>
+
+int doSomething(int x, int y);
+
+int main()
+{
+    std::cout << "Hello World!\n";
+
+    std::cout << foo::doSomething(4, 3) << '\n';
+    
+    return 0;
+}
+
+```
+
+If an identifier inside a namespace is used, without scope resolution, the
+compiler finds inside the namespace, if it cannot find, it goes to each containing
+namespace in sequence to find, the global namespace being checked last.
+
+```{r}
+#| label: search-indenfier
+
+#include <iostream>
+
+void print() // this print lives in the global namespace
+{
+	std::cout << " there\n";
+}
+
+namespace foo
+{
+	void print() // this print lives in the foo namespace
+	{
+		std::cout << "Hello";
+	}
+
+	void printHelloThere()
+	{
+		print(); // calls print() in foo namespace
+		::print(); // calls print() in global namespace
+	}
+}
+
+int main()
+{
+	foo::printHelloThere();
+
+	return 0;
+}
+```
+
+If we define namsepace in different files to main.cpp:
+
+* Create header file for the namespace. For example, namespace foo:
+
+```{r}
+#| label: header-foo
+
+#ifndef FOO_H
+#define FOO_H
+
+namespace foo
+{
+	int add(int x, int y);
+
+	int substract(int x, int y);
+
+}
+
+#endif
+```
+
+* Include the header into the namespace file foo.cpp:
+
+```{r}
+#| label: foo.cpp
+
+#include "foo.h"
+
+namespace foo
+{
+	int add(int x, int y)
+	{
+		return x + y;
+	}
+
+	int substract(int x, int y)
+	{
+		return x - y;
+	}
+}
+```
+
+* Add header to main.cpp:
+
+```{r}
+#| label: main-with-header
+
+#include "foo.h"
+#include <iostream>
+
+int main()
+{
+    std::cout << "Hello World!\n";
+
+    std::cout << foo::add(4, 3) << '\n';
+    std::cout << foo::substract(10, 7) << '\n';
+    
+    return 0;
+}
+```
+
+Namespace can be nested in other namespace by declaration `namespace foo::goo`.
+
+#### Namespace aliases
+
+For nested namespace, C++ allow to name the namespace for shortenning:
+
+```{r}
+#| label:: namespace-aliased
+
+#include <iostream>
+
+namespace foo::goo
+{
+  int add(int x, int y)
+  {
+    return x + y;
+  }
+}
+
+int main()
+{
+  namespace active = foo::goo;  // active refers to foo::go
+  
+  std::cout << active::add(1, 2) << '\n'; // This is really foo::goo::add()
+  
+  return 0;
+}
+```
+
+:::{.callout-note}
+
+* In general, we should avoid deeply nested namespaces.
+
+* We can separate application-specific code from code that might be reusable later
+.For example, one namespace for math: `math::`, language and localization: `lang::`
+
+* When sharing the code, should put it in a namespace.
+
+:::
+
+## Local variables
+
+Local variables have a **block scope**: *in scope* from
+point of definition to the end of the block they are defined within.
+
+```{r}
+#|label: block-scope
+
+#include <iostream>
+
+int main()
+{
+	int i{ 5 };			// i enters scope
+	double d{ 4.0 };   // d enters scope
+
+	return 0;
+}	// d and i go out of scope here.
+
+```
+
+All variable names within a scope must be unique.
+
+A local variable has a lifetime, called storage **duration**. This determine when
+and how a variable will be created and detroyed.
+
+Local variable has **automatic storage duration**: created and detroyed within 
+the block
+
+=> local variable == **automatic variable**.
+
+We can define variables inside nested block:
+
+* They enters the scope at time of definition and go out at the end of the nested
+block. So do their lifetimes.
+
+* Thus, it cannot be found from outer block
+
+* But, variable in outer block can be used inside nested block.
+
+```{r}
+#| label: nest-block-variable
+
+#include <iostream>
+
+int main()
+{ // outer block
+
+    int x { 5 }; // x enters scope and is created here
+
+    { // nested block
+        int y { 7 }; // y enters scope and is created here
+
+        // x and y are both in scope here
+        std::cout << x << " + " << y << " = " << x + y << '\n';
+    } // y goes out of scope and is destroyed here
+
+    // y can not be used here because it is out of scope in this block
+
+    return 0;
+} // x goes out of scope and is destroyed here
+```
+
+Variable should be defined in the most limited scope: inside the nested block 
+that uses it.
+
+:::{.callout-tip}
+
+Define variables in the most limited existing scope. Avoid creating new blocks 
+whose only purpose is to limit the scope of variables.
+
+:::
+
+## Introduction to global variables
+
+We define a variable outside of a function, this one is **global variable**.
+By convention:
+
+* It is under the `#include` and above any function.
+
+* Consider using prefix 'g' or 'g_' for global variables.
+
+Its properties:
+
+* Has global scope (global namespace scope)
+* Uses anywhere in the file
+* Created when the program starts and detroyed when it ends => **static duration**
+So, it is **static variable**.
+
+* Zero-initialized by default^[local variables have uninitialized default].
+* Global variable can be defined as constant, but we have to initialize it:
+
+```{r}
+#| label: global-variable-constant
+
+const int g_x;  //error: no default initialized
+
+const int g_w{1}; // ok
+```
+
+:::{.callout-warning}
+
+We should avoid to use non-constant global variables.
+
+:::
+
+## Varaible shadowing (name hiding)
+
+When outer block and inner block have a variable with same name, the nested
+variable "hides" the outer variable when they are both in scope. This is called
+**name hiding** or **shadowing**.
+
+The same applies to global variable, but global variable is a part of namespace
+so we can use `::`prefix to indicate using global variable.
+
+:::{.callout-tip}
+
+Avoid variable shadowing
+
+:::
+
+## Internal linkage
+
+An identifer's linkage determines whether the other declarations of that name
+refer to the same object or not.
+
+* Local variable does not have linkage.
+* Global variable has internal and external linkage
+
+An **internal linkage** is seen and used within a single file. 
+
+A global variable has external linkage as default, so we define internal linkage by use `static ...`.
+
+But const global variable or constexpr global variable are internal linkage by default.
+
+```{r}
+#| label: global-internal
+
+static int g_x{};	// internal linkage
+const int g_y{ 2 };	// internal linkage by default
+constexpr int g_z{ 3 };	//internal linkage by default
+
+```
+
+### The one-definition rule and internal linkage {.unnumbered}
+
+One-definition rule says that an object or function cannot have more than 
+one definition, either within a file or a program. But, internal object are defined in different files are considered to be independent entities.
+
+We can apply the same to function by using `static`:
+
+```{r}
+#| label: internam-function
+
+# This function is declared as static, and can now be used only within this file
+# Attempts to access it from another file via a function forward declaration will
+# fail
+
+[[maybe_unused]] static int add(int x, int y)
+{
+    return x + y;
+}
+```
+
+## External linkage and variable forward declarations
+
+Identifier with **external linkage** can be used and seen from its file and other code files (via a forward declaration).
+
+* Function have *external linkage by default* so we can use a forward declaration
+* Non-const global variable are external by default
+* Const global variable defined through `extern` keyword
+* To use global variable in other file, we also forward declaration like in
+function,
+
+The following code are example of using external linkage for global variable (const and non-const one). First, we have global variable in one source file a.cpp:
+
+```{r}
+#| label: external-linkage-acpp
+
+int g_x{ 3 };                   #// internal by default
+extern const int g_y { 4 };     #// okie
+extern constexpr int g_z{3};    #// can, but useless
+
+```
+
+We use them in the main.cpp by their declarations:
+
+```{r}
+#| label: const-declaration
+
+#include <iostream>
+
+int g_x;                   #// internal by default
+extern const int g_y;     #// okie
+extern constexpr int g_z;    #// can, but useless
+
+int main()
+{
+    std::cout << g_x << '\n'; // prints 2
+
+    return 0;
+}
+```
+
+:::{.callout-warning}
+
+Do not use `extern` keyword if we define an unitialized non-const global variable. C++ will think it is a declaration.
+
+:::
+
+We should be clear about **file scope** and **global scope**: all global variable can be used within the file that defines them; if it can be seen by other files too, it has global scope (with proper declarations).
+
+## Why (non-const) global variables are evil
+
+* Their values can be changed by any function that is called
+=> Make program state is *unpredictable*.
+
+* A function that utilizes nothing but its parameters and has no side effects is
+*perfectly modular*.
+
+* Modularity helps both in understanding what a program does, as well as
+reusability.
+
+* Global variables make the program less modular.
+
+:::{.callout-tip}
+
+Use local variables instead of global variables whenever possible.
+
+:::
+
+## Sharing global constants across multiple files {#sec-sharConstVar}
+
+1. Create a .cpp file for a constants namespace includes all the const 
+global variables.
+2. Create a header file for that namespace
+3. Include the header file in other files using the constants
+
+This solution has downside. The compiler does not evaluate the const global variables at compile-time because it only recognizes the declarations. There may impact the performance maximization. To have a better solution, C++17 introduce a new keyword `inline` that allow an object can be defined in different files without violating the *one definition rule*.
+
+```{r}
+#| label: sharing-const
+
+#> In constant.cpp
+
+#include "constant.h"
+
+namespace constants
+{
+	extern const double pi{ 3.14159 };
+	extern const double avogadro{ 6.0221413e23 };
+	extern const double myGravity{ 9.2 };
+}
+
+#> In constant.h
+
+#ifndef CONSTANT_H
+#define CONSTANT_H
+
+namespace constants
+{
+	extern const double pi;
+	extern const double avogadro;
+	extern const double myGravity;
+}
+
+#endif // !CONSTANT_H
+
+#> In main.Cpp
+
+#include "constant.h"
+#include <iostream>
+
+int main()
+{
+	std::cout << "Enter a radius: ";
+	int radius{};
+	std::cin >> radius;
+
+	std::cout << "The circumfence is " << 2.0 * radius * constants::pi << '\n';
+
+	return 0;
+}
+
+```
+
+### Global constants as inline variables
+
+In C++, the term `inline` has evolved to mean "multiple definitions are allowed". An **inline variable** is one that is allowed to be defined in multiple files without violating one definition rule.
+
+Inline variables have **two primary restrictions** that must be obeyed:
+
+1. All definitions of the inline variable must be identical.
+2. The inline variable definitions (not a forward declaration) must be present
+**in any file** that uses the variable.
+
+We see the differences with the sharing constant global variables mentioned at the session's beginning:
+
+* For inline const var, we do not need to have separate .cpp file for header 
+because we define (not only declare) all in the header file.
+
+```{r}
+#| label: inline-variable
+
+# In constants.h
+
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+namespace constants
+{
+  inline constexpr double pi{3.14159};
+  inline constexpr double avogadro{6.0221413e23};
+}
+
+#endif
+
+# In main cpp
+
+#include "constants.h"
+
+#include <iostream>
+
+int main()
+{
+    std::cout << "Enter a radius: ";
+    int radius{};
+    std::cin >> radius;
+
+    std::cout << "The circumference is: " << 2.0 * radius * constants::pi << '\n';
+
+    return 0;
+}
+```
+
+:::{.callout-tip}
+
+If you need global constants and your compiler is C++17 capable, prefer defining 
+inline constexpr global variables in a header file.
+
+:::
+
+## Static local variables
+
+**Local variable**, by its definition, has the scope within its block or 
+*automatic duration*. When we want a local variable exists in whole the program,
+we use **static local variables** by adding `static` before local variable's
+definition.
+
+Let have the examples:
+
+```{r}
+#| label: default-local-var
+
+#include <iostream>
+
+void incrementAndPrint()
+{
+	int value{ 1 };
+	++value;
+	std::cout << value << '\n';
+}
+
+int main()
+{
+	incrementAndPrint();
+	incrementAndPrint();
+	incrementAndPrint();
+
+	return 0;
+}
+
+#> 2
+#> 2
+#> 2
+```
+
+Now, we modify for static local variable:
+
+```{r}
+#label: static-local-var
+
+#include <iostream>
+
+void incrementAndPrint()
+{
+	static int value{ 1 };
+	++value;
+	std::cout << value << '\n';
+}
+
+int main()
+{
+	incrementAndPrint();
+	incrementAndPrint();
+	incrementAndPrint();
+
+	return 0;
+}
+#> 2
+#> 3
+#> 4
+```
+
+We use static local variable to keep track of variable like IDs for object.
+
+### Static local constants
+
+:::{.callout-tip}
+
+Avoid `static` local variables unless the variable never needs to be reset
+:::
+
+## Using declarations and using directives
+## Inline function
+
+Codes of called function are expanded in caller. Modern compiler decides this.
+
+## Constexpr and consteval functions
+
+A **constexpr function**: can be evaluated at compile-time. Simply by supplying
+`constexpr` keyword in front of the return type.
+
+```{r}
+#| label: constexpr-function
+
+#include <iostream>
+
+constexpr int greater(int x, int y)
+{
+	return (x > y ? x : y);
+}
+
+int main()
+{
+	constexpr int x{ 5 };
+	constexpr int y{ 6 };
+
+	constexpr int g{ greater(x, y) };
+
+	std::cout << g << " is greater!\n";
+
+	return 0;
+}
+```
+
+To be a constexpr function, a function has to:
+
+* Have a constexpr return type
+* Do not have any non-constexpr functions
+
+Constexpr function can be evaluated at *runtime*.
+
+## Chapter summary
+
+A **compound statement** or **block** is a group of statements is treated as a
+single statement by compiler.
+

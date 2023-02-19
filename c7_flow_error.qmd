@@ -1,8 +1,6 @@
 ---
-free: true
+title: "Control flow and Error Handling"
 ---
-
-# Control flow introduction
 
 In C++, CPU run the program from the beginning of main() function to its end. 
 This running follows a sequence called **execution path**. There are types of
@@ -17,13 +15,12 @@ to a non-sequential statement.
 
 Figure @fig-flow-categories below show the categories of **flow control statement**:
 
-```{r}
-#| label: fig-flow-categories
+```{r fig-flow-categories}
 #| fig-cap: Categories of flow control statements
 #| eval: true
 #| echo: false
 
-knitr::include_graphics("figure/c7_flow_categories.PNG", dpi = 100)
+knitr::include_graphics("figure/c7_flow_categories.PNG", dpi = 200)
 ```
 
 ## Conditional flow control statement
@@ -550,4 +547,573 @@ int main()
 The author recommend favor `while` loops over `do-while` when given equal choice.
 
 ## For statements
+
+In this session, we learn about the classic for statements with the form: `for (init-statement; condition; end-expression) statements`.
+
+We can easily link to the while statement:
+
+```{r}
+#| label: while-and-for
+
+init_statement;
+while(condition)
+{
+    statement;
+    end_expression;
+}
+```
+
+We can write a very simple for loop:
+
+```{r}
+#| label: for_cout_to_ten
+
+int main()
+{
+	for (int count{ 1 }; count <= 10; ++count)
+		std::cout << count << ' ';
+	
+	std::cout << '\n';
+
+	return 0;
+}
+```
+
+We can easily change to `while statement`:
+
+```{r}
+#| label: while_count_to_ten
+
+int main()
+{
+    {
+        int count{1};
+        while (count <= 10)
+        {
+            std::cout << count << ' ';
+            ++count
+        }
+    }
+    
+    std::cout << '\n';
+}
+```
+
+We can define multiple counters:
+
+```{r}
+#| label: for_multiple_var
+
+#include "io.h"
+#include <iostream>
+
+int main()
+{
+
+	for (int x{ 0 }, y{ 9 }; x < 10; ++x, --y)
+		std::cout << x << ' ' << y << '\n';
+	
+	return 0;
+}
+```
+
+Loop can nest in other loop:
+
+```{r}
+#| label: loop-nested
+
+void charNumber()
+{
+	for (char c{ 'a' }; c <= 'h'; ++c)
+	{
+		std::cout << c;
+		
+		for (int i{ 0 }; i < 4; i++)
+		{
+			std::cout << i;
+		}
+
+		std::cout << '\n';
+	}
+}
+
+```
+
+:::{.callout-note}
+
+### Best practice
+
+*   `For statements` are the mostly important used loop in C++.
+*   Prefer `for loop` over `while loop` when there is an obvious loop variable.
+*   Prefer `while loop` over `for loops` when there is no obvious loop variable.
+
+:::
+
+
+## Break and continue
+
+`break statement` terminates the switch or loop, and execution continue at the
+*first statement* beyond the switch or loop.
+
+`return statement` *terminate the entire function that the loop is within*, and
+execution continues at point where the function was called.
+
+### Continue
+
+**Continue statement** tells the program end current iteration, and continue next iteration.
+
+The author advise to use the break, continue statement or *early return* when they simplify the loop logic.
+
+## Halts {#sec-halts}
+
+The last category of flow control statement is **halt**: terminates the program.
+
+### The `std::exit()` function
+
+It terminates the program normally. The term **normal termination** means that 
+the program exits in an expected way; it does not imply about whether the program was successful or not.
+
+`std::exit()` cleans up some static storage objects, returned back to OS.
+
+The program does not execute any statements after `std::exit()`.
+
+`std::exit()` does not clean up local variables in the current function or up in the call stack.
+
+Function `std::atexit()` take the arguments as functions to remember to do the clean up when we call `std::exit()`.
+
+### `std::abort()`
+
+This function ends the program *abnormally*. It means that the program has some kind of unusual runtime error and could not continue to run.
+
+```{r std-abort-example}
+
+#include <cstdlib> // for std::abort()
+#include <iostream>
+
+int main()
+{
+    std::cout << 1 << '\n';
+    std::abort();
+
+    // The following statements never execute
+    std::cout << 2 << '\n';
+
+    return 0;
+}
+```
+
+
+It does not clean up anything.
+
+:::{.callout-tip}
+
+Only use a halt if there is no safe way to return normally from the main function.
+
+:::
+
+## Introduction to testing the code
+
+### Test your programs in small pieces
+
+We should write small functions (or classes), and then compile and test immediately. This test is call **unit testing**; each unit test assures a correct-particular behavior of that unit.
+
+These are some method to test your unit code:
+
+#### Informal testing
+
+You write your function and run it with some inputs to see whether it runs as expected or not. 
+
+We have a function that check whether a character is lower Vowel, then we add some character to see that it works well
+
+```{r}
+#| label: informal-test
+
+#include "io.h"
+#include <iomanip>
+#include <iostream>
+
+int main()
+{
+	std::cout << std::boolalpha;
+	std::cout << isVowvel('0') << '\n';
+
+	return 0;
+}
+
+```
+
+#### Preserving your tests
+
+Instead of testing informal, we can write a program to test the unit function.
+
+```{r}
+#| label: test-function
+
+void testVowel()
+{
+	std::cout << "Choose 'a': " << isVowvel('a') << '\n';
+	std::cout << "Choose 'b': " << isVowvel('b') << '\n';
+}
+
+```
+
+## Common semantic errors in C++
+
+**Semantic errors** means that the codes do not do what we intended, and it leads to `undefined behavior`. There are some common semantic errors:
+
+* Conditional logic errors: errors occurs when the programmer incorrectly codes the logic of a conditional statement or loop condition.
+* Infinite loop
+* Off-by-one errors: counter are not correctly condition
+* Incorrect operator precedence
+* Integer division
+* Accidental null statements
+* Not using compound statement when one is required
+
+## Detecting and handling errors
+
+Most errors occur due to faulty assumptions made by the programmer and/or lack of proper error detection/handling:
+
+* Assume about return value
+* Assume that user give correct input
+* Assume that function is called correctly
+
+Thus, we need to learn about error handling strategies (what to do when things go wrong) inside a function.
+
+Functions may fail for many reasons and there is no best way to handle an error. There are 4 general strategies that can be used:
+
+### Handling the error within the function
+
+We correct the error in the same function which the error occurred so that the error can be contained and corrected without impacting any code outside function:
+
+```{r handling-in-function}
+
+void printDivision(int numerator, int demonator)
+{
+	if (demonator != 0)
+		std::cout << static_cast<double>(numerator) / demonator << '\n';
+	else
+		std::cerr << "Error: Could not divide by zero\n";
+}
+
+```
+
+:::{.callout-note}
+
+The handling print the error message out, and then the program continue to run the next statements in the caller.
+
+When we added a halt, it stops entire program.
+
+:::
+
+### Passing error back to the caller
+
+As the above handling, the called function does not return anything to the calling function. If we want to pass the error to caller function, we should create a handling that return a value so that the caller function knows whether the called function runs correctly or not.
+
+### Fatal errors
+
+In some case, the error is severe that we have to stop the program (*non-recoverable*), we can use the halt statement such as `std::exit()`:
+
+```{r error-fatal}
+
+void printDivision(int numerator, int demonator)
+{
+	if (demonator != 0)
+		std::cout << static_cast<double>(numerator) / demonator << '\n';
+	else
+	{
+		std::cerr << "Error: Could not divide by zero\n";
+		std::exit(1);
+	}
+}
+```
+
+## `std::cin` and handling invalid input
+
+A **robust** program anticipate the misuse from users and provide way to handle those program at the first place.
+
+#### `std::cin`, buffers, and extraction
+
+`std::cin` let user enter a value. This value is then stored temporarily inside of `std::cin` and waits for extracting to a variable. They call it **buffer**. The `operator>>` is an extraction to get the value in buffer into the variable. Normally, a value or a character is taken out, if there is still information in the buffer, that information is still there for the next extraction. 
+
+For example, if there is "5a" in buffer and we extract to variable x, then x = '5' and 'a' is in the buffer for the next extraction. 
+
+We write a program to illustrate the following error cases:
+
+```{r program-error-cases}
+
+#include <iostream>
+
+double getDouble()
+{
+    std::cout << "Enter a double value: ";
+    double x{};
+    std::cin >> x;
+    return x;
+}
+
+char getOperator()
+{
+    std::cout << "Enter one of the following: +, -, *, or /: ";
+    char op{};
+    std::cin >> op;
+    return op;
+}
+
+void printResult(double x, char operation, double y)
+{
+    switch (operation)
+    {
+    case '+':
+        std::cout << x << " + " << y << " is " << x + y << '\n';
+        break;
+    case '-':
+        std::cout << x << " - " << y << " is " << x - y << '\n';
+        break;
+    case '*':
+        std::cout << x << " * " << y << " is " << x * y << '\n';
+        break;
+    case '/':
+        std::cout << x << " / " << y << " is " << x / y << '\n';
+        break;
+    }
+}
+
+int main()
+{
+    double x{ getDouble() };
+    char operation{ getOperator() };
+    double y{ getDouble() };
+
+    printResult(x, operation, y);
+
+    return 0;
+}
+
+```
+
+#### Error case 1: Input extraction succeeds but the input is meaningless to the program
+
+For example, users enter x = 5, y = 2 and operator = 'k'. These inputs are attracted successfully to variable but we cannot operate the function.
+
+We solve this case by doing input validation:
+
+```{r error1-handle}
+
+har getOperator()
+{
+	while (true)
+	{
+		std::cout << "Enter one of the following: +, -, *, or /: ";
+		char op{};
+		std::cin >> op;
+
+		switch (op)
+		{
+		case '+':
+		case '-':
+		case '*':
+		case '/':
+			return op;
+		default:
+			std::cerr << "Error: Operator is not valid. Please try again.\n";
+		}
+	}
+}
+
+```
+
+#### Error case 2: Extraction succeeds but with extraneous input
+
+For example, user enters `5*7`, the programs run and return 35 but does not lead user continue enter the input because `*7\n` is stored in buffer for the following `operator>>`.
+
+To solve this error, we have to tell the program **ignore** all the following character until the next `\n`. In C++, we use the function `std::cin.ignore(num_char_to_ignore, \n)` or better is `std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n`)
+
+```{r ignore-line}
+
+void ignoreLine()
+{
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
+```
+
+Then call the function in get input function:
+
+```{r error-ignorLine-correct}
+
+double getDouble()
+{
+	std::cout << "Enter a double: ";
+	double x{};
+	std::cin >> x;
+	ignoreLine();
+	
+	return x;
+}
+```
+
+#### Error case 3: Extraction fails
+
+This case happens when we enter a double value by a value with different type eg.: a. The `operator>>` cannot cover it to a double, so it let `a` in the buffer and goes into *fail mode*. Then, further requests for input extraction will silently fail. Thus, the output prompt still prints, but the input prompt is skipped, and we get stuck in infinite loop.
+
+We solve the problem by:
+
+*   Test whether the `std::cin` is fail: `!std::cin`
+*   If it is fail, put it back to *normal* state: `std::cin.clear()`
+*   Flush the buffer so we can enter the new value: `ignoreLine()`
+
+```{r solve-extraction-fails}
+
+if (!std::cin)
+{
+    std::cin.clear();   #// put back to normal mode
+    ignoreLine();       #// and remove bad input
+}
+
+```
+
+#### Error case 4: Extraction succeeds but the user overflows a numeric value
+## Assert and static_assert
+
+Return to the program:
+
+```{r printDivision-error-discuss}
+
+void printDivision(int numerator, int demonator)
+{
+	if (demonator != 0)
+		std::cout << static_cast<double>(numerator) / demonator << '\n';
+	else
+	{
+		std::cerr << "Error: Could not divide by zero\n";
+	}
+}
+
+```
+
+The program checks whether we divide a number by a zero. This is a semantic error and will cause the program to crash down.
+
+We link to the session @sec-halts for ideas on `std::exit()` and `std//abort()`. 
+
+*   If we skip the offending statements, the error fails **silently**. This is bad for programming because we do not know where the error message is and how the conditions that triggered the error message.
+
+*   If we terminate the program by `std::exit()`, we loses our call stack and any debugging information. `std::abort()` is a better option for such cases when the we can start debugging at the point where the program aborted.
+
+#### Precondition, Invariant, Postcondition
+
+It is any condition that must always be true prior to the execution of codes' component.
+
+**Invariant** is a condition must be true while some component is executing
+
+**Postcondition** is something that must be true after the execution of some component of code.
+
+### Assertions
+
+An *assertion* is an expression that will be true unless there is a bug in a program.  If the expression is true, the assertion statement does nothing, otherwise, an error message is displayed and the program is terminated (via `std::abort()`). The error message contains: failed as text, name of code file, and the line number of the assertion.
+
+To use assertion, we include header `assert`. Let look at the following codes:
+
+```{r assertion-example}
+
+#include <cassert>
+#include <cmath>
+#include <iostream>
+
+	double calculateTimeUntilObjectHitsGround(double initialHeight, double gravity)
+	{
+		assert(gravity > 0.0);
+
+		if (initialHeight <= 0.0)
+		{
+			return 0.0;
+		}
+
+		return std::sqrt((2.0 * initialHeight) / gravity);
+	}
+```
+
+* Make the assert statements be descriptive:
+
+```{r assert-descriptive}
+
+assert(found && "Car could not be found in database")
+
+#// If `found == false`, then FALSE && TRUE is FALSE,  this trigger assert
+
+```
+
+#### Asserts and Error handling
+
+Assertions: to catch the programming errors by documenting something that should never happen. If it does happen, the the programmer made an error somewhere, it identifies and fixes. It does not allow recovery from errors.
+
+Error handling: gracefully handle case that could happen (rarely). There may or may not be *recoverable*, but the program's users may encounter them.
+
+#### `static_assert`
+
+A `static_assert` checks the condition at the compile-time. It formula is `static_assert(condition, diagnostic_message)`.
+## Introduction to random numer generation
+
+Computer are generally incapable of generating truly random numbers. It simulates randomness using an algorithm.
+
+### Algorithms and state
+
+#### Algorithm:
+
+*   It is an instruction's sequence to solve a demand and provide useful results.
+*   It is reusable
+*   In C++, algorithms are typically implemented as reusable functions.
+
+Here is an example:
+
+```{r algo-plusOne}
+
+int plusOne()
+	{
+		static int s_state{ 3 };
+
+		++s_state;
+
+		return s_state;
+	}
+```
+
+An algorithm is **stateful** if it retains some information across calls. A **stateless** algorithm does not store any information. Our `plusOne()` is stateful because it creates a *static variable* that is used through its call.
+
+The `plusOne()` is **deterministic**: given input, it will always produce **the same output**.
+
+### Pseudo-random number generators (PRNGs)
+
+This is a very simple PRNGs:
+
+```{r prng-simple}
+
+#include "random.h"
+
+int LCG16()
+{
+	static int s_state{ 5323 };
+	s_state = 8253729 * s_state + 2396403;
+
+	return s_state % 32768;
+}
+
+```
+
+This function returns the same random sequence.
+
+#### Seeding a PRNG
+
+The sequence of "random number" is not random. It is based on the initial state. The same initial state will generate same output sequence.
+
+When PRNG is instantiated, an initial value called a **random seed** can be provided to the initial state of the PRNG.
+
+#### What makes a good PRNG?
+
+* The PRNG should generate each number with approximately same probability.
+* The method by which the next number in the sequence should be  **unpredictable**.
+* It should represent the distribution of number
+* It should have a high period for all seed
+    - All PRNG are periodic: the sequence of numbers will repeated itself. The length of sequence before a PRNG begins to repeat itself is known as the **period**.
+    
+    
 

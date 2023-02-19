@@ -1,0 +1,523 @@
+# Introduction to C++
+
+## Statements {#sec-statements}
+
+**Statements** are the instructions that cause the program to *perform some actions*. Most of the statements end with *semicolon*.
+
+## Function
+
+In C++, statements are typically grouped into units called **functions**. Function is a collection of statements that execute sequentially (in order, from top to bottom).
+
+Functions are written to do a **specific tasks**.
+
+## Syntax and syntax error
+
+**Syntax** is the rules how the programs must be constructed in order to be considered valid. If we violate a rule, the compiler will complain and issue a **syntax error**.
+
+Program's compilation will only complete once **all** syntax errors are resolved.
+
+## Comments
+
+A comment is a programmer-readable note inserted directly into a source code of the program (compiler ignores the comments).
+
+*Single-line comments:* `//` symbol begins a C++ single-line comment.
+
+*Multi-line comments*: `/*` and `*/` pair of symbols denotes a multi-line comment.
+
+**Proper use of comments**
+
+* Describe *what* the library, program, or functions, do. These are typically placed on the top of the file or library.
+
+* Second, inside the lib, program, or function, comments are used to describe *how* the code is going to accomplish the goal.
+
+* Third, at the *statement* level, comments can describe *why* the code is doing something. The **bad** statement comment describe *what* the code is doing.
+
+Comments are good way to remind the reason a programmer made one decision instead of another.
+
+::: {.callout-tip collapse="false"}
+
+### Best practice
+
+Comment your code liberally, and write your comments as if speakings to someone who has *no idea* what the code does. Don't assume that you'll remember why you mad specific choices.
+
+:::
+
+You can also *comment out* the code block if:
+
+1.  You're working on a new piece of code that won't compile yet.
+2.  You have written a new code that results the errors and you do not have time to fix it.
+3.  To find the source of the errors.
+4.  You want to replace one piece of code with another piece of code.
+
+**Summary**
+
+* At the library, program, or function level, use comments to describe *what*.
+* Inside them, use comments to describe *how*.
+* At the statement level, use comments to describe *why*.
+
+## Objects and Variables {#sec-intro_var}
+## Data
+
+In @sec-statements, statements inside function perform actions that generate whatever result the program was designed to produce.
+
+But, **how do programs actually produce results?**: bref, by *manipulating* data.
+
+In computing, **data** is *any information* that can be moved, processed and stored by computer.
+
+::: {.callout-note collapse="false"}
+
+#### Key insight
+
+Programs are collections of instructions that manipulate data to produce a desired results.
+
+:::
+
+A program can acquire data to work in many ways: file, database, network, user providing input on keyboard, or from the programmer putting data directly into a source code.
+
+Data on computer is typically stored in a efficient format (and thus is not human readable).
+
+### Objects and variables
+
+* A single piece of data stored in memory somewhere is called **value**.
+* An **object** is a region of storage that has a value and other associated properties. We use the object to store and retrieve values.
+* Objects can be named or unnamed. A named object is called **variable**, the name of object is call **identifier**.
+
+### Variable instantiation
+
+To create a **variable**, we have to **define** it. Here is an example of defining a variable named x:
+
+```{r}
+#| labels: cd-var_define
+#| eval: false
+
+int x;
+```
+
+When the program run, it will instantiate the **variable**: object will be created and assigned a memory address. Variable must be instantiated *before* they can be used to store value.
+
+### Data types
+
+Variables are named region of storage that can store value. A **data type** tells the compiler what type of value the variable will be store.
+
+### Define multiple variables
+
+We can define muliple variables in one statement by separating them by `,`.
+
+```{r}
+#| eval: false
+
+int a, b;
+```
+
+But, variables of different types must be defined in separate statements:
+
+```{r}
+#| eval: false
+
+int a, double b;  # false
+int a; double b;  # correct
+
+# Correct and recommended
+int a;
+double b;
+```
+
+::: {.callout-tip}
+
+#### Best practice
+
+Avoid defining multiple variables of the same type in a simple statement. Instead, define each variable in a separate statement on it own line
+
+:::
+
+## Variable assignment and initialization
+
+In previous session @sec-intro_var, we know how to define a variable. In this session, we'll explore how to actually *put values into variables* and use those values.
+
+Recall the variable's definitions:
+
+```{r}
+#| eval: false
+
+int x;
+int y;
+int z;
+
+```
+
+### Variable assignment
+
+After variable has been defined, you can give it a value by using `=`, **copy assignment** or **assignment**.
+
+```{r}
+#| eval: false
+
+#include <iostream>
+
+int main() {
+  
+  int width;
+  width = 5;  // copy assignment of value 5 into variable width
+
+  width = 7;
+  
+  return 0;
+}
+  
+```
+
+### Initialization
+
+With *initialization*, we can define and assign value to variable as the same time. There are many ways to initiate:
+
+```{r}
+#| eval: false
+
+int a;
+int a = 5;  #copy initialization
+int c( 6 )  # direct initialization
+
+# List initialization methods
+int d { 7 };
+int e = { 8 };
+int f {}
+```
+
+#### Default initialization
+
+We do not provide any initialization value.
+
+#### Copy initialization
+
+With `=`: copy the value on the right-hand side of the equals into the variable being created. It does not use much in modern C++.
+
+#### Direct initialization
+
+Similar to copy initialization, not popular in modern C++.
+
+#### List initialization
+
+This is the modern way to initialize. Prior to this, some types of initialization require using the direct one, and other types required indirect one. The *list initialization*  introduce to provide more consistent initialization syntax.
+
+List initialization disallows "narrowing conversion": return errors if we initialize a variable using a value that the variable cannot safely hold:
+
+```{r}
+
+int width { 4.5};   # return error
+```
+
+::: {.callout-tip}
+
+##### Best practice
+
+* Favor list initialization whenever possible.
+* Initialize your variables upon creation.
+
+:::
+
+## Introduction to iostream: cout, cin, and endl
+
+### The input and output (io) library
+
+`io` library is part of C++ standard library that works with inpur and output. We use the functionality in  `iostream` to get *input* from keyboard and *output* data to console.
+
+We use the library by including it:
+
+```{r}
+
+#include <iostream>
+
+```
+
+
+One of the most useful is `std::cout`: send data to the console to be printed as text
+
+```{r}
+
+#include <iostream>
+
+int main()
+{
+  std::cout << "Hello World!\n";
+  
+  return 0;
+}
+```
+
+It can print a *number* too:
+
+```{r}
+
+#include <iostream>
+
+int main()
+{
+  std::cout << 4;
+  
+  return 0;
+}
+```
+
+It can print value of a variable:
+
+```{r}
+
+#include <iostream>
+
+int main()
+{
+  int x{ 5 };
+  std::cout << x;
+  
+  return 0;
+}
+```
+
+To print more than one thing in the same line:
+
+```{r}
+#include <iostream>
+
+int main()
+{
+    int x{ 5 };
+    std::cout << "x is equal to " << x;
+
+    return 0;
+}
+```
+
+Use `std::endl` to make the cursor in the next line.
+
+```{r}
+#include <iostream>
+
+int main()
+{
+    int x{ 5 };
+    std::cout << "Hi!" << std::endl;
+    std::cout << "My name is Huy." << std::endl;
+
+    return 0;
+}
+```
+
+::: {.callout-tip}
+
+### Best practice
+
+Output a newline whenever a line of output is complete.
+
+:::
+
+### std::cout is buffered
+
+Statements request that output be sent to the console. However, output is typically not sent to the console immediately. Instead, the requested output *gets in line*, and is stored in a region of memory set aside to collect later, called **buffer**. Periodically, buffer is **flushed**, all data is transferred to its destination.
+
+### std::endl vs `\n`
+
+`std::endl` move the cursor to the next line and *flushes* the buffer. Sometimes, we do not need to flush the buffer and prefer the system do it periodically. 
+
+Thus, use of `\n`  is preferred instead:
+
+::: {.callout-tip}
+
+#### Best practice
+
+Prefer `\n` over std::endl when ouputing text to the console.
+
+:::
+
+### std::cin
+
+`std::cin` reads the data from keyboard using extraction operator `>>`.
+
+```{r}
+#include <iostream>
+
+int main()
+{
+    std::cout << "Enter a number: ";
+    
+    int x{ };
+    std::cin >> x;
+
+    std::cout << "You endtered: " << x << '\n';
+    return 0;
+}
+```
+
+
+We can input many variables in the same line:
+
+```{r}
+#include <iostream>
+
+int main()
+{
+    std::cout << "Enter two numbers separated by a space: ";
+    
+    int x{ };
+    int y{ };
+    std::cin >> x >> y;
+
+    std::cout << "You entered " << x << " and " << y << ".\n";
+    std::cout << "Thank you!\n";
+    return 0;
+}
+```
+
+
+::: {.callout-note}
+
+### Best practice
+
+Initialize variable first, then use `std::in`.
+
+:::
+
+## Uninitialized variables and undefined behavior
+
+C++ does not initialize the variable automatically. Thus, when a variable is given a memory address to use to store data, the default value of that variable is whatever value happens to already be in that memory address.
+
+Let be clear that:
+
+* Initialization = the object is given a known value at the point of definition.
+* Assignment = The object is given a known value beyond the point of definition
+* Uninitialized = The object has not been given a known value yet.
+
+In some case, we do not know what the value printed from the following code because uninitialized `x` is given any value.
+
+```{r}
+
+#include <iostream>
+
+int main()
+{
+    int x;
+    std::cout << x << '\n';
+
+    return 0;
+}
+```
+
+
+::: {.callout-warning}
+
+Using uninitialized is one of the most common mistakes
+
+:::
+
+### Undefined behavior
+
+Uninitialized variables are one example of undefined behavoir: we cannot know the results, or they can change, be incorrect, sometime correct, or crash.
+
+## Basic formatting
+
+The recommendations for basic formatting:
+
+1.  It fine to use either tab or spaces for indentation.
+2.  Function braces can be:
+
+```{r}
+int main() {
+}
+```
+
+or
+
+```{r}
+int main() 
+{
+}
+```
+
+The author recommended the later.
+
+3.  Each statement should start one tab from the opening space.
+4.  Line should not be too long. Typically, 80 characters is the maximum length in a line.
+5.  If line is too long, split with an operator (eg. +, -). The operator should be placed at the beginning of the next line.
+6. Use whitespaces to make the code easier to read.
+
+## Literals and operators
+
+### Literals
+
+**Literal** is a fixed value that has been inserted directly into the source code.
+
+### Operators
+
+**Operator** is the specific operation to be performed.
+
+### Return values and side effects
+
+An operator that has some observable effect beyond producing return value is said to have a side effect. For example, `x = 5` is evaluated, side effect is to assign 5 to `x`; the changed value of `x` is observable, or `std::cout <<` too.
+
+## Expression
+
+**Expression** is a combination of literals, variables, operators, and function calls that calculates a single value.
+
+The process of executing an expression is called **evaluation**. The single value is called **result**.
+
+Expressions do not end in a semicolon, and cannot be compiled by themselves (they must exist within a statement), example that
+
+```{r}
+int x{ 2 + 3 } ;
+```
+
+`2 + 3` is an expression and do not need a semicolon.
+
+Expressions also involve operators with side effects:
+
+```{r}
+
+x = 5;
+x = 2 + 3;
+std::cout << x;
+```
+
+### Expression statement
+
+Expression cannot compile by itself. We can add `=` to make it compile. We call this **expression statement**, an expression following by a semicolon.
+
+### Useless expression statements
+
+We can make an expression without assigning or having any side effect, such that
+
+```{r}
+2 * 3
+```
+
+## Developing first program
+### Multiply by 2
+
+::: {.callout-tip}
+
+#### Best practice
+
+New programmers often try to write an entire program all at once, and then get overwhelmed when it produces a lot of errors. A better strategy is to add one piece at a time, make sure it compiles, and test it. Then when you’re sure it’s working, move on to the next piece.
+
+:::
+
+There are many solutions, from bad to good. Let take time to find the good one (not override input value, avoid complexity).
+
+* We should firstly try to make the program work
+* Then, spend time to cleanup the code.
+
+```{r}
+#include <iostream>
+
+int main()
+{
+	std::cout << "Enter an integer: ";
+	
+	int num{ };
+	std::cin >> num;
+	
+	std::cout << "Double " << num << " is: " << num * 2 << ".\n";
+	std::cout << "Triple " << num << " is: " << num * 3 << ".\n";
+
+	return 0;
+}
+```
+

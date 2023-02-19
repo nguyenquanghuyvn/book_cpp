@@ -1,0 +1,16 @@
+{
+  "hash": "c5b4ddb4e41bd6ed4f371d9c68d0ba37",
+  "result": {
+    "markdown": "# Debugging C++ Programs\n\n## Syntax and semantic errors\n\n> Software errors are prevalent. It's easy to make them, and it's hard to find them\n\nTwo catergories of errors:\n\n* **Syntax error**: write a statement that is not valid according to the grammar of C++ (missing semicolons, using undeclared variables, missing braces, etc...). A compiler will catch these errors, so we identify and fix them. For example:\n\n\n::: {.cell}\n\n```{.r .cell-code}\n#include <iostream>\n\nint main()\n{\n    std::cout < \"Hi there\"; << x << '\\n'; // invalid operator (<), extraneous semicolon, undeclared variable (x)\n    return 0 // missing semicolon at end of statement\n}\n```\n:::\n\n\n\n* **Semantic error** occurs when a statement is syntactically valid, does not do what the we want.\n\n  - Sometimes it cause the program to crash\n\n\n::: {.cell}\n\n```{.r .cell-code}\n#include <iostream>\n\nint main()\n{\n    int a { 10 };\n    int b { 0 };\n    std::cout << a << \" / \" << b << \" = \" << a / b << '\\n'; // division by 0 is undefined\n    return 0;\n}\n```\n:::\n\n\n  - Or wrong value\n  \n\n::: {.cell}\n\n```{.r .cell-code}\n#include <iostream>\n\nint main()\n{\n    int x;\n    std::cout << x << '\\n'; // Use of uninitialized variable leads to undefined result\n\n    return 0;\n}\n```\n:::\n\n\n  - Or\n\n\n::: {.cell}\n\n```{.r .cell-code}\n#include <iostream>\n\nint main()\n{\n    return 0; // function returns here\n\n    std::cout << \"Hello, world!\\n\"; // so this never executes\n}\n```\n:::\n\n\n## The debugging process\n\nGenerally, there are 5 steps:\n\n1.  Find the root cause of the problem\n2.  Ensure you understand why the issue is occuring\n3.  Determine how you'll fix the issue\n4.  Repair the issue causing the problem\n5.  Retest to ensure the problem has been fixed and no new problems have emerged\n\n### Debugger\n\nA **debugger** is a computer program that allows the programmer to control how another program executes and examine the program state while that program is **running**. For example, a programmer can use debugger to execute a program line by line, examining the value of variables along the way.\n\nThe advantage:\n\n* The ability to precisely control execution of program\n* To view the program state\n\n:::{.callout-tip}\n\nDo not neglect learning to use a debugger. As your programs get more complicated, the amount of time you spend learning to use the integrated debugger effectively will pale in comparison to amount of time you save finding and fixing issues.\n\n:::\n\n### The call stack\n\nThe **call stack** is a list of all active functions that have been called to get to the current point of execution. It includes an entry for each function called, as well as which line code will be returned to when the function returns. Whenever a new functions is called, that function is added to the top of the call stack.\n\n",
+    "supporting": [
+      "c4_debug_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
