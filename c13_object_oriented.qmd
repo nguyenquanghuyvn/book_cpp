@@ -1,0 +1,25 @@
+---
+title: "Basic Object-oriented Programming"
+---
+
+In C++, object is a piece of memory to store values. An named object is a variable.
+
+Object-oriented programming (OOP) provides us with the ability to create objects that tie together both **properties**(e.g. color, weight, size, shape, etc...) and **behaviors** (e.g. being opened, make something else hot, etc...).
+
+```{r example_object}
+
+you.driveTo(work);
+
+```
+
+This is not only read more clearly, it also make it clearer who is the subject and what behavior. This makes the program to be written in a more *modular fashion*.
+
+Objects in OOP include normal definition and combines both properties and behaviors.
+
+## Classes and class members
+ 
+ 
+
+
+
+

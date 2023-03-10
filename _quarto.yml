@@ -20,6 +20,7 @@ book:
     - c10_enums_structs.qmd
     - c11_arrays_1.qmd
     - c12_function.qmd
+    - c13_object_oriented.qmd
     - summary.qmd
     - references.qmd
   

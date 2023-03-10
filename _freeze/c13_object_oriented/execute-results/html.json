@@ -1,0 +1,14 @@
+{
+  "hash": "5968dbdb4b2ffb619ce184864a2ea565",
+  "result": {
+    "markdown": "---\ntitle: \"Basic Object-oriented Programming\"\n---\n\n\nIn C++, object is a piece of memory to store values. An named object is a variable.\n\nObject-oriented programming (OOP) provides us with the ability to create objects that tie together both **properties**(e.g. color, weight, size, shape, etc...) and **behaviors** (e.g. being opened, make something else hot, etc...).\n\n\n::: {.cell}\n\n```{.r .cell-code}\nyou.driveTo(work);\n```\n:::\n\n\nThis is not only read more clearly, it also make it clearer who is the subject and what behavior. This makes the program to be written in a more *modular fashion*.\n\nObjects in OOP include normal definition and combines both properties and behaviors.\n\n ## Classes and class members\n \n \n\n\n\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
