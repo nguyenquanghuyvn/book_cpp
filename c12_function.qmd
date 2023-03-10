@@ -1305,3 +1305,107 @@ Be extra careful when you capture variables by reference, especially with a defa
 
 Lambda is an object, it can be copied; this property sometimes causes problems.
 
+Let look at the following example to see the unexpected results:
+
+```{r lambda_copies1}
+
+#include <iostream>
+
+int main()
+{
+	int i{ 0 };
+
+	auto count{ [i]() mutable {
+		std::cout << ++i << '\n';
+		}
+	};
+
+	count();
+
+	auto otherCount{ count };
+
+	count();
+	otherCount();
+
+	return 0;
+}
+#> 1
+#> 2
+#> 2
+```
+
+We expect that the results are `1, 2, 3`. `otherCount()` copied the functor/object `count` which is initialized as `1`. Then, we called the functor `otherCount()`, it printed `2`.
+
+The problem persists to the function pointer parameters created with `std::function` from `functional`  Here is an example:
+
+```{r lambda_copies2}
+
+void my_invoke(const std::function<void()>& fn)
+{
+	fn();
+}
+
+int main()
+{
+	int i{ 0 };
+
+	auto count{ [i]() mutable {
+		std::cout << ++i << '\n';
+		}
+	};
+
+	my_invoke(count);
+	my_invoke(count);
+	my_invoke(count);
+
+	return 0;
+}
+
+#> 1
+#> 1
+#> 1
+```
+
+To prevent this happen, we need to prevent the copy behavior of `std::function` and pass as reference to the lambda by using `std::ref()` function to wrap lambda in a `std::reference_wrapper` type. That will make `std::function` copy the reference rather than the actual object.
+
+Here is the new code with expected results:
+
+```{r std_ref}
+
+#include <iostream>
+#include <functional>
+
+void my_invoke(const std::function<void()>& fn)
+{
+	fn();
+}
+
+int main()
+{
+	int i{ 0 };
+
+	auto count{ [i]() mutable {
+		std::cout << ++i << '\n';
+		}
+	};
+
+	my_invoke(std::ref(count));
+	my_invoke(std::ref(count));
+	my_invoke(std::ref(count));
+
+	return 0;
+}
+
+#> 1
+#> 2
+#> 3
+```
+
+:::{.callout-tip}
+
+* Standard library functions may copy function objects (reminder: lambdas are function objects). If you want to provide lambdas with mutable captured variables, pass them by reference using `std::ref()`.
+
+* Try to avoid mutable lambdas. Non-mutable lambdas are easier to understand and don’t suffer from the above issues, as well as more dangerous issues that arise when you add parallel execution.
+
+:::
+
