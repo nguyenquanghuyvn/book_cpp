@@ -1,5 +1,5 @@
 ---
-title: "Basic Object-oriented Programming"
+title: "Basic Object oriented Programming"
 ---
 
 In C++, object is a piece of memory to store values. An named object is a variable.
@@ -18,8 +18,75 @@ Objects in OOP include normal definition and combines both properties and behavi
 
 ## Classes and class members
  
+ The `struct` data type only contains data, not the other behavior or properties. In OOP, we have **class**: it is similar to `struct`, but **having the functions** that work with the data as well.
  
+ Here is code to define **class**:
+ 
+```{r class_define}
 
 
+struct DateStruct {
+	int year{};
+	int month{};
+	int day{};
+};
 
+class DateClass {
+public:
+	int m_year{};
+	int m_month{};
+	int m_day{};
+};
+
+int main()
+{
+
+	return 0;
+}
+
+```
+ 
+ 
+Class definition is a *blueprint*, it does not actually create the object. To actually create an object of the class, a variable of that class **must** by defined: 
+
+```{r class_var}
+DateClass today{ 2020, 10, 14 };
+```
+
+### Member functions
+
+Functions defined inside of a class are **member function** or **methods**. Member function can be defined inside our outside of the class definition.
+
+```{r member_function}
+
+class DateClass {
+public:
+	int m_year{};
+	int m_month{};
+	int m_day{};
+
+	void print()
+	{
+		std::cout << m_year << '/' << m_month << '/' << m_day << '\n';
+	}
+};
+
+class Employee
+{
+public:
+	std::string m_name{};
+	int m_id{};
+	double m_wage{};
+
+	void print()
+	{
+		std::cout
+			<< "Name: " << m_name
+			<< "; Id: " << m_id
+			<< "; Wage " << m_wage << '\n';
+	}
+};
+```
+
+Member function can call function that defined after it in the class (normal function requires forward declaration).
 
