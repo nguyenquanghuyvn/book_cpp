@@ -15,27 +15,34 @@ book:
     - c5_operators.qmd
     - c6_scope_duration_linkage.qmd
     - c7_flow_error.qmd
+    - c8_implicit_conversion.qmd
+    - c9_intro_compound_data.qmd
+    - c10_enums_structs.qmd
+    - c11_arrays_1.qmd
+    - c12_function.qmd
     - summary.qmd
     - references.qmd
   
 page-navigation: true
 bibliography: references.bib
 toc: true
-toc-depth: 4
+toc-depth: 3
 callout-appearance: simple
+number-depth: 2
+citation: true
+code-block-bg: true
+code-copy: true
 
 format:
   html:
     theme: cosmo
-    code-fold: true
+    code-fold: false
     
   pdf:
     keep-tex: true
     documentclass: scrreprt
     fontfamily: libertinus
     number-sections: true
-    number-depth: 2
-    code-block-bg: true
     include-in-header: 
       text: |
         \usepackage{makeidx}

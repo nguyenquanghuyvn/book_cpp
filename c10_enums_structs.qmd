@@ -1,0 +1,879 @@
+---
+title: "Compound Types: Enums and Structs"
+---
+
+## Introduction to program-defined (user-defined) types
+
+We create directly the fundamental types such as `int`, `double` and `bool`. This is true for compound types extended from fundamentals types: functions, pointers, references, and arrays)
+
+```{r}
+#| label: compound-type-create
+
+int x;
+double y;
+
+void fcn(int)   # function type void()(int)
+int* ptr;
+int& ref;
+int arr[5];     # an array of 5 int
+```
+
+We also have type alias be defined through `using`. If we do not define it before using it, compiler will return error:
+
+```{r}
+#| label: type-alias
+
+using length = int;
+
+int main()
+{
+    length x{5};
+    std::cout << x << '\n';
+    
+    return 0;
+}
+```
+
+:::
+
+What will happen if we need a compound type that does not exit in C++ like fraction type?
+
+:::
+
+C++ allows us to create entirely new, custom types for use in our programs. We call it: **program-defined types** or **user-defined types**.
+
+Program-defined types must be defined before they are used. This definition is **type definition**.
+
+This is an example to define a new type named *Fraction*:
+
+```{r}
+#| label: example-define-type
+
+struct Fraction {
+	int numerator{};
+	int numerator{};
+};
+
+int main() {
+	
+	Fraction f{ 3, 4 };
+
+	return 0;
+}
+```
+
+:::{.callout-important}
+
+Always end the program-defined type definitions by a **semicolon**. If not, there will be an error.
+
+:::
+
+:::{.callout-tip}
+
+* Name your program-defined types starting with a capital letter and do not use a suffix.
+
+* A program-defined type used in only one code file should be defined in that code file as close to the first point of use as possible.
+
+* A program-defined type used in multiple code files should be defined in a header file with the same name as the program-defined type and then #included into each code file as needed.
+
+:::
+
+Program-defined type are partially exempt from the one-definition rule. Because the compiler needs to know the whole definition of type, forward declaration is not enough.
+
+## Enumerations
+
+An **enumeration** (enumarated type or **enum**) is a compound data type, program-defined type where every possible value is defined as a symbolic constant (**enumerator**).
+
+C++ supports two kinds of enumerations: unscoped enumerations and scoped enumerations.
+
+## Unscoped enumerations
+
+This is defined via the `enum` keyword. Let learn from the code:
+
+```{r}
+#| label: enum-Color
+
+enum Color
+{
+	// Here are enumerators
+
+	red,
+	green,
+	blue,
+};
+
+int main() {
+	
+	Color apple{ red };
+	Color shirt{ green };
+	Color cup{ blue };
+
+
+	return 0;
+}
+```
+
+Our enum should start with a capital letter.
+
+Each enum types are distinct types. Thus, enumerators defined as part of one enumerated type cannot be used with object of another enummerated type
+
+Enumerated types are best used when we have a smallish set of related constants.
+
+Enumerators exist in the scope creating the enumeration. For example, `enum Color` defined in global scope, thus all the name `red, green, and blue` are defined in global scope. This sometimes invoke the name collision if there are enumerators with same name but in different enum.
+
+To deal with this we can:
+
+* Use `Color::green`
+* Or put the `enum Color` in a namespace (**preferred**)
+
+```{r}
+#| label: enum-namespace
+
+namespace color
+{
+    enum Color{
+        red,
+        green, 
+        blue,
+    };
+}
+```
+
+## Unscoped enumeration input and output
+
+Each enumerator is assigned by computer or by programmer an integral.
+
+```{r}
+#| label: integral-enum
+
+enum Color
+{
+        red, # = 1
+        green, # = 2
+        blue, # 3
+};
+
+# we can assigne number too
+
+enum Color
+{
+        red, # = 1
+        green, # = 2
+        blue = 5,
+};
+```
+
+Because the unscoped enumeration implicitly converses to integer and the `std::cout<<` does not know how to print our define type, program prints unscoped enumration as integer, not its enumerators.
+
+```{r}
+#| label: enum_print
+
+#include <iostream>
+
+enum Color
+{
+	black, 
+	red,
+	blue,
+	green,
+	white,
+	cyan,
+	yellow,
+	magenta,
+};
+
+int main()
+{
+	Color shirt{ blue };
+	
+	std::cout << "Your shirt is " << shirt << '\n';
+
+	return 0;
+}
+
+#> Your shirt is 2
+```
+
+TO solve this problem, we can create a function to get enumerators and assign it to string to print out:
+
+```{r}
+#| label: enum-function-print
+
+#include <iostream>
+
+enum Color
+{
+	black, 
+	red,
+	blue,
+	green,
+	white,
+	cyan,
+	yellow,
+	magenta,
+};
+
+#' We create a function helping to print:
+const std::string_view getColor(Color& color)	# C++17
+{
+	switch (color)
+	{
+	case black:
+		return "black";
+	case red:
+		return "red";
+	case green:
+		return "green";
+	default:
+		return "???";
+	}
+}
+
+int main()
+{
+	Color shirt{ blue };
+	
+	std::cout << "Your shirt is " << shirt << '\n';
+
+	return 0;
+}
+```
+
+The other code we can do it to use `std::ostream`:
+
+```{r}
+#label: teach-operator>>
+
+std::ostream& operator<<(std::ostream& out, Color color)
+{
+	switch (color)
+	{
+	case black: 
+		out << "black";
+		break;
+	case red:
+		out << "red";
+		break;
+	case blue:
+		out << "blue";
+		break;
+	default:
+		out << "???";
+		break;
+	}
+
+	return out;
+}
+```
+
+This is similar to `std::cin`: it does not know how to input our defined type. We need a function or an overload to teach it:
+
+```{r}
+#| label: enum-std::in
+
+std::istream& operator>>(std::istream& in, Pet& pet)
+{
+	int input{};
+	in >> input;
+
+	pet = static_cast<Pet>(input);
+	
+	return in;
+
+}
+
+std::ostream& operator<<(std::ostream& out, Pet& pet)
+{
+	switch (pet)
+	{
+	case cat:
+		out << "cat";
+		break;
+	case dog:
+		out << "dog";
+		break;
+	case pig:
+		out << "pig";
+		break;
+	case whale:
+		out << "whale";
+		break;
+	}
+
+	return out;
+}
+
+
+int main()
+{
+    std::cout << "Enter a pet (0=cat, 1=dog, 2=pig, 3=whale): ";
+
+    Pet pet{};
+    std::cin >> pet; // input our pet using std::cin
+
+    std::cout << pet << '\n'; // prove that it worked
+
+    return 0;
+}
+```
+
+## Scope enumeration (enum class)
+
+We use `enum class` for scoped enumeration. There are two differences with unscoped enumeration:
+
+* They are strong type: do not implicitly cover to integer
+* They are strongly scoped: enumerators only place in the scope of its enum
+
+Here is an example code:
+
+```{r}
+#| label: scoped-example
+
+enum class Color
+{
+    red,
+    blue,
+};
+
+enum class Fruit
+{
+    banana,
+    fruit,
+};
+
+int main()
+{
+    std::cout << "Hello World!\n";
+
+    Color color{ Color::red };
+    Fruit fruit{ Fruit::banana };
+
+    if (color == fruit) # Compile error: can in unscope, but error in scoped enum
+        std::cout << "color and fruit are equal\n";
+    else
+        std::cout << "color and fruit are not equal\n";
+}
+
+```
+
+:::{.callout-note}
+
+Although we use `class` keyword, scope enum are not a *class type* (structs, classes, and unions).
+
+:::
+
+Notice the errors below:
+
+```{r}
+#| label: scoped-error
+
+    std::cout << red << '\n';   # red is not in global scope, it is in Color scope
+    std::cout << Color::red << '\n'; #operator<< does not know how to print Color type
+
+```
+
+We can use `using enum Define_type` inside a function to simplify the codes:
+
+```{r}
+#| label: using-enum
+
+constexpr std::string_view getColor(Color color)
+{
+    using enum Color;
+
+    switch (color)
+    {
+    case black:
+        return "black";
+    case red:
+        return "red";
+    case blue:
+        return "blue";
+    default:
+        return "???";
+    }
+}
+```
+
+Finally, learn from exercise:
+
+```{r}
+#| label: exercise
+
+enum class Animal
+{
+    pig,
+    chicken,
+    goat,
+    cat,
+    dog,
+    duck,
+    snake,
+};
+
+constexpr std::string_view get_animal_name(Animal animal)
+{
+    using enum Animal;
+
+    switch (animal)
+    {
+    case pig:
+        return "pig";
+    case chicken:
+        return "chicken";
+    case cat:
+        return "cat";
+    case dog:
+        return "dog";
+    case duck:
+        return "duck";
+    default:
+        std::cerr << "Error: cannot find the animal.\n";
+    }
+}
+
+int print_number_legs(Animal animal)
+{
+    using enum Animal;
+
+    switch (animal)
+    {
+    case pig:
+    case cat:
+    case dog:
+        return 4;
+    case duck:
+    case chicken:
+        return 2;
+    default:
+        std::cerr << "Error: cannot find the animal.\n";
+        std::abort();
+    }
+}
+
+void print_number_legs_ref(Animal animal)
+{
+    using enum Animal;
+
+    switch (animal)
+    {
+    case pig:
+    case cat:
+    case dog:
+        std::cout << 4;
+        break;
+    case duck:
+    case chicken:
+        std::cout << 2;
+        break;
+    default:
+        std::cerr << "Error: cannot find the animal.\n";
+        break;
+    }
+
+    std::cout << " legs.\n";
+}
+
+
+int main()
+{
+    std::cout << "Hello World!\n";
+
+    Color color{ Color::red };
+    Fruit fruit{ Fruit::banana };
+
+    // We can explicitly cover to integer
+    std::cout << static_cast<int>(color) << '\n';
+
+    //Get animal's name
+
+    Animal animal{ Animal::chicken };
+    std::cout << get_animal_name(Animal::snake) << '\n';
+    std::cout << "A " << get_animal_name(animal) << " has " << print_number_legs(animal) << " legs.\n";
+    std::cout << "A " << get_animal_name(animal) << " has ";
+    print_number_legs_ref(animal);
+
+    return 0;
+}
+
+```
+
+## Introduction to structs, members, and member selection
+
+`struct`(structure) is a keyword that group the related variables into one data types. Each variable defined in `struct` is a **member** of that struct type.
+
+We can use operator`.` to call each member in the struct and use it as a normal variable for programming.
+
+Here is an example:
+
+```{r}
+#| label: struct-employee
+
+#include <iostream>
+
+struct Employee
+{
+	int id{};
+	int age{};
+	double wage{};
+};
+
+int main()
+{
+	Employee joe{};
+	joe.id = 14;
+	joe.age = 40;
+	joe.wage = 4000.0;
+
+	Employee frank{};
+	frank.id = 20;
+	frank.age = 30;
+	frank.wage = 3000.0;
+
+	std::cout << "Joe's earning: " << joe.wage << '\n';
+	std::cout << "Frank's earning: " << frank.wage << '\n';
+
+	if (joe.wage > frank.wage)
+		std::cout << "Joe earns more than Frank.\n";
+	else if (joe.wage < frank.wage)
+		std::cout << "Joe earns less than Frank.\n";
+	else
+		"They have the same wage.\n";
+
+	// Frank got promotion
+	++frank.wage;
+
+	// Today is Joe's birthday
+	++joe.age;
+
+	return 0;
+}
+    
+```
+
+## Struct aggregate initialization
+
+Struct is an **aggregate** so it uses **aggregate initialization** by providing the **initializer list**, a list of valuers separated by comma:
+
+```{r}
+#| label: initialization
+
+Employee joe{14, 32, 4000.0};
+```
+
+Is some values is missing in initialization, it will be 0.
+
+Value of a struct type can be `const` such as `const Employee joe{14, 32, 4000.0};`
+
+We can add new member (variable) in struct, but should be at the bottom to avoid shift the value.
+
+#### Assignment with an initializer list
+
+We can use initializer list to assign values to members:
+
+```{r}
+#| label: struct-assignation
+
+Employee joe{14, 32, 4000.0};
+
+joe = {joe.id, 33, 4500.0};
+
+joe = {.id = joe.id, .age = 33, .Wage = 4600.0} # from C++20
+```
+
+:::{.callout-tip}
+
+Provide a default value for all members.
+
+If no explicit initializer values will be provided for an aggregate, prefer value initialization (with empty braces initializers) to default initialization( with no braces).
+
+:::
+
+## Struct passing and miscellany
+
+The important advantage of struct is `pass by reference to struct` so that we onmy one variable instead of many member variables in struct for the variable:
+
+```{r}
+#| label: pass_struct
+
+struct Employee
+{
+	int id{};
+	int age{};
+	double wage{};
+};
+
+void print_employee(const Employee& employee)
+{
+	std::cout << "ID: " << employee.id << '\n';
+	std::cout << "Age: " << employee.age << '\n';
+	std::cout << "Wage: " << employee.wage << "\n\n";
+}
+
+int main()
+{
+	Employee joe{ 10, 25, 3000.00 };
+	Employee frank{ 16, 30, 3500.00 };
+
+	print_employee(joe);
+	print_employee(frank);
+
+	return 0;
+}
+```
+
+We can also `return by struct`:
+
+```{r}
+#| label: return-struct
+
+Employee get_employee()
+{
+    return {};
+    
+    #or
+    return {0, 0, 0.0};
+    
+    #or
+    return Employee {0, 0, 0.0};
+    
+    #or
+    Employee emp{};
+    return emp;
+}
+```
+
+### Struct with program-defined members
+
+Struct can include member as another struct.
+
+```{r}
+#| label: struct-in-stuct
+
+struct Employee
+{
+	int id{};
+	int age{};
+	double wage{};
+};
+
+struct Company
+{
+	int number_employees{};
+	Employee CEO{};
+};
+
+int main()
+{
+	Company my_company{ 10, {1, 30, 230000.00} };
+	std::cout << my_company.CEO.age << '\n';
+
+	return 0;
+}
+```
+
+:::{.callout-note}
+
+Class is the heart of C++ and object oriented programming. It is built on top of structs. It is important to understand struct.
+
+:::
+
+Generally, we use `.` to call members of a struct. If it is a **reference** to a struct, we also use `.`.
+
+For a **pointer** to a struct, we cannot use `.`, we use operator `->` instead:
+
+```{r}
+#| label: reference-pointer-struct
+
+#include <iostream>
+#include <string>
+
+struct Paw
+{
+	int claw{};
+};
+
+struct Animal
+{
+	std::string name{};
+	Paw paw{};
+};
+
+int main()
+{
+	Animal puma{ "Puma", {5} };
+	Animal* ptr{ &puma };
+
+	std::cout << (ptr->paw).claw << '\n';
+
+	return 0;
+}
+
+```
+
+## Class template
+
+We come to the property that *type definition* cannot be overloaded like function. We can use `class template`:
+
+```{r}
+#| label: class_template
+
+#include <iostream>
+
+template <typename T>
+struct Pair
+{
+	T first{};
+	T second{};
+};
+
+template <typename T>
+constexpr T max(Pair<T> pair)
+{
+	return (pair.first > pair.second ? pair.first : pair.second);
+}
+
+int main()
+{
+	Pair<int> p1{ 5, 6 };
+	std::cout << p1.first << ' ' << p1.second << '\n';
+	std::cout << max<int>(p1) << '\n';
+
+	Pair<double> p2{ 3.2, 6.4 };
+	std::cout << p2.first << ' ' << p2.second << '\n';
+	std::cout << max(p2) << '\n';
+
+	return 0;
+}
+```
+
+Class template can have normal variable and template variable:
+
+```{r}
+
+template <typename T>
+struct Pair
+{
+    T first{};
+    int second{};
+}
+```
+
+Class template can have multiple types:
+
+```{r}
+template< typename T, typename U>
+struct Pair
+{
+    T first{};
+    U second{};
+};
+
+template <typename T, typename U>
+void print(Pair<U, T> p)
+{
+    std::cout << '[' << p.first << " , " << p.second << ']';
+}
+
+void print(Pair2<T, U> pair)
+{
+	std::cout << '[' << pair.first << ", " << pair.second << ']';
+}
+
+int main()
+{
+	Pair<int> p1{ 5, 6 };
+	std::cout << p1.first << ' ' << p1.second << '\n';
+	std::cout << max<int>(p1) << '\n';
+
+	Pair<double> p2{ 3.2, 6.4 };
+	std::cout << p2.first << ' ' << p2.second << '\n';
+	std::cout << max(p2) << '\n';
+
+	Pair2<int, double> p3{ 2, 8.6 };
+	print(p3);
+
+	return 0;
+}
+```
+
+#### std::pair
+
+C++ provide `std::pair` to work exactly as the pair template that we created above:
+
+```{r}
+#| label: std::pair
+
+template <typename T, typename U>
+void print2(std::pair<T, U> pair)
+{
+	std::cout << '[' << pair.first << ", " << pair.second << ']' << '\n';
+}
+
+int main()
+{
+
+	std::pair<int, double> p4{ 10, 25.5 };
+	print2(p4);
+
+	return 0;
+}
+```
+
+We can put template definition (function, type) and type definition in the header for using in multiple files. They are exempt from one-definition rule.
+
+```{r}
+#| label: header
+
+#ifndef PAIR_H
+#define PAIR_H
+
+template <typename T>
+struct Pair
+{
+    T first{};
+    T second{};
+};
+
+template <typename T>
+constexpr T max(Pair<T> p)
+{
+    return (p.first < p.second ? p.second : p.first);
+}
+
+#endif
+```
+
+## Class template argument deduction and deduction guides
+
+From C++17, we can define the template, but the compiler need a guide to deduce the member's type, thus we write the **deduction guide**:
+
+```{r}
+#| label: deduction-guide
+
+#include <iostream>
+#include <utility>
+
+template <typename T, typename U>
+struct Pair
+{
+	T first{};
+	U second{};
+};
+
+# Deduction guide
+template <typename T, typename U>
+Pair(T, U) -> Pair<T, U>;
+
+int main()
+{
+	std::pair<int, int> p1{ 3, 4 };
+	std::pair p2{ 1, 2 };
+
+	Pair p2{ 3, 2 }; # need deduction guide
+
+}
+```
+
+The chapter's summary is [here](https://www.learncpp.com/cpp-tutorial/chapter-10-summary-and-quiz/).
+

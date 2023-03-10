@@ -1,0 +1,896 @@
+---
+title: "Introduction to compound data types"
+---
+
+**Question:** How can we write a function taking two fraction numbers and then multiply them?
+
+With the fundamental data types, it is not easy to have a nice solution. Thus, C++ provide a tool: **compound data types**.
+
+## Compound data types
+
+They are constructed from fundamental data types. Each of them has its own unique properties. In the following sessions, we will learn many compound data types.
+
+## Value categories (lvalues and rvalues)
+
+All expressions in C++ have **a type and a value category**. 
+
+**Type**: Compiler will see whether the expression's type is valid in a given context.
+
+**Value category** of an expression indicates whether an expression resolves to a value, a function, or an object of some kind.
+
+There are two value categories: `lvalue` and `rvalue`.
+
+* `lvalue` is an expression that evaluates to an identifiable object or function
+
+```{r}
+#| label: lvalue
+
+#int x{5};
+#int y{x};   # x is modifiable lvalue expression
+
+const double d{};
+const double e{d};  # d is non-modifiable lvalue expr
+```
+
+* `rvalue` is expression that is not `lvalue` such as literals, return of functions or operators.
+
+From this we can understand why `x = 5` is valid, but not `5 = x`. `=assignment` requires the left operand is modifiable `lvalue` and right operand is `rvalue`.
+
+:::{.callout-note}
+
+`lvalue` can be implicitly converted to `rvalue`. Thus, `x = y` or `x = x + 1` are valid.
+
+:::
+
+## lvalue reference
+
+In C++, **reference** is an alias to an object. We can modify the object that are referenced (called *referent*) through its alias.
+
+```{r}
+#| label:lvalue-reference
+
+#include <iostream>
+
+int main()
+{
+	int x{ 5 };
+	int& ref{ x };      # We use (&) to define reference to x
+
+	return 0;
+}
+```
+
+In the above code, `ref` is bound to `x`. 
+
+:::{.callout-note}
+
+We cannot bind lvalue reference to non-modifiable lvalue. We need the const reference in preceding session.
+
+The type of reference must match the type of the referent.
+
+References are not objects in C++.
+
+References **cannot be reseated** to other lvalue.
+
+:::
+
+## Lvalue reference to const
+
+We can do this by `const int& ref{x}`. `ref` binds to non-modifiable lvalue `const int x`. `ref` can access its referent, but cannot modify the value being referenced:
+
+```{r}
+#| label: const-reference
+
+#include <iostream>
+
+int main()
+{
+	const int x{ 5 };
+	const int& ref{ x };
+
+	std::cout << ref << '\n';
+	ref = 6;    #!!! Error: cannot assign to const lvalue ref
+
+	return 0;
+}
+
+```
+
+Variable `x` does not need to be const to have const reference
+
+```{r}
+#| label: const-reference-modifable lvalue
+
+int main()
+{
+	int x{ 5 };
+	const int& ref{ x };
+
+	std::cout << ref << '\n';
+	//ref = 6; error
+
+	x = 6;
+	std::cout << ref << '\n';
+
+	return 0;
+}
+```
+
+:::{.callout-tip}
+
+Favor `lvalue references to const` over `lvalue references to non-const`
+
+:::
+
+With `lvalue reference to const`, we can bind to `rvalue` too: `const int& ref{ 5 };`.
+
+The program creates a **temporary object**^[Temporary object or anonymous object is created temporarily within a single expression. It does not have any scope] as a referent. However, lifetime of temporary object extends to the lifetime of its references.
+
+## Pass by lvalue reference
+
+Why does C++ allow to bind to `rvalue` object ?
+
+In function, when we pass by value to parameters, C++ copies argument's value to the function to use and destroys at the end of called function. Sometimes, it is not efficient for other data types.
+
+To avoid this, C++ uses `pass by reference` instead of `pass by value`. To do that, we declare functions' parameters as a reference type rather than a normal type.
+
+```{r}
+#| label: pass-by-reference
+
+#include <iostream>
+#include <string>
+
+void printValue(std::string& y)
+{
+	std::cout << y << '\n';
+}
+
+int main()
+{
+	std::string x{ "Hello world!" };
+	printValue(x);	// x is now passed by reference into reference parameter y
+
+	return 0;
+}
+```
+
+:::{.callout-warning}
+
+`pass by reference` to non-const allows us to write functions that **modify value** of arguments passed in
+
+:::
+
+We use const reference to avoid this. And const reference can refer to modifiable lvalue, non-modifiable lvalue and rvalue too.
+
+:::{.callout-tip}
+
+Function with multiple parameters can have both `pass by value` and `pass by reference`
+
+For fundamental types, `pass by value`
+
+For class types, `pass by reference`
+
+:::
+
+### The cost of pass by value vs pass by reference
+
+Why do not we always use pass by reference?
+
+First, cost of copying an object depends on: 
+
+* The size of object
+* Additional set up
+
+In this view, pass by reference is faster.
+
+Second, assessing an object through a reference is slightly more expensive than a normal variable identifier. In this view, pass by value is better.
+
+## Introduction to pointer
+
+> Pointers are one of C++'s historical boogeymen.
+>
+> `r tufte::quote_footer('--- Alex')`
+
+When we define a variable, RAM assigns a piece of memory to this object. For example,  define `char x{}`, and then RAM allocate it to address `140`. Anytime, we call `x`, RAM will go to `140` to extract its value.
+
+This is true with reference too. 
+
+```{r}
+#| reference-adress
+
+int main()
+{
+    char x{};
+    char& ref{x};
+    
+    return 0;
+}
+```
+
+Anytime we call `ref`, the program goes to the memory address `140`.
+
+### The address-of operator (&)
+
+The **address-of operator (&)** returns the memory address of operand.
+
+```{r}
+#| label: address-of
+
+#include <iostream>
+
+int main()
+{
+	int x{ 5 };
+	std::cout << x << '\n';
+	std::cout << &x << '\n';
+
+	return 0;
+}
+
+```
+
+The **dereference operator (\*)** returns the value at a given memory address as an lvalue.
+
+```{r}
+#| label: dereference
+
+std::cout << *(&x) << '\n';
+```
+
+### Pointers
+
+A **pointer** is an object that holds a *memory address* (typically of another variable) as its value.
+
+Like reference to lvalue uses `(&)`, the pointer use an asterisk `*`:
+
+```{r}
+#| label: pointer-declaration
+
+int* ptr;
+```
+
+Like normal variable, pointers are not initialized by default. If not initialized, we call it **wild pointer**. We should always initialize pointers to a *known value*.
+
+```{r}
+#| label: initialized-pointer
+
+int x{ 5 };
+int& ref{ x };
+int* ptr;	        # wild pointer
+int* ptr2{};        # null pointer
+int* ptr3{ &x };	# a pointer bind to address of x
+```
+
+:::{.callout-note}
+
+* "X pointer" is a short hand for "pointer to an X".
+
+:::
+
+Muck like a reference, type of reference has to match type of object referred, type of pointer has to match the type of the object of being pointed to.
+
+Initializing a pointer with a literal value is **disallowed**.
+
+### Pointer and assignment
+
+We use assignment to change the pointer points to address of other object:
+
+```{r}
+#| label: change-pointing-to
+
+int main()
+{
+	int x{ 5 };
+	int* ptr{ &x };
+
+	std::cout << *ptr << '\n';
+
+	int y{ 10 };
+	ptr = &y;
+	std::cout << *ptr << '\n';
+
+	return 0;
+}
+```
+
+We use the assignment to change the value of object that a pointer is pointing to
+
+### Pointer and reference
+
+Pointer and reference has some similarly. But they are different:
+
+* For pointer, we must use address-of and dereference explicitly. They are implicit for reference
+* Reference must be initialized, pointer are not required (risk of undefined behaviors)
+* Reference is not an object, pointer is an object
+* Reference cannot be reseated, pointer can be reseated
+* References must always be bound to an object, point can point to nothing (null pointer)
+* References are safe, pointers are inherently dangerous.
+
+The address-of operator returns a pointer, not as a literal.
+
+The size of pointers are the same regardless of size of object being pointed to
+
+### Dangling pointers
+
+Like dangling reference, **dangling pointer** is a pointer that is holding the address of an object that is no longer valid.
+
+### Conclusion
+
+Pointers are both more flexible than references and more dangerous.
+
+
+## Null pointers
+
+**Null pointers** point to nothing; it holds null value. We can assign null pointer to an object.
+
+```{r}
+#| label: null-pointer
+
+int* ptr0{};			// null pointer
+ptr0 = &x;			   // null pointers point to an object
+
+```
+
+In C++, we use `nullptr` to initialize, assign, pass null pointer to pointer or function.
+
+Dereferencing a null pointer may lead to *undefined behavior* or crash the program.
+
+:::{.callout-warning}
+
+Whenever we use a pointer, we must guarantee that there does not have any dereferencing null or dangling pointers.
+
+:::
+
+We can use the `if statement` to test whether a pointer is null or not.
+
+:::{.callout-tip}
+
+Any pointer should either hold a valid object's address or be set to `nullptr`. Thus, we can test for the pointer's nullity and assume any non-null pointer is valid.
+
+:::
+
+We should favor references over pointers unless the additional capabilities provided by pointer are needed.
+
+The code for this session
+
+```{r}
+#| label: code-session
+
+#include <iostream>
+#include <typeinfo>
+
+int main()
+{
+	int x{ 5 };
+	int* ptr0{ nullptr };// null pointer
+	int* ptr{ &x };
+
+	if (ptr == nullptr)
+	{
+		std::cout << "ptr is null\n";
+	}
+	else
+	{
+		std::cout << "ptr is non-null\n";
+	}
+
+	ptr0 = &x;			   // null pointers point to an object
+	ptr = nullptr;
+
+	std::cout << typeid(&x).name() << '\n';
+	std::cout << ptr << '\n';
+
+	return 0;
+}
+
+```
+
+## Pointer and const
+
+A normal pointer cannot point to a const object, we need a **pointer to a const value** by adding `const` at the start of pointer's definition.
+
+```{r}
+#| label: pointer-to-const
+
+const int x{5};
+const int* ptr{ &x };	# we use the pointer to const, but it is not const itself
+
+```
+
+From its definition, `ptr` point to const `x`. That pointer cannot change the value of `x` through assignment, but it can pointer to other object (either const or not-const). Thus, pointer is **not constant itself** but it cannot change the value of object pointed.
+
+To create a constant pointer that it cannot point to other object, we use the code `int* const ptr{ &y }`. Thus, the const pointer cannot point to other object, but it can change object's value.
+
+Finally, we can define **const pointer to const value** by using two `const` before the type and after the asterisk.
+
+Let look at the following code as a summary this session
+
+```{r}
+#| label: const-pointer
+
+#include <iostream>
+#include <typeinfo>
+
+int main()
+{
+	const int x{ 5 };
+
+	//int* ptr{ &x };				# compile error: cannot initialize with const
+	const int* ptr{ &x };		   # we use the pointer to const, but it is not const itself
+
+	//*ptr = 6;				     # error: cannot change value of const var
+	
+	int y{ 7 };
+	ptr = &y;				  # can change the address to point to
+
+	const int* ptr2{ &y };  # const pointer to a non-const var
+	//*ptr2 = 6;		   # not allowed
+	y = 6;				  # ok
+
+	int z{ 10 };
+	int* const ptr3{ &y };			 # const pointer	
+
+	ptr3 = &z;						# const pointer cannot pointer to other object
+	*ptr3 = 500;
+
+	const int* const ptr4{ &x };	  # const pointer to const value
+
+	return 0;
+}
+```
+
+
+## Pass by address
+
+We start by looking at the following code:
+
+```{r}
+#label: print-function
+
+#include <iostream>
+#include <string>
+
+# Function use pass by value
+void printValue(std::string val)
+{
+	std::cout << val << '\n';
+}
+
+# Function use pass by reference
+void printByReference( const std::string& ref)
+{
+	std::cout << ref << '\n';
+}
+
+int main()
+{
+	std::string val{ "Hello world!" };
+
+	printValue(val);			# it copies the val's value to pass to called function
+	printByReference(val);	   # it does not copies, make a reference to function
+
+	return 0;
+}
+```
+
+We learned about `pass by value` and `pass by reference`. Let recall where we use either of them.
+
+We now also use `pass by address` as follow code:
+
+```{r}
+#| label: pass-by-address
+
+void changeValue(int* ptr)
+{
+	*ptr = 6;
+}
+
+int main()
+{
+	std::string val{ "Hello world!" };
+
+	printValue(val);	# it copies the val's value to pass to called function
+	printByReference(val);	   # it does not copy, make a reference to function
+	printByAddress(&val);	  # pass by address, does not copy val
+
+	return 0;
+}
+```
+
+We can modify the object's value through pass by address
+
+```{r}
+#| label: pass-by-address-change-value
+
+void changeValue(int* ptr)
+{
+	*ptr = 6;
+}
+```
+
+Make sure not to pass null pointer. We can test and handle it
+
+```{r}
+#| label: test-null
+
+void print(int* ptr)
+{
+	assert(ptr && "Pointer must be not null");
+	
+	if (!ptr)	// if ptr is null pointer, return
+	{
+		return;
+	}
+
+	std::cout << *ptr << '\n';
+}
+```
+
+Pass by address can only use for lvalue, not for rvalue. Pass by const reference can use for both and avoids the null problem.
+
+:::{.callout-tip}
+
+Favor pass by reference over pass by address.
+
+:::
+
+
+## Pass by address 2
+
+Pass by address can use for default (optional) arguments. But sometimes, we can use the overloaded functions.
+
+### Changing what a pointer parameter points at
+
+Pass by address **copies** the address to the parameters, so we change the pointing in the function does not change the pointing of pointer outside function.
+
+To do this, we pass **pointer by reference** to the parameter.
+
+```{r}
+#| label: pointer-by-reference
+
+void printByReference( const std::string*& ref)
+{
+	std::cout << ref << '\n';
+}
+```
+
+### There is only pass by value
+
+Compiler implement pass by reference by using pointers. Behind the scenes, pass by reference is just pass by address with implicit dereference.
+
+When pass by address make a copies of address from caller to the called function, it is also an type of pass by value.
+
+We conclude that C++ really passes everything by value!
+
+
+## Return by reference and return by address
+
+Compiler copies function's return to pass back to caller. This sometimes expensive.
+
+### Return by reference
+
+We may use **return by reference** to avoid this. **Return by reference** returns a reference that is bound to object being returned. Here is an example:
+
+```{r}
+#| label: return-by-reference
+
+#include <iostream>
+#include <string>
+
+const std::string& getProgramName()
+{
+	static const std::string s_programName{ "Calculator" };
+	
+	return s_programName;
+}
+
+int main()
+{
+	std::cout << "Program's name is " << getProgramName() << '\n';
+
+	return 0;
+}
+```
+
+`getProgramName()` return a const reference. When the return is executed, `getProgramme()` return a const reference to `s_programName`.
+
+The object returned by reference must exit after the function returns. We cannot use the **local variable** for return by reference.
+
+Avoid returning references to non-const local static variables. The code below shows the problem:
+
+```{r}
+#| label: non-const-value
+
+const int& getId()
+{
+	static int id{ 0 };
+	++id;
+
+	return id;
+}
+
+int main()
+{
+	//std::cout << "Program's name is " << getProgramName() << '\n';
+
+	const int& id1{ getId() };
+	const int& id2{ getId() };
+
+	std::cout << id1 << id2 << '\n';
+
+	return 0;
+}
+
+#>22
+```
+
+Two ids value are the same because we generate non-const static variable.
+
+When we assign or initialize a  **normal variable** by a return by reference function, compiler makes a **copies** of the value return by reference:
+
+```{r}
+#| label: non-const-value-normal-variable
+
+const int& getId()
+{
+	static int id{ 0 };
+	++id;
+
+	return id;
+}
+
+int main()
+{
+	//std::cout << "Program's name is " << getProgramName() << '\n';
+
+	const int id1{ getId() };  #id1 and id2 are normal variable
+	const int id2{ getId() };
+
+	std::cout << id1 << id2 << '\n';
+
+	return 0;
+}
+
+#>12
+```
+
+**Notice that the reference is left dangling before the copy is made.**
+
+It is fine to return reference parameters by reference
+
+```{r}
+#| label: return-reference-pass-by-reference
+
+const std::string& firstAlphabetical(const std::string& a, const std::string& b)
+{
+	return (a < b ? a : b);
+}
+
+int main()
+{
+	const std::string a{ "Hello" };
+	const std::string b{ "World" };
+
+	std::cout << firstAlphabetical(a, b) << '\n';
+
+	return 0;
+}
+```
+
+The caller can modify the return by reference for non-const reference.
+
+```{r}
+#| label: modify-return-reference
+
+int& max(int& x, int& y)
+{
+	return (x > y ? x : y);
+}
+
+
+int main()
+{
+	int a{ 100 };
+	int b{ 200 };
+
+	max(a, b) = 1;
+
+	std::cout << b << '\n';
+
+	return 0;
+}
+```
+
+## Type deduction with pointers, references, and const
+
+Recall about type deduction for object and function by using `auto`. Remember that `auto` remove `const`, if we want to keep it, then use `const auto`. Let look at the code:
+
+```{r}
+#| label: auto-recall
+
+#include <iostream>
+
+int getVal()
+{
+	return 1;
+}
+
+const double foo()
+{
+	return 5.6;
+}
+
+int main()
+{
+	auto val{ getVal() };	# val deduced as type int
+
+	auto x{ foo() };	    # double, dropped const
+	const auto y{ foo() }; # const double
+
+	return 0;
+}
+```
+
+Type deduction also drops **reference**, thus we need to add again to the definition:
+
+```{r}
+#| label: reference-deduction
+
+std::string& getRef()
+{
+	static std::string s_getString{ "Hello" };
+
+	return s_getString;
+}
+
+int main()
+{
+	auto ref1{ getRef() };	# std::string, dropped reference
+	auto& ref2{ getRef() };	# std::string&
+
+	return 0;
+}
+```
+
+### Top-level const and low-level const
+
+A **top-level const** is a const qualifier that applies to an object itself:
+
+```{r}
+#| label: top-level-const
+
+const int x{};  # this const applies directly to x
+int* const ptr{}; # this const applies directly to ptr
+```
+
+A **low-level const** is a const qualifier that applies to the object being referenced or pointed to:
+
+```{r}
+#| label: low-level-const
+
+const int& ref{x};  # this const applies to the object being referenced
+const int* ptr{};   # this const applies to the oject being pointed to
+```
+
+A reference is not an object, so there are no top-level- const for reference.
+
+Pointer may have both top and low level const
+
+```{r}
+#| label: both-level-pointer
+
+const int* const ptr{};
+
+```
+
+Type deduction only drops **top-level const**.
+
+If the initializer is a reference to const, the reference is dropped first, and then any top-level const is dropped from the result:
+
+```{r}
+#| label: reference-deduction-const
+
+const std::string& getRef()
+{
+	static const std::string s_getString{ "Hello" };
+
+	return s_getString;
+}
+
+int main()
+{
+	auto ref1{ getRef() };		# std::string: dropped reference, then dropped const
+	const auto ref2{ getRef() }; # const std::string: dropped reference
+
+	auto& ref3{ getRef() };		# const std::string&
+	const auto& ref4{ getRef() }; # const std::string&
+
+	return 0;
+}
+```
+
+### Type deduction and pointers
+
+Unlike reference, type deduction does not drop pointer, thus the two codes below have the same results:
+
+```{r}
+#| label: pointer-reference
+
+#include <iostream>
+#include <string>
+
+std::string* getPtr(std::string* str)
+{ 
+	return str;
+}
+
+int main()
+{
+	std::string str{ "Hello" };
+
+	auto ptr3{ getPtr(&str) };  # std::string*
+	auto* ptr4{ getPtr(&str) }; # std::string*
+
+	std::cout << *ptr3  << ' ' << *ptr4 << '\n';
+
+	return 0;
+}
+```
+
+But there are difference betwwen `auto` and `auto*`
+
+* `auto` deduces including pointer
+* `auto*` deduces not including pointer, and then reapplied the pointer.
+* `auto*` must resolve to a pointer initialzer, otherwise, there is error
+
+```{r}
+
+auto* ptr4{ *getPtr() };     # does not compile (initializer not a pointer)
+```
+
+We can see the following code:
+
+```{r}
+#| label: const-pointer-const
+
+std::string* getPtr(); # some function that returns a pointer
+
+int main()
+{
+    const auto ptr1{ getPtr() };  # std::string* const
+    auto const ptr2 { getPtr() }; # std::string* const
+
+    const auto* ptr3{ getPtr() }; # const std::string*
+    auto* const ptr4{ getPtr() }; # std::string* const
+
+    return 0;
+}
+```
+
+And a more complicated one:
+
+```{r}
+
+#include <string>
+
+const std::string* const getConstPtr(); # some function that returns a const pointer to a const value
+
+int main()
+{
+    auto ptr1{ getConstPtr() };  # const std::string*
+    auto* ptr2{ getConstPtr() }; # const std::string*
+
+    auto const ptr3{ getConstPtr() };  # const std::string* const
+    const auto ptr4{ getConstPtr() };  # const std::string* const
+
+    auto* const ptr5{ getConstPtr() }; # const std::string* const
+    const auto* ptr6{ getConstPtr() }; # const std::string*
+
+    const auto const ptr7{ getConstPtr() };  # error: const qualifer can not be applied twice
+    const auto* const ptr8{ getConstPtr() }; # const std::string* const
+
+    return 0;
+}
+```
+
+Please read the Chapter's summary [here](https://www.learncpp.com/cpp-tutorial/chapter-9-summary-and-quiz/).

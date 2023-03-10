@@ -93,7 +93,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./summary.html" rel="next">
+<link href="./c8_implicit_conversion.html" rel="next">
 <link href="./c6_scope_duration_linkage.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -203,7 +203,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./summary.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summary</span></a>
+  <a href="./c8_implicit_conversion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Type conversion and Funcion Overloading</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c9_intro_compound_data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Introduction to compound data types</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c10_enums_structs.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Compound Types: Enums and Structs</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c11_arrays_1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Arrays (Part 1)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Summary</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -221,67 +241,49 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
    
   <ul>
   <li><a href="#conditional-flow-control-statement" id="toc-conditional-flow-control-statement" class="nav-link active" data-scroll-target="#conditional-flow-control-statement"><span class="toc-section-number">8.1</span>  Conditional flow control statement</a>
-  <ul>
-  <li><a href="#if-statements-and-blocks" id="toc-if-statements-and-blocks" class="nav-link" data-scroll-target="#if-statements-and-blocks"><span class="toc-section-number">8.1.1</span>  If statements and blocks</a></li>
-  <li><a href="#common-if-statement-problem" id="toc-common-if-statement-problem" class="nav-link" data-scroll-target="#common-if-statement-problem"><span class="toc-section-number">8.1.2</span>  Common <code>if statement</code> problem</a></li>
-  <li><a href="#switch-statement-basics" id="toc-switch-statement-basics" class="nav-link" data-scroll-target="#switch-statement-basics"><span class="toc-section-number">8.1.3</span>  Switch statement basics</a></li>
+  <ul class="collapse">
+  <li><a href="#if-statements-and-blocks" id="toc-if-statements-and-blocks" class="nav-link" data-scroll-target="#if-statements-and-blocks">If statements and blocks</a></li>
+  <li><a href="#common-if-statement-problem" id="toc-common-if-statement-problem" class="nav-link" data-scroll-target="#common-if-statement-problem">Common <code>if statement</code> problem</a></li>
+  <li><a href="#switch-statement-basics" id="toc-switch-statement-basics" class="nav-link" data-scroll-target="#switch-statement-basics">Switch statement basics</a></li>
   </ul></li>
   <li><a href="#goto-statements" id="toc-goto-statements" class="nav-link" data-scroll-target="#goto-statements"><span class="toc-section-number">8.2</span>  Goto statements</a></li>
   <li><a href="#introduction-to-loops-and-while-statements" id="toc-introduction-to-loops-and-while-statements" class="nav-link" data-scroll-target="#introduction-to-loops-and-while-statements"><span class="toc-section-number">8.3</span>  Introduction to loops and while statements</a>
-  <ul>
-  <li><a href="#nested-loop" id="toc-nested-loop" class="nav-link" data-scroll-target="#nested-loop"><span class="toc-section-number">8.3.1</span>  Nested loop</a></li>
+  <ul class="collapse">
+  <li><a href="#nested-loop" id="toc-nested-loop" class="nav-link" data-scroll-target="#nested-loop">Nested loop</a></li>
   </ul></li>
   <li><a href="#do-while-statement" id="toc-do-while-statement" class="nav-link" data-scroll-target="#do-while-statement"><span class="toc-section-number">8.4</span>  Do while statement</a></li>
   <li><a href="#for-statements" id="toc-for-statements" class="nav-link" data-scroll-target="#for-statements"><span class="toc-section-number">8.5</span>  For statements</a></li>
   <li><a href="#break-and-continue" id="toc-break-and-continue" class="nav-link" data-scroll-target="#break-and-continue"><span class="toc-section-number">8.6</span>  Break and continue</a>
-  <ul>
-  <li><a href="#continue" id="toc-continue" class="nav-link" data-scroll-target="#continue"><span class="toc-section-number">8.6.1</span>  Continue</a></li>
+  <ul class="collapse">
+  <li><a href="#continue" id="toc-continue" class="nav-link" data-scroll-target="#continue">Continue</a></li>
   </ul></li>
   <li><a href="#sec-halts" id="toc-sec-halts" class="nav-link" data-scroll-target="#sec-halts"><span class="toc-section-number">8.7</span>  Halts</a>
-  <ul>
-  <li><a href="#the-stdexit-function" id="toc-the-stdexit-function" class="nav-link" data-scroll-target="#the-stdexit-function"><span class="toc-section-number">8.7.1</span>  The <code>std::exit()</code> function</a></li>
-  <li><a href="#stdabort" id="toc-stdabort" class="nav-link" data-scroll-target="#stdabort"><span class="toc-section-number">8.7.2</span>  <code>std::abort()</code></a></li>
+  <ul class="collapse">
+  <li><a href="#the-stdexit-function" id="toc-the-stdexit-function" class="nav-link" data-scroll-target="#the-stdexit-function">The <code>std::exit()</code> function</a></li>
+  <li><a href="#stdabort" id="toc-stdabort" class="nav-link" data-scroll-target="#stdabort"><code>std::abort()</code></a></li>
   </ul></li>
   <li><a href="#introduction-to-testing-the-code" id="toc-introduction-to-testing-the-code" class="nav-link" data-scroll-target="#introduction-to-testing-the-code"><span class="toc-section-number">8.8</span>  Introduction to testing the code</a>
-  <ul>
-  <li><a href="#test-your-programs-in-small-pieces" id="toc-test-your-programs-in-small-pieces" class="nav-link" data-scroll-target="#test-your-programs-in-small-pieces"><span class="toc-section-number">8.8.1</span>  Test your programs in small pieces</a>
   <ul class="collapse">
-  <li><a href="#informal-testing" id="toc-informal-testing" class="nav-link" data-scroll-target="#informal-testing"><span class="toc-section-number">8.8.1.1</span>  Informal testing</a></li>
-  <li><a href="#preserving-your-tests" id="toc-preserving-your-tests" class="nav-link" data-scroll-target="#preserving-your-tests"><span class="toc-section-number">8.8.1.2</span>  Preserving your tests</a></li>
-  </ul></li>
+  <li><a href="#test-your-programs-in-small-pieces" id="toc-test-your-programs-in-small-pieces" class="nav-link" data-scroll-target="#test-your-programs-in-small-pieces">Test your programs in small pieces</a></li>
   </ul></li>
   <li><a href="#common-semantic-errors-in-c" id="toc-common-semantic-errors-in-c" class="nav-link" data-scroll-target="#common-semantic-errors-in-c"><span class="toc-section-number">8.9</span>  Common semantic errors in C++</a></li>
   <li><a href="#detecting-and-handling-errors" id="toc-detecting-and-handling-errors" class="nav-link" data-scroll-target="#detecting-and-handling-errors"><span class="toc-section-number">8.10</span>  Detecting and handling errors</a>
-  <ul>
-  <li><a href="#handling-the-error-within-the-function" id="toc-handling-the-error-within-the-function" class="nav-link" data-scroll-target="#handling-the-error-within-the-function"><span class="toc-section-number">8.10.1</span>  Handling the error within the function</a></li>
-  <li><a href="#passing-error-back-to-the-caller" id="toc-passing-error-back-to-the-caller" class="nav-link" data-scroll-target="#passing-error-back-to-the-caller"><span class="toc-section-number">8.10.2</span>  Passing error back to the caller</a></li>
-  <li><a href="#fatal-errors" id="toc-fatal-errors" class="nav-link" data-scroll-target="#fatal-errors"><span class="toc-section-number">8.10.3</span>  Fatal errors</a></li>
+  <ul class="collapse">
+  <li><a href="#handling-the-error-within-the-function" id="toc-handling-the-error-within-the-function" class="nav-link" data-scroll-target="#handling-the-error-within-the-function">Handling the error within the function</a></li>
+  <li><a href="#passing-error-back-to-the-caller" id="toc-passing-error-back-to-the-caller" class="nav-link" data-scroll-target="#passing-error-back-to-the-caller">Passing error back to the caller</a></li>
+  <li><a href="#fatal-errors" id="toc-fatal-errors" class="nav-link" data-scroll-target="#fatal-errors">Fatal errors</a></li>
   </ul></li>
-  <li><a href="#stdcin-and-handling-invalid-input" id="toc-stdcin-and-handling-invalid-input" class="nav-link" data-scroll-target="#stdcin-and-handling-invalid-input"><span class="toc-section-number">8.11</span>  <code>std::cin</code> and handling invalid input</a>
-  <ul>
-  <li><a href="#stdcin-buffers-and-extraction" id="toc-stdcin-buffers-and-extraction" class="nav-link" data-scroll-target="#stdcin-buffers-and-extraction"><span class="toc-section-number">8.11.0.1</span>  <code>std::cin</code>, buffers, and extraction</a></li>
-  <li><a href="#error-case-1-input-extraction-succeeds-but-the-input-is-meaningless-to-the-program" id="toc-error-case-1-input-extraction-succeeds-but-the-input-is-meaningless-to-the-program" class="nav-link" data-scroll-target="#error-case-1-input-extraction-succeeds-but-the-input-is-meaningless-to-the-program"><span class="toc-section-number">8.11.0.2</span>  Error case 1: Input extraction succeeds but the input is meaningless to the program</a></li>
-  <li><a href="#error-case-2-extraction-succeeds-but-with-extraneous-input" id="toc-error-case-2-extraction-succeeds-but-with-extraneous-input" class="nav-link" data-scroll-target="#error-case-2-extraction-succeeds-but-with-extraneous-input"><span class="toc-section-number">8.11.0.3</span>  Error case 2: Extraction succeeds but with extraneous input</a></li>
-  <li><a href="#error-case-3-extraction-fails" id="toc-error-case-3-extraction-fails" class="nav-link" data-scroll-target="#error-case-3-extraction-fails"><span class="toc-section-number">8.11.0.4</span>  Error case 3: Extraction fails</a></li>
-  <li><a href="#error-case-4-extraction-succeeds-but-the-user-overflows-a-numeric-value" id="toc-error-case-4-extraction-succeeds-but-the-user-overflows-a-numeric-value" class="nav-link" data-scroll-target="#error-case-4-extraction-succeeds-but-the-user-overflows-a-numeric-value"><span class="toc-section-number">8.11.0.5</span>  Error case 4: Extraction succeeds but the user overflows a numeric value</a></li>
-  </ul></li>
+  <li><a href="#stdcin-and-handling-invalid-input" id="toc-stdcin-and-handling-invalid-input" class="nav-link" data-scroll-target="#stdcin-and-handling-invalid-input"><span class="toc-section-number">8.11</span>  <code>std::cin</code> and handling invalid input</a></li>
   <li><a href="#assert-and-static_assert" id="toc-assert-and-static_assert" class="nav-link" data-scroll-target="#assert-and-static_assert"><span class="toc-section-number">8.12</span>  Assert and static_assert</a>
-  <ul>
-  <li><a href="#precondition-invariant-postcondition" id="toc-precondition-invariant-postcondition" class="nav-link" data-scroll-target="#precondition-invariant-postcondition"><span class="toc-section-number">8.12.0.1</span>  Precondition, Invariant, Postcondition</a></li>
-  <li><a href="#assertions" id="toc-assertions" class="nav-link" data-scroll-target="#assertions"><span class="toc-section-number">8.12.1</span>  Assertions</a>
   <ul class="collapse">
-  <li><a href="#asserts-and-error-handling" id="toc-asserts-and-error-handling" class="nav-link" data-scroll-target="#asserts-and-error-handling"><span class="toc-section-number">8.12.1.1</span>  Asserts and Error handling</a></li>
-  <li><a href="#static_assert" id="toc-static_assert" class="nav-link" data-scroll-target="#static_assert"><span class="toc-section-number">8.12.1.2</span>  <code>static_assert</code></a></li>
+  <li><a href="#assertions" id="toc-assertions" class="nav-link" data-scroll-target="#assertions">Assertions</a></li>
   </ul></li>
-  <li><a href="#algorithms-and-state" id="toc-algorithms-and-state" class="nav-link" data-scroll-target="#algorithms-and-state"><span class="toc-section-number">8.12.2</span>  Algorithms and state</a>
+  <li><a href="#introduction-to-random-numer-generation" id="toc-introduction-to-random-numer-generation" class="nav-link" data-scroll-target="#introduction-to-random-numer-generation"><span class="toc-section-number">8.13</span>  Introduction to random numer generation</a>
   <ul class="collapse">
-  <li><a href="#algorithm" id="toc-algorithm" class="nav-link" data-scroll-target="#algorithm"><span class="toc-section-number">8.12.2.1</span>  Algorithm:</a></li>
-  </ul></li>
-  <li><a href="#pseudo-random-number-generators-prngs" id="toc-pseudo-random-number-generators-prngs" class="nav-link" data-scroll-target="#pseudo-random-number-generators-prngs"><span class="toc-section-number">8.12.3</span>  Pseudo-random number generators (PRNGs)</a>
-  <ul class="collapse">
-  <li><a href="#seeding-a-prng" id="toc-seeding-a-prng" class="nav-link" data-scroll-target="#seeding-a-prng"><span class="toc-section-number">8.12.3.1</span>  Seeding a PRNG</a></li>
-  <li><a href="#what-makes-a-good-prng" id="toc-what-makes-a-good-prng" class="nav-link" data-scroll-target="#what-makes-a-good-prng"><span class="toc-section-number">8.12.3.2</span>  What makes a good PRNG?</a></li>
-  </ul></li>
+  <li><a href="#algorithms-and-state" id="toc-algorithms-and-state" class="nav-link" data-scroll-target="#algorithms-and-state">Algorithms and state</a></li>
+  <li><a href="#pseudo-random-number-generators-prngs" id="toc-pseudo-random-number-generators-prngs" class="nav-link" data-scroll-target="#pseudo-random-number-generators-prngs">Pseudo-random number generators (PRNGs)</a></li>
+  <li><a href="#randomization-in-c" id="toc-randomization-in-c" class="nav-link" data-scroll-target="#randomization-in-c">Randomization in C++</a></li>
+  <li><a href="#generating-random-numbers-using-mersenne-twister" id="toc-generating-random-numbers-using-mersenne-twister" class="nav-link" data-scroll-target="#generating-random-numbers-using-mersenne-twister">Generating random numbers using Mersenne Twister</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -325,13 +327,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <section id="conditional-flow-control-statement" class="level2" data-number="8.1">
 <h2 data-number="8.1" class="anchored" data-anchor-id="conditional-flow-control-statement"><span class="header-section-number">8.1</span> Conditional flow control statement</h2>
-<section id="if-statements-and-blocks" class="level3" data-number="8.1.1">
-<h3 data-number="8.1.1" class="anchored" data-anchor-id="if-statements-and-blocks"><span class="header-section-number">8.1.1</span> If statements and blocks</h3>
+<section id="if-statements-and-blocks" class="level3">
+<h3 class="anchored" data-anchor-id="if-statements-and-blocks">If statements and blocks</h3>
 <p>C++ have two kinds of conditional statement: <code>if statement</code> and <code>switch statement</code>.</p>
 <p>We already worked with <code>if statement</code> in previous chapters, one thing to be noted here is that the author recommends to use the ‘{}’ for the statements, even if we just have single statement after <code>if</code> and/or <code>else</code>.</p>
 </section>
-<section id="common-if-statement-problem" class="level3" data-number="8.1.2">
-<h3 data-number="8.1.2" class="anchored" data-anchor-id="common-if-statement-problem"><span class="header-section-number">8.1.2</span> Common <code>if statement</code> problem</h3>
+<section id="common-if-statement-problem" class="level3">
+<h3 class="anchored" data-anchor-id="common-if-statement-problem">Common <code>if statement</code> problem</h3>
 <ol type="1">
 <li><code>if_statements</code> within other <code>if statements</code>:</li>
 </ol>
@@ -428,8 +430,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </details>
 </div>
 </section>
-<section id="switch-statement-basics" class="level3" data-number="8.1.3">
-<h3 data-number="8.1.3" class="anchored" data-anchor-id="switch-statement-basics"><span class="header-section-number">8.1.3</span> Switch statement basics</h3>
+<section id="switch-statement-basics" class="level3">
+<h3 class="anchored" data-anchor-id="switch-statement-basics">Switch statement basics</h3>
 <p>The idea behind a <strong>switch statement</strong> is that: an expression (condition) is evaluated to produce a value. If the expression’s value is equal to the value after any of <code>case labels</code>, the statements after the matching <code>case label</code> are executed. If there does not have any match, <code>default label</code> are executed instead.</p>
 <div class="callout-note callout callout-style-simple">
 <div class="callout-body d-flex">
@@ -683,8 +685,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<section id="nested-loop" class="level3" data-number="8.3.1">
-<h3 data-number="8.3.1" class="anchored" data-anchor-id="nested-loop"><span class="header-section-number">8.3.1</span> Nested loop</h3>
+<section id="nested-loop" class="level3">
+<h3 class="anchored" data-anchor-id="nested-loop">Nested loop</h3>
 <p>A loop can be inside other loop. The inner loop can use outer loop’s counter. Here is an example:</p>
 <div class="cell">
 <details>
@@ -933,8 +935,8 @@ Best practice
 <h2 data-number="8.6" class="anchored" data-anchor-id="break-and-continue"><span class="header-section-number">8.6</span> Break and continue</h2>
 <p><code>break statement</code> terminates the switch or loop, and execution continue at the <em>first statement</em> beyond the switch or loop.</p>
 <p><code>return statement</code> <em>terminate the entire function that the loop is within</em>, and execution continues at point where the function was called.</p>
-<section id="continue" class="level3" data-number="8.6.1">
-<h3 data-number="8.6.1" class="anchored" data-anchor-id="continue"><span class="header-section-number">8.6.1</span> Continue</h3>
+<section id="continue" class="level3">
+<h3 class="anchored" data-anchor-id="continue">Continue</h3>
 <p><strong>Continue statement</strong> tells the program end current iteration, and continue next iteration.</p>
 <p>The author advise to use the break, continue statement or <em>early return</em> when they simplify the loop logic.</p>
 </section>
@@ -942,16 +944,16 @@ Best practice
 <section id="sec-halts" class="level2" data-number="8.7">
 <h2 data-number="8.7" class="anchored" data-anchor-id="sec-halts"><span class="header-section-number">8.7</span> Halts</h2>
 <p>The last category of flow control statement is <strong>halt</strong>: terminates the program.</p>
-<section id="the-stdexit-function" class="level3" data-number="8.7.1">
-<h3 data-number="8.7.1" class="anchored" data-anchor-id="the-stdexit-function"><span class="header-section-number">8.7.1</span> The <code>std::exit()</code> function</h3>
+<section id="the-stdexit-function" class="level3">
+<h3 class="anchored" data-anchor-id="the-stdexit-function">The <code>std::exit()</code> function</h3>
 <p>It terminates the program normally. The term <strong>normal termination</strong> means that the program exits in an expected way; it does not imply about whether the program was successful or not.</p>
 <p><code>std::exit()</code> cleans up some static storage objects, returned back to OS.</p>
 <p>The program does not execute any statements after <code>std::exit()</code>.</p>
 <p><code>std::exit()</code> does not clean up local variables in the current function or up in the call stack.</p>
 <p>Function <code>std::atexit()</code> take the arguments as functions to remember to do the clean up when we call <code>std::exit()</code>.</p>
 </section>
-<section id="stdabort" class="level3" data-number="8.7.2">
-<h3 data-number="8.7.2" class="anchored" data-anchor-id="stdabort"><span class="header-section-number">8.7.2</span> <code>std::abort()</code></h3>
+<section id="stdabort" class="level3">
+<h3 class="anchored" data-anchor-id="stdabort"><code>std::abort()</code></h3>
 <p>This function ends the program <em>abnormally</em>. It means that the program has some kind of unusual runtime error and could not continue to run.</p>
 <div class="cell">
 <details>
@@ -986,12 +988,12 @@ Best practice
 </section>
 <section id="introduction-to-testing-the-code" class="level2" data-number="8.8">
 <h2 data-number="8.8" class="anchored" data-anchor-id="introduction-to-testing-the-code"><span class="header-section-number">8.8</span> Introduction to testing the code</h2>
-<section id="test-your-programs-in-small-pieces" class="level3" data-number="8.8.1">
-<h3 data-number="8.8.1" class="anchored" data-anchor-id="test-your-programs-in-small-pieces"><span class="header-section-number">8.8.1</span> Test your programs in small pieces</h3>
+<section id="test-your-programs-in-small-pieces" class="level3">
+<h3 class="anchored" data-anchor-id="test-your-programs-in-small-pieces">Test your programs in small pieces</h3>
 <p>We should write small functions (or classes), and then compile and test immediately. This test is call <strong>unit testing</strong>; each unit test assures a correct-particular behavior of that unit.</p>
 <p>These are some method to test your unit code:</p>
-<section id="informal-testing" class="level4" data-number="8.8.1.1">
-<h4 data-number="8.8.1.1" class="anchored" data-anchor-id="informal-testing"><span class="header-section-number">8.8.1.1</span> Informal testing</h4>
+<section id="informal-testing" class="level4">
+<h4 class="anchored" data-anchor-id="informal-testing">Informal testing</h4>
 <p>You write your function and run it with some inputs to see whether it runs as expected or not.</p>
 <p>We have a function that check whether a character is lower Vowel, then we add some character to see that it works well</p>
 <div class="cell">
@@ -1011,8 +1013,8 @@ Best practice
 </details>
 </div>
 </section>
-<section id="preserving-your-tests" class="level4" data-number="8.8.1.2">
-<h4 data-number="8.8.1.2" class="anchored" data-anchor-id="preserving-your-tests"><span class="header-section-number">8.8.1.2</span> Preserving your tests</h4>
+<section id="preserving-your-tests" class="level4">
+<h4 class="anchored" data-anchor-id="preserving-your-tests">Preserving your tests</h4>
 <p>Instead of testing informal, we can write a program to test the unit function.</p>
 <div class="cell">
 <details>
@@ -1050,8 +1052,8 @@ Best practice
 </ul>
 <p>Thus, we need to learn about error handling strategies (what to do when things go wrong) inside a function.</p>
 <p>Functions may fail for many reasons and there is no best way to handle an error. There are 4 general strategies that can be used:</p>
-<section id="handling-the-error-within-the-function" class="level3" data-number="8.10.1">
-<h3 data-number="8.10.1" class="anchored" data-anchor-id="handling-the-error-within-the-function"><span class="header-section-number">8.10.1</span> Handling the error within the function</h3>
+<section id="handling-the-error-within-the-function" class="level3">
+<h3 class="anchored" data-anchor-id="handling-the-error-within-the-function">Handling the error within the function</h3>
 <p>We correct the error in the same function which the error occurred so that the error can be contained and corrected without impacting any code outside function:</p>
 <div class="cell">
 <details>
@@ -1077,12 +1079,12 @@ Best practice
 </div>
 </div>
 </section>
-<section id="passing-error-back-to-the-caller" class="level3" data-number="8.10.2">
-<h3 data-number="8.10.2" class="anchored" data-anchor-id="passing-error-back-to-the-caller"><span class="header-section-number">8.10.2</span> Passing error back to the caller</h3>
+<section id="passing-error-back-to-the-caller" class="level3">
+<h3 class="anchored" data-anchor-id="passing-error-back-to-the-caller">Passing error back to the caller</h3>
 <p>As the above handling, the called function does not return anything to the calling function. If we want to pass the error to caller function, we should create a handling that return a value so that the caller function knows whether the called function runs correctly or not.</p>
 </section>
-<section id="fatal-errors" class="level3" data-number="8.10.3">
-<h3 data-number="8.10.3" class="anchored" data-anchor-id="fatal-errors"><span class="header-section-number">8.10.3</span> Fatal errors</h3>
+<section id="fatal-errors" class="level3">
+<h3 class="anchored" data-anchor-id="fatal-errors">Fatal errors</h3>
 <p>In some case, the error is severe that we have to stop the program (<em>non-recoverable</em>), we can use the halt statement such as <code>std::exit()</code>:</p>
 <div class="cell">
 <details>
@@ -1104,8 +1106,8 @@ Best practice
 <section id="stdcin-and-handling-invalid-input" class="level2" data-number="8.11">
 <h2 data-number="8.11" class="anchored" data-anchor-id="stdcin-and-handling-invalid-input"><span class="header-section-number">8.11</span> <code>std::cin</code> and handling invalid input</h2>
 <p>A <strong>robust</strong> program anticipate the misuse from users and provide way to handle those program at the first place.</p>
-<section id="stdcin-buffers-and-extraction" class="level4" data-number="8.11.0.1">
-<h4 data-number="8.11.0.1" class="anchored" data-anchor-id="stdcin-buffers-and-extraction"><span class="header-section-number">8.11.0.1</span> <code>std::cin</code>, buffers, and extraction</h4>
+<section id="stdcin-buffers-and-extraction" class="level4">
+<h4 class="anchored" data-anchor-id="stdcin-buffers-and-extraction"><code>std::cin</code>, buffers, and extraction</h4>
 <p><code>std::cin</code> let user enter a value. This value is then stored temporarily inside of <code>std::cin</code> and waits for extracting to a variable. They call it <strong>buffer</strong>. The <code>operator&gt;&gt;</code> is an extraction to get the value in buffer into the variable. Normally, a value or a character is taken out, if there is still information in the buffer, that information is still there for the next extraction.</p>
 <p>For example, if there is “5a” in buffer and we extract to variable x, then x = ‘5’ and ‘a’ is in the buffer for the next extraction.</p>
 <p>We write a program to illustrate the following error cases:</p>
@@ -1162,8 +1164,8 @@ Best practice
 </details>
 </div>
 </section>
-<section id="error-case-1-input-extraction-succeeds-but-the-input-is-meaningless-to-the-program" class="level4" data-number="8.11.0.2">
-<h4 data-number="8.11.0.2" class="anchored" data-anchor-id="error-case-1-input-extraction-succeeds-but-the-input-is-meaningless-to-the-program"><span class="header-section-number">8.11.0.2</span> Error case 1: Input extraction succeeds but the input is meaningless to the program</h4>
+<section id="error-case-1-input-extraction-succeeds-but-the-input-is-meaningless-to-the-program" class="level4">
+<h4 class="anchored" data-anchor-id="error-case-1-input-extraction-succeeds-but-the-input-is-meaningless-to-the-program">Error case 1: Input extraction succeeds but the input is meaningless to the program</h4>
 <p>For example, users enter x = 5, y = 2 and operator = ‘k’. These inputs are attracted successfully to variable but we cannot operate the function.</p>
 <p>We solve this case by doing input validation:</p>
 <div class="cell">
@@ -1192,8 +1194,8 @@ Best practice
 </details>
 </div>
 </section>
-<section id="error-case-2-extraction-succeeds-but-with-extraneous-input" class="level4" data-number="8.11.0.3">
-<h4 data-number="8.11.0.3" class="anchored" data-anchor-id="error-case-2-extraction-succeeds-but-with-extraneous-input"><span class="header-section-number">8.11.0.3</span> Error case 2: Extraction succeeds but with extraneous input</h4>
+<section id="error-case-2-extraction-succeeds-but-with-extraneous-input" class="level4">
+<h4 class="anchored" data-anchor-id="error-case-2-extraction-succeeds-but-with-extraneous-input">Error case 2: Extraction succeeds but with extraneous input</h4>
 <p>For example, user enters <code>5*7</code>, the programs run and return 35 but does not lead user continue enter the input because <code>*7\n</code> is stored in buffer for the following <code>operator&gt;&gt;</code>.</p>
 <p>To solve this error, we have to tell the program <strong>ignore</strong> all the following character until the next <code>\n</code>. In C++, we use the function <code>std::cin.ignore(num_char_to_ignore, \n)</code> or better is <code>std::cin.ignore(std::numeric_limits&lt;std::streamsize&gt;::max(), '\n</code>)</p>
 <div class="cell">
@@ -1221,8 +1223,8 @@ Best practice
 </details>
 </div>
 </section>
-<section id="error-case-3-extraction-fails" class="level4" data-number="8.11.0.4">
-<h4 data-number="8.11.0.4" class="anchored" data-anchor-id="error-case-3-extraction-fails"><span class="header-section-number">8.11.0.4</span> Error case 3: Extraction fails</h4>
+<section id="error-case-3-extraction-fails" class="level4">
+<h4 class="anchored" data-anchor-id="error-case-3-extraction-fails">Error case 3: Extraction fails</h4>
 <p>This case happens when we enter a double value by a value with different type eg.: a. The <code>operator&gt;&gt;</code> cannot cover it to a double, so it let <code>a</code> in the buffer and goes into <em>fail mode</em>. Then, further requests for input extraction will silently fail. Thus, the output prompt still prints, but the input prompt is skipped, and we get stuck in infinite loop.</p>
 <p>We solve the problem by:</p>
 <ul>
@@ -1241,8 +1243,8 @@ Best practice
 </details>
 </div>
 </section>
-<section id="error-case-4-extraction-succeeds-but-the-user-overflows-a-numeric-value" class="level4" data-number="8.11.0.5">
-<h4 data-number="8.11.0.5" class="anchored" data-anchor-id="error-case-4-extraction-succeeds-but-the-user-overflows-a-numeric-value"><span class="header-section-number">8.11.0.5</span> Error case 4: Extraction succeeds but the user overflows a numeric value</h4>
+<section id="error-case-4-extraction-succeeds-but-the-user-overflows-a-numeric-value" class="level4">
+<h4 class="anchored" data-anchor-id="error-case-4-extraction-succeeds-but-the-user-overflows-a-numeric-value">Error case 4: Extraction succeeds but the user overflows a numeric value</h4>
 </section>
 </section>
 <section id="assert-and-static_assert" class="level2" data-number="8.12">
@@ -1268,14 +1270,14 @@ Best practice
 <li><p>If we skip the offending statements, the error fails <strong>silently</strong>. This is bad for programming because we do not know where the error message is and how the conditions that triggered the error message.</p></li>
 <li><p>If we terminate the program by <code>std::exit()</code>, we loses our call stack and any debugging information. <code>std::abort()</code> is a better option for such cases when the we can start debugging at the point where the program aborted.</p></li>
 </ul>
-<section id="precondition-invariant-postcondition" class="level4" data-number="8.12.0.1">
-<h4 data-number="8.12.0.1" class="anchored" data-anchor-id="precondition-invariant-postcondition"><span class="header-section-number">8.12.0.1</span> Precondition, Invariant, Postcondition</h4>
+<section id="precondition-invariant-postcondition" class="level4">
+<h4 class="anchored" data-anchor-id="precondition-invariant-postcondition">Precondition, Invariant, Postcondition</h4>
 <p>It is any condition that must always be true prior to the execution of codes’ component.</p>
 <p><strong>Invariant</strong> is a condition must be true while some component is executing</p>
 <p><strong>Postcondition</strong> is something that must be true after the execution of some component of code.</p>
 </section>
-<section id="assertions" class="level3" data-number="8.12.1">
-<h3 data-number="8.12.1" class="anchored" data-anchor-id="assertions"><span class="header-section-number">8.12.1</span> Assertions</h3>
+<section id="assertions" class="level3">
+<h3 class="anchored" data-anchor-id="assertions">Assertions</h3>
 <p>An <em>assertion</em> is an expression that will be true unless there is a bug in a program. If the expression is true, the assertion statement does nothing, otherwise, an error message is displayed and the program is terminated (via <code>std::abort()</code>). The error message contains: failed as text, name of code file, and the line number of the assertion.</p>
 <p>To use assertion, we include header <code>assert</code>. Let look at the following codes:</p>
 <div class="cell">
@@ -1309,21 +1311,23 @@ Best practice
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co">#// If `found == false`, then FALSE &amp;&amp; TRUE is FALSE,  this trigger assert</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<section id="asserts-and-error-handling" class="level4" data-number="8.12.1.1">
-<h4 data-number="8.12.1.1" class="anchored" data-anchor-id="asserts-and-error-handling"><span class="header-section-number">8.12.1.1</span> Asserts and Error handling</h4>
+<section id="asserts-and-error-handling" class="level4">
+<h4 class="anchored" data-anchor-id="asserts-and-error-handling">Asserts and Error handling</h4>
 <p>Assertions: to catch the programming errors by documenting something that should never happen. If it does happen, the the programmer made an error somewhere, it identifies and fixes. It does not allow recovery from errors.</p>
 <p>Error handling: gracefully handle case that could happen (rarely). There may or may not be <em>recoverable</em>, but the program’s users may encounter them.</p>
 </section>
-<section id="static_assert" class="level4" data-number="8.12.1.2">
-<h4 data-number="8.12.1.2" class="anchored" data-anchor-id="static_assert"><span class="header-section-number">8.12.1.2</span> <code>static_assert</code></h4>
-<p>A <code>static_assert</code> checks the condition at the compile-time. It formula is <code>static_assert(condition, diagnostic_message)</code>. ## Introduction to random numer generation</p>
+<section id="static_assert" class="level4">
+<h4 class="anchored" data-anchor-id="static_assert"><code>static_assert</code></h4>
+<p>A <code>static_assert</code> checks the condition at the compile-time. It formula is <code>static_assert(condition, diagnostic_message)</code>.</p>
+</section>
+</section>
+</section>
+<section id="introduction-to-random-numer-generation" class="level2" data-number="8.13">
+<h2 data-number="8.13" class="anchored" data-anchor-id="introduction-to-random-numer-generation"><span class="header-section-number">8.13</span> Introduction to random numer generation</h2>
 <p>Computer are generally incapable of generating truly random numbers. It simulates randomness using an algorithm.</p>
-</section>
-</section>
-<section id="algorithms-and-state" class="level3" data-number="8.12.2">
-<h3 data-number="8.12.2" class="anchored" data-anchor-id="algorithms-and-state"><span class="header-section-number">8.12.2</span> Algorithms and state</h3>
-<section id="algorithm" class="level4" data-number="8.12.2.1">
-<h4 data-number="8.12.2.1" class="anchored" data-anchor-id="algorithm"><span class="header-section-number">8.12.2.1</span> Algorithm:</h4>
+<section id="algorithms-and-state" class="level3">
+<h3 class="anchored" data-anchor-id="algorithms-and-state">Algorithms and state</h3>
+<p><strong>Algorithm</strong>:</p>
 <ul>
 <li>It is an instruction’s sequence to solve a demand and provide useful results.</li>
 <li>It is reusable</li>
@@ -1346,9 +1350,8 @@ Best practice
 <p>An algorithm is <strong>stateful</strong> if it retains some information across calls. A <strong>stateless</strong> algorithm does not store any information. Our <code>plusOne()</code> is stateful because it creates a <em>static variable</em> that is used through its call.</p>
 <p>The <code>plusOne()</code> is <strong>deterministic</strong>: given input, it will always produce <strong>the same output</strong>.</p>
 </section>
-</section>
-<section id="pseudo-random-number-generators-prngs" class="level3" data-number="8.12.3">
-<h3 data-number="8.12.3" class="anchored" data-anchor-id="pseudo-random-number-generators-prngs"><span class="header-section-number">8.12.3</span> Pseudo-random number generators (PRNGs)</h3>
+<section id="pseudo-random-number-generators-prngs" class="level3">
+<h3 class="anchored" data-anchor-id="pseudo-random-number-generators-prngs">Pseudo-random number generators (PRNGs)</h3>
 <p>This is a very simple PRNGs:</p>
 <div class="cell">
 <details>
@@ -1365,13 +1368,13 @@ Best practice
 </details>
 </div>
 <p>This function returns the same random sequence.</p>
-<section id="seeding-a-prng" class="level4" data-number="8.12.3.1">
-<h4 data-number="8.12.3.1" class="anchored" data-anchor-id="seeding-a-prng"><span class="header-section-number">8.12.3.1</span> Seeding a PRNG</h4>
+<section id="seeding-a-prng" class="level4">
+<h4 class="anchored" data-anchor-id="seeding-a-prng">Seeding a PRNG</h4>
 <p>The sequence of “random number” is not random. It is based on the initial state. The same initial state will generate same output sequence.</p>
 <p>When PRNG is instantiated, an initial value called a <strong>random seed</strong> can be provided to the initial state of the PRNG.</p>
 </section>
-<section id="what-makes-a-good-prng" class="level4" data-number="8.12.3.2">
-<h4 data-number="8.12.3.2" class="anchored" data-anchor-id="what-makes-a-good-prng"><span class="header-section-number">8.12.3.2</span> What makes a good PRNG?</h4>
+<section id="what-makes-a-good-prng" class="level4">
+<h4 class="anchored" data-anchor-id="what-makes-a-good-prng">What makes a good PRNG?</h4>
 <ul>
 <li>The PRNG should generate each number with approximately same probability.</li>
 <li>The method by which the next number in the sequence should be <strong>unpredictable</strong>.</li>
@@ -1380,7 +1383,157 @@ Best practice
 <ul>
 <li>All PRNG are periodic: the sequence of numbers will repeated itself. The length of sequence before a PRNG begins to repeat itself is known as the <strong>period</strong>.</li>
 </ul></li>
+<li>It should be efficient</li>
 </ul>
+</section>
+</section>
+<section id="randomization-in-c" class="level3">
+<h3 class="anchored" data-anchor-id="randomization-in-c">Randomization in C++</h3>
+<p>We use via <code>&lt;random&gt;</code> header with the following PRNG families:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figure/prng_cpp.PNG" class="img-fluid figure-img" style="width:120.0%"></p>
+<p></p><figcaption class="figure-caption">PRNG families in C++</figcaption><p></p>
+</figure>
+</div>
+</section>
+<section id="generating-random-numbers-using-mersenne-twister" class="level3">
+<h3 class="anchored" data-anchor-id="generating-random-numbers-using-mersenne-twister">Generating random numbers using Mersenne Twister</h3>
+<p>We use the <code>&lt;ramdon&gt;</code> header. There are two Mersenne Twister types:</p>
+<ul>
+<li><code>mt19937</code>: generates 32-bit unsigned integer</li>
+<li><code>mt19937_64</code>: generates 64-bit unsigned integer</li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;random&gt;</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">randomMT</span>()</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>mt19937 mt{};</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (int count{ <span class="dv">1</span> }; count <span class="sc">&lt;=</span> <span class="dv">40</span>; <span class="sc">++</span>count)</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="fu">mt</span>() <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\t</span><span class="st">'</span>;</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (count % <span class="dv">5</span> <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>            std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="rolling-a-dice-using-mt" class="level4">
+<h4 class="anchored" data-anchor-id="rolling-a-dice-using-mt">Rolling a dice using MT</h4>
+<p>We use the <strong>uniform distribution</strong> that produces output between two numbers X and Y with equal probability.</p>
+<p>Here is the code:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;random&gt;</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>void <span class="fu">dice</span>()</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>mt19937 mt{};</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>uniform_int_distribution die6{ <span class="dv">1</span>, <span class="dv">6</span> };</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (int count{ <span class="dv">1</span> }; count <span class="sc">&lt;=</span> <span class="dv">40</span>; <span class="sc">++</span>count)</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="fu">die6</span>(mt) <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\t</span><span class="st">'</span>;</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (count % <span class="dv">5</span> <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>            std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The dice sequence is not random. If we ran many times, we see that it is the same because we initialized our MT so it has the same seed every time the program is run.</p>
+<p>To deal with this we usually use the seed from:</p>
+<ul>
+<li>The system clock</li>
+<li>The system’s random device</li>
+</ul>
+</section>
+<section id="seeding-with-the-system-clock" class="level4">
+<h4 class="anchored" data-anchor-id="seeding-with-the-system-clock">Seeding with the system clock</h4>
+<p>We use the system clock to initialize the seed for PRNG. This is from the <code>&lt;chrono&gt;</code> header and the function <code>static_cast&lt;unsigned int&gt;(std::chrono::steady_clock::now().time_since_epoch().count())</code>. Let see the example below:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>void <span class="fu">diceSystemClock</span>()</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>mt19937 mt{ static_cast<span class="sc">&lt;</span>unsigned int<span class="sc">&gt;</span>(</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>chrono<span class="sc">::</span>steady_clock<span class="sc">::</span><span class="fu">now</span>()<span class="fu">.time_since_epoch</span>()<span class="fu">.count</span>()</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>        ) };</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>uniform_int_distribution die6{ <span class="dv">1</span>, <span class="dv">6</span> };</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (int count{ <span class="dv">1</span> }; count <span class="sc">&lt;=</span> <span class="dv">40</span>; <span class="sc">++</span>count)</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="fu">die6</span>(mt) <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\t</span><span class="st">'</span>;</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (count % <span class="dv">10</span> <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>            std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="seeding-with-the-random-device" class="level4">
+<h4 class="anchored" data-anchor-id="seeding-with-the-random-device">Seeding with the random device</h4>
+<p>We use the code <code>std::random_device()</code>. It will ask the OS for a random number. One potential <em>problem</em> is that it it not required to be non-deterministic. But, the lasted version support proper implementation of <code>std::random_device()</code>.</p>
+<div class="callout-tip callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Use <code>std::random_device()</code> to seed PRNGs.</p>
+<p>Only seed a given PRNG once, do not reseed it.</p>
+</div>
+</div>
+</div>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>int <span class="fu">getCard</span>()</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>mt19937 mt{ std<span class="sc">::</span>random_device{}() };</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>uniform_int_distribution card{ <span class="dv">1</span>, <span class="dv">52</span> };</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    return <span class="fu">card</span>(mt);</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Everytime we call <code>getCard()</code>, the program creates a new seed. This is inefficient at best and cause poor random results.</p>
+</section>
+<section id="random-numbers-across-multiple-functions" class="level4">
+<h4 class="anchored" data-anchor-id="random-numbers-across-multiple-functions">Random numbers across multiple functions</h4>
+<p>To use this, we create an <code>std::mt19937</code> object with <code>std:random_device()</code> in a namespace. This is an exception that we use non-const global variables.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;random&gt;</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>namespace Random</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>mt19937 mt{std<span class="sc">::</span>random_device{}()};</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>    int <span class="fu">get</span>(int min, int max)</span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>uniform_int_distribution die{min, max};</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>        return <span class="fu">die</span>(mt);</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
 
 
 </section>
@@ -1528,8 +1681,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./summary.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./c8_implicit_conversion.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Type conversion and Funcion Overloading</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

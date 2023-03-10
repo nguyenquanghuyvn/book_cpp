@@ -1,0 +1,1307 @@
+---
+title: "Function"
+---
+
+## Function pointers
+
+Let consider the following function:
+
+```{r foo}
+#include <iostream>
+
+int foo()
+{
+	return 5;
+}
+
+int main()
+{
+	std::cout << foo << '\n';   #// print function's address
+    
+    std::cout << reinterpret_cast<void*>(foo) << '\n'
+    #// force the compiler print function's address
+
+	return 0;
+}
+
+#> 00009F3CB
+```
+
+Identifer `foo` is the function's name. It has its own `l-value` function type which is function that return an `int` and takes no parameters.
+
+Like a variable, system **assigns an address to a function**. 
+
+When we use the `operator()`, the program jumps to an address of called function to execute. If we send a function without calling it (omit the operator`()`) to `std::cout`, we get function's address instead. We added an example to the chunk `foo` above.
+
+#### Pointers to functions
+Here is a code:
+
+```{r declare}
+int (*fcnPtr)()
+
+#// this is a pointer to a function that takes no parameter and return an integer
+#// remember to put in parentheses
+
+
+int (*const fcnPtr)();
+#// const function pointer
+```
+
+#### Assigning a function to a function pointer
+
+Function pointers can be initialized with a function (a non-const function pointer can be assgined a function).
+
+The pointer function has to same return type and parameters with the function pointed. Here is an example:
+
+```{r f_ptr_assignment}
+#include <iostream>
+
+int foo()
+{
+	return 5;
+}
+
+double goo()
+{
+	return 6.0;
+}
+
+int hoo(int x)
+{
+	return x;
+}
+
+int main()
+{
+	std::cout << foo << '\n';
+
+	int (*f_ptr1)() { &foo };
+	double (*f_ptr2)() { &goo };
+	int (*f_ptr3)(int) { &hoo };
+    
+    #// C++ implicitly convert a function into a function pointer
+    int (*f_ptr4)(){foo};   #// do not need use "&"
+
+	return 0;
+}
+
+```
+
+Function pointers can also be initialzed or assgined to `nullptr`:
+
+```{r to_nullptr}
+int (*fcnptr)() {nullptr};
+```
+
+#### Calling a function using a function pointer
+
+There are two ways: explicit dereference and implicit dereference. Here is the code:
+
+```{r }
+
+#// Explicitly:
+(*f_ptr3)(5);
+
+#// Implicitly:
+f_ptr3(5);
+
+```
+
+**Note:** the default parameter cannot work with function call by a pointer. Because default parameter is evaluated at compile-time, while function pointers are at run-time. We need to explicitly give the value to the function pointers.
+
+### Passing functions as arguments to other functions
+
+We can **pass a function as an argument of other function**, that arguments is **callback functions**.
+
+With this, we can make a function more flexible by letting user's put their function. An example for this is the *sorting function*.
+
+We write a sorting program that allow the users to sort the list ascending or descending. This function use a function as its parameter; the callback function work on how to sort the list by varying the comparison between two elements.
+
+This is a code that does not use the function pointer:
+
+```{r sorting_normal}
+
+#include <utility>
+
+bool ascending(int x, int y)
+{
+	return x > y;
+}
+
+void selection_sort( int* array, int size )
+{
+	for (int start_index{ 0 }; start_index < size - 1; ++start_index)
+	{
+		int smallest_index{ start_index };
+
+		for (int current_index{ start_index + 1 }; current_index < size; ++current_index)
+		{
+			if (ascending(array[smallest_index], array[current_index]))
+				smallest_index = current_index;
+		}
+
+		std::swap(array[start_index], array[smallest_index]);
+	}
+}
+
+```
+
+We want the caller decide how the sorting will be done, we can use the function pointer. In the above code, the comparison returns a boolean object, thus we create a pointer to a boolean function that takes two `int` parameters:
+
+```{r}
+bool (*compare_fcn)(int, int)
+```
+Thus we rewrite the code as:
+
+```{r sorting_pointer_function}
+
+#include <utility>  #\\ using the `std::swap`
+
+bool ascending(int x, int y)
+{
+	return x > y;
+}
+
+bool descending(int x, int y)
+{
+	return x < y;
+}
+
+#// We can add many customization function:
+bool even_first(int x, int y)
+{
+	if ((x % 2 == 0) && !(y % 2 == 0))
+		return false;
+	if (!(x % 2 == 0) && (y % 2 == 0))
+		return true;
+
+	return ascending(x, y);
+}
+
+void selection_sort( int* array, int size, bool (*compare_fcn)(int, int))
+{
+	for (int start_index{ 0 }; start_index < size - 1; ++start_index)
+	{
+		int smallest_index{ start_index };
+
+		for (int current_index{ start_index + 1 }; current_index < size; ++current_index)
+		{
+			if (compare_fcn(array[smallest_index], array[current_index]))
+				smallest_index = current_index;
+		}
+
+		std::swap(array[start_index], array[smallest_index]);
+	}
+}
+
+int main()
+{
+	int array[11]{ 3, 7, 0 ,5 ,8, 9 ,10, 2, 15, 20, 15 };
+
+	selection_sort(array, 11, ascending);
+	print(array, 11);
+
+	selection_sort(array, 11, descending);
+	print(array, 11);
+
+	selection_sort(array, 11, even_first);
+	print(array, 11);
+
+	return 0;
+}
+```
+
+We can provide **default functions** to a function pointer parameter:
+
+```{r default_function}
+void selection_sort( int* array, int size, bool (*compare_fcn)(int, int) = ascending);
+```
+
+We can make function pointer prettier with type aliases:
+
+```{r}
+
+#// Name alias for function pointer type
+using Validate_fcn = bool(*)(int, int);
+
+#// The the sorting function is rewrite as:
+void selection_sort( int* array, int size, Validate_fcn pfcn = ascending);
+
+```
+
+### Using `std::function`
+
+We use `std::function` from header `functional` header like this:
+
+```{r}
+#include <functional>
+
+std::function<bool(int, int) > fcnPtr{};
+fcnPtr = &ascending;
+
+#// Using alias name for clear code
+using validate_fcn = std::function<bool(int, int)>;
+```
+
+We only use implicit dereference with `std::function`.
+
+From C++17, compiler can deduce the return type and parameter of pointer function from pointed function initializer. But, this does not work with *type alias*.
+
+We can use keyword `auto` with function pointer, but this is not recommended because we easily make mistakes.
+
+### Exercsise
+
+Here is the full code of the exercise for this session:
+
+```{r code_exercise}
+#| code-fold: true
+
+#include <functional>
+#include <cassert>
+#include <iostream>
+
+struct Inputs
+{
+	int first{};
+	int second{};
+	char op{};
+};
+
+int get_integer()
+{
+	int x{};
+	std::cin >> x;
+
+	while (std::cin.fail())
+	{
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+		std::cout 
+			<< "Invalid integer. "
+			<< "Please enter again your integer: ";
+		std::cin >> x;
+	}
+
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+	return x;
+}
+auto get_operator()
+{
+	char op{};
+	do
+	{
+		std::cout << "Please enter your operators ( +, -, *, /): ";
+		std::cin >> op;
+	} while (op != '+' && op != '-' && op != '*' && op != '/');
+
+	return op;
+}
+```
+ 
+ Then, we create a function to take the operator:
+ 
+```{r}
+auto add(int x, int y)
+{
+	return x + y;
+}
+
+auto substract(int x, int y)
+{
+	return x - y;
+}
+
+auto multiply(int x, int y)
+{
+	return x * y;
+}
+
+auto divide(int x, int y)
+{
+	assert(y != 0 && "Cannot devide by zero! Return error.");
+	
+	return x / y;
+}
+```
+ 
+ Create a pointer function to get the arithmetic function:
+ 
+```{r}
+using Arithmetic_fcn = std::function<int(int, int)>;
+
+Arithmetic_fcn get_arithmetic_fcn(char op)
+{
+	switch (op)
+	{
+	case '+':
+		return &add;
+	case '-':
+		return &substract;
+	case '*':
+		return  &multiply;
+	case '/':
+		return &divide;
+	default:
+		return nullptr;
+	}
+}
+
+int main()
+{
+	std::cout << "Please enter your first integer: ";
+	auto first{ get_integer() };
+
+	std::cout << "Please enter your second integer: ";
+	auto second{ get_integer() };
+
+	std::cout << "Please enter your operator: ";
+	auto op{ get_operator() };
+
+	Arithmetic_fcn fcn{ get_arithmetic_fcn(op) };
+
+	if (fcn)
+	{
+		std::cout
+			<< first << ' ' << op << ' ' << second << " = "
+			<< fcn(first, second) << '\n';
+	}
+	else
+	{
+		std::cout << "Error: cannot execute your request.\n";
+	}
+
+	return 0;
+}
+```
+ 
+
+## The stack and the heap
+
+### The heap segment
+
+**Heap segment** (also called "free store") keeps track of memory used for *dynamic memory allocation*.
+
+In C, using `new` operator results in the allocation in *heap segment*. 
+
+```{r}
+
+int* ptr{new int};
+int* array{new int[10]}
+
+```
+Subsequent call the memory allocation, does not guarantee sequential memory address. For example, `ptr` and `array` may not have sequential addresses.
+
+The heap has advantage and disadvantages:
+
+:::{layout-ncol=2}
+
+#### Avantages
+
+- Do not need to assign size at the compile time
+- Large arrays, structures, or classes can be allocated there.
+
+#### Disavantages
+
+- Comparatively slow
+- Need to be deallocated or application ends
+- Must be accessed through a pointer
+
+:::
+
+### The call stack
+
+The **call stack** keeps track of all the active functions from the start of the program to the current point of execution, and handles allocation of all function parameters and local variables.
+
+It is a *stack data structure*.
+
+#### The stack data structure
+
+A **data structure** is a programming mechanism for organizing data so that it can be used efficiently.
+
+Example of data structure is arrays and structs. And **stack** is one of these.
+
+Let image stack as a stack of plates. In computer programming, a stack contains multiple variables (much like an array). A stack is more limited that we can not access and modify as we wish. We only perform on stack three things:
+
+1. Look at the top item on the stack: `top()` or sometimes `peek()`.
+2. Take the top item off of the stack: `pop()`.
+3. Put a new item on top of the stack: `push()`.
+
+A stack is "last-in, first-out". Let use an analogy: mailboxes. Each mailbox holds one item, they are stacked together. Each mailbox nails to the mailbox below, so the number of mailboxes cannot be changed.
+
+We use a *marker* to keep track of where the bottom-most empty mailbox is. When we push an item onto our mailbox stack, we put in the mailbox that is marked, and move the marker up on mailbox; when we pop an item off, we move the *marker* down one mailbox
+
+Anything below the mailbox is **on the stack**; anything at the marker or above the marker is **not on the stack**.
+
+When program encounter a function call, it pushes the function onto the call stack. When a function ends, function is popped off the call stack. We see all of the functions that were called to get to the current point of execution.
+
+The stack itself is a fixed-sized chunk of memory addresses. The mailboxes are memory addresses, and the items pushing or popping out on the stack are call **stack frame**.
+
+A stack frame keeps track of all of data associated with one function call. The "marker" is a register as a the stack pointer.
+
+#### The call stack in action
+
+When a function is called:
+
+1. The program encounters a function call
+2. A **stack frame** is constructed and pushed on the stack. The stack frame consists of:
+    * **Return address**: the address of the instruction where to return after the called function exits.
+    * All functions arguments
+    * Memory fo any local variables
+    * Saved copies of any registers modified by the function that need to be restored when the function returns.
+
+3. The CPU jumps to the function's start point
+4. The instructions inside of the function begin executing.
+
+When the function terminates:
+
+5. Registers are restored from the call stack
+6. The stack frame is popped off the stack (free local variables, arguments).
+7. The return value is handled
+8. The CPU resumes executions at the return address.
+
+#### Stack overflow
+
+**Stack overflow** happens when all the memory in the stack has been allocated.
+
+## `std::vector` capacity and stack behavior
+
+`std::vector` is a dynamic array that both remembers its length and be resized as required. This array has another attribute, it is **capacity**: how many elements were allocated in memory; **length** is how many elements are being used in the array.
+
+Look at the code below to see the difference between **length** and **capacity**:
+
+```{r capacity_length}
+
+#include <vector>
+#include <iostream>
+
+int main()
+{
+	std::vector<int> array{};
+	array = { 0, 1, 2, 3, 4, 5 };	// array of length 5
+	std::cout
+		<< "Length :" << array.size()
+		<< ". Capacity: " << array.capacity() << '\n';
+
+	array = { 9, 8, 7 };
+	std::cout
+		<< "Length :" << array.size()
+		<< ". Capacity: " << array.capacity() << '\n';
+
+	return 0;
+}
+#> Length: 6. Capacity: 6
+#> Length: 3. Capacity: 6
+
+```
+
+Notice that range for subscript operator(`[]`) and `at()` is from vector's length, not the capacity.
+
+### Stack behavior with `std::vector`
+
+`std::vector` can also be used as a stack with 3 functions:
+
+* `push_back()`: pushes an element on the stack
+* `back()`: returns the value of the top element on the stack
+* `pop_back()`: pops an element off the stack
+
+Unlike the array subscript or  `at()`, the stack-based function resizes the `std::vector` if necessary. But, resizing is expensive. We avoid by allocating a certain amount of **capacity up front** using the function `reserve()` function.
+
+Here is a code for the above ideas:
+
+```{r stack_behavior}
+
+#include <vector>
+#include <iostream>
+
+void print_stack(const std::vector<int>& stack)
+{
+	for (auto element : stack)
+		std::cout << element << ' ';
+	std::cout 
+		<< "(cap " << stack.capacity() 
+		<< " length " << stack.size() << ")\n";
+}
+
+int main()
+{
+	
+	std::vector<int> stack{};
+	stack.reserve(5);
+
+	print_stack(stack);
+
+	stack.push_back(5);
+	print_stack(stack);
+
+	stack.push_back(4);
+	print_stack(stack);
+
+	stack.push_back(3);
+	print_stack(stack);
+
+	std::cout << "top: " << stack.back() << '\n';
+
+	stack.pop_back();
+	print_stack(stack);
+
+	stack.pop_back();
+	print_stack(stack);
+
+	return 0;
+}
+```
+
+When vector resizes, it may allocate more capacity than needed; this is called "breathing room". For example, when we use the `push_back()` another element, it would not need to resize immediately.
+
+
+## Recursion
+
+A **recursion function** in C++ is a function that calls itself. It works like a normal function, but we must include a **recursive termination condition**, or they will run "forever".
+
+A **recursive termination** is condition that, when met, will cause the recursive function to stop calling itself. We usually use the `if statement`.
+
+Here is the example code:
+
+```{r count_recursion}
+
+#include <iostream>
+
+void count_down(int count)
+{
+	std::cout << "push " << count << '\n';
+
+	if (count > 1)
+		count_down(count - 1);
+
+	std::cout << "pop: " << count << '\n';
+}
+
+int main()
+{
+	count_down(5);
+
+	return 0;
+}
+
+#> push 5
+#> push 4
+#> push 3
+#> push 2
+#> push 1
+#> pop 1
+#> pop 2
+#> pop 3
+#> pop 4
+#> pop 5
+
+```
+
+Here is another example:
+
+```{r sumto_recursion}
+
+auto sum_to(int sumto)
+{
+	if (sumto <= 0)
+		return 0;
+	
+	if (sumto == 1)
+		return 1;
+
+	return sum_to(sumto - 1) + sumto;
+}
+```
+
+Recursion uses to catch the fibonacci numbers:
+
+```{r fibonacci_inefficient}
+
+auto fibonacci(int count)
+{
+	if (count == 0)
+		return 0;
+	if (count == 1)
+		return 1;
+
+	return fibonacci(count - 1) + fibonacci(count - 2);
+}
+```
+
+The above code call too many functions, so it is inefficiently. One technique called, **memorization**, caches the results of expensive function calls so the results can be returned when the same input occurs again:
+
+```{r fibonacci_memo}
+
+int fibonacci_memo(int count)
+{
+	static std::vector results{ 0, 1 };
+
+	if (count < static_cast<int>(std::size(results)))
+		return results[count];
+
+	results.push_back(fibonacci_memo(count - 1) + fibonacci(count - 2));
+
+	return results[count];
+}
+
+int main()
+{
+	for (int count{ 0 }; count < 15; ++count)
+		std::cout << fibonacci_memo(count) << ' ';
+	std::cout << '\n';
+
+	return 0;
+}
+```
+
+The recursion is a good choice when most of following are true:
+
+* The code is much simpler to implement
+* The recursion depth can be limited
+* The iterative version of the algorithm requires managing stack of data
+* This is not a performance-critical section of code
+
+
+
+## Command line arguments
+
+When a program is run, execution starts at the top of the function `main()`. We have seen that `main()` takes no parameters. However, some programs need parameters to run.
+
+**Command line arguments** are optional string arguments that are passed by the operating system to the program when it is launched. The program can use them as inputs or ignore them.
+
+Muck like function parameters provide a way for a function to provide inputs to another functions, command line arguments provide a way for people or programs to provide inputs to a program.
+
+### Using command line arguments
+
+After providing the command line arguments, we can access them from C++ program. We define a new form of `main()` such as
+
+```{r new_main_func}
+int main(int argc, char* argv[])
+```
+
+* **argc** is an integer containing the count of the number of arguments passed to the program.
+* **argv** is where the actual argument values are stored as an array of C-style strings, the length of array is `argc`.
+
+Here is a simple program use the command line:
+
+```{r simple_program}
+
+#include <iostream>
+
+int main(int argc, char* argv[])
+{
+	std::cout << "There are " << argc << " arguments:\n";
+
+	for (int count{ 0 }; count << argc; ++count)
+	{
+		std::cout << count << ' ' << argv[count] << '\n';
+	}
+
+	return 0;
+}
+```
+
+The command line arguments are as strings, if we want to use them as numeric type, we need to cover it.
+
+Here is an example:
+
+```{r convert}
+
+#// Program: MyArgs
+#include <sstream>		// use std::stringstream
+#include <string>
+#include <iostream>
+
+int main(int argc, char* argv[])
+{
+	std::cout << "There are " << argc << " arguments:\n";
+
+	if (argc <= 1)
+	{
+		if (argv[0])
+		{
+			std::cout << "Usage: " << argv[0] << "<number>" << '\n';
+		}
+		else
+			std::cout << "Usage: <program name> <number>" << '\n';
+		return 1;
+	}
+
+	std::stringstream covert{ argv[1] };
+
+	int my_int{};
+	if (!(covert >> my_int))
+		my_int = 0;
+
+	std::cout << "Got integer: " << my_int << '\n';
+
+	return 0;
+}
+
+```
+
+## Ellisis (and why to avoid them)
+
+The number of function's parameters must be known in advance. But, some cases where it can be useful to be able to pass a variable number of parameters. C++ provide a special specifier known as ellipsis `...` to do it precisely.
+
+The authors recommended avoid using ellipsis.
+
+Here is a way to declare:
+
+```{r declare2}
+return_type function_name(parameter_list, ...)
+```
+
+The ellipsis captures additional arguments and it like an array that contains the parameters
+
+### An ellipsis example
+
+We write a program to return an average of a list of integer.
+
+```{r mean_ellipsis}
+
+#include <cstdarg>	// use ellipsis: std::va_list, va_start, va_arg, va_end
+#include <iostream>
+
+auto mean(int count, ...)
+{
+	int sum{ 0 };
+
+	std::va_list list;
+	
+	va_start(list, count);
+
+	for (int i{ 0 }; i < count; ++i)
+	{
+		sum += va_arg(list, int);	#// va_arg: point to the next arg in list
+	}
+
+	va_end(list);
+
+	return static_cast<double>(sum) / count;
+}
+
+int main()
+{
+	std::cout << "mean: " << mean(5, 1, 2, 3, 4, 5) << '\n';
+
+	return 0;
+}
+```
+
+### Why using ellipsis is dangerous
+
+* Type checking on the parameters is suspended. In some cases, our program will just produce garbage or crash.
+* Ellipsis don't know how many parameters were passed. Thus, to keep track of parameters' numbers, there are three ways:
+    
+    - Method 1: Pass a length parameter like above example
+    - Method 2: use a sentinel value. A *sentinel* value terminates a loop when it is encountered such as `\0` for string. For ellipsis,the sentinel is passed in as the last parameter.For example, we assign `-1` to the last parameter in ellipsis:
+    
+```{r sentinel}
+
+#include <cstdarg>	// use ellipsis: std::va_list, va_start, va_arg, va_end
+#include <iostream>
+
+auto mean(int first, ...)
+{
+	int sum{ first };
+
+	std::va_list list;
+	
+	va_start(list, first);
+	
+	int count{ 1 };
+
+	while (true)
+	{
+		int arg{ va_arg(list, int) };
+
+		if (arg == -1)
+			break;
+
+		sum += arg;
+		++count;
+	}
+
+	va_end(list);
+
+	return static_cast<double>(sum) / count;
+}
+
+int main()
+{
+	std::cout << "mean: " << mean(1, 2, 3, 4, 5, -1) << '\n';
+
+	return 0;
+}
+```
+
+## Introduction to lambdas (anonymous functions)
+
+**Lambda expression** allows us to define an anonymous function inside another function. This is the structure:
+
+```{r}
+[ capture clause] (parameters) -> returnType(#//optional)
+    {
+        statements;
+    }
+```
+
+Here is an example:
+
+```{r found_string}
+
+#include <algorithm>
+#include <array>
+#include <string_view>
+#include <iostream>
+
+int main()
+{
+	constexpr std::array<std::string_view, 4> arr{ "apple", "banana", "walnut", "lemon" };
+
+	const auto found
+	{
+		std::find_if
+		(
+			arr.begin(), arr.end(),
+			[](std::string_view str)
+			{
+				return (str.find("nut") != std::string_view::npos);
+			}
+		)
+	};
+
+	if (found == arr.end())
+		std::cout << "Cannot found\n";
+	else
+	{
+		std::cout << "Found " << *found << '\n';
+	}
+
+	return 0;
+}
+
+```
+
+### Type of a lambda
+
+Like in the above example, we defined lambda right where it was needed; we called this **function literal**.
+
+We can make the code clearer by initializing a **lambda variable** with a **lambda definition** and then use it later. 
+
+Here is an example for lambda variable named `l_found`:
+
+```{r lambda_var}
+
+auto l_found
+{
+	[](std::string_view str)
+	{
+		return (str.find("nut") != std::string_view::npos);
+	}
+};
+
+#// Then we use it in function `find_if`
+const auto found{ std::find_if(arr.begin(), arr.end(), l_found) };
+```
+
+Lambda does not have a type that we can explicitly use. Lambda is not a function (to avoid the limitation of C++ not supporting nested functions). Lambda is a special kind of object called **functor**, with an overloaded `operator()` callable like a function.
+
+If the *capture clause* is empty, we can use normal function pointer, `std::function` or type deduction `auto` (from C++20) to define lambda variable. Here is an example:
+
+```{r auto_std_function}
+
+#include <functional>
+#include <iostream>
+
+int main()
+{
+	std::function add_number
+	{
+		[](double a, double b)
+		{
+			return a + b;
+		}
+	};
+
+	add_number(2, 3);
+
+	auto add_number2{
+		[](double a, double b) {
+			return a + b;
+		}
+	};
+
+	add_number2(5, 6);
+}
+
+```
+In cases, we pass lambda to a function's parameter, we define the function parameter by `std::function` which works with regular functions and lambdas:
+
+```{r pass_to_function}
+
+void repeat(int repetitions, const std::function<void(int)>& fn)
+{
+	for (int i{ 0 }; i < repetitions; ++i)
+	{
+		fn(i);
+	}
+}
+
+int main()
+{
+	auto l_print{
+		[](int i) {
+			std::cout << i << '\n';
+		}
+	};
+	
+	repeat(5, [](int i) {
+		std::cout << i << '\n';
+		});
+
+	repeat(2, l_print); #// From C++20
+
+	return 0;
+}
+```
+
+:::{.callout-tip}
+
+When storing a lambda in a variable, use `auto`.
+
+When passing a lambda to a function:
+
+* If C++20, use `auto` as parameter's type
+* Otherwise, use `std::function`.
+
+:::
+
+### Generic lambdas
+
+We can use `auto` keyword for the parameters in the lambda. This is call **generic lambdas**.
+
+#### Return type deduction and trailing return types
+
+If in lambda, we call `return` keyword more than one times and the return types are different. It is better to explicitly specify return type for the lambda.
+
+Here is an example from using **lambdas**:
+
+```{r sorting_seasons}
+
+#include <iostream>
+#include <algorithm>
+#include <array>
+#include <string_view>
+
+struct Season 
+{
+	std::string_view name{};
+	double averageTemperature{};
+};
+
+int main()
+{
+	std::array<Season, 4> seasons{
+		{
+			{ "Spring", 285.0 },
+			{ "Summer", 296.0 },
+			{ "Fall", 288.0 },
+			{ "Winter", 263.0 }
+		}
+	};
+
+	std::sort(seasons.begin(), seasons.end(),
+		[](Season& a, Season& b) {
+			return a.averageTemperature < b.averageTemperature;
+		});
+
+	for (const auto& season : seasons)
+	{
+		std::cout << season.name << '\n';
+	}
+}
+```
+
+## Lambda capture
+
+If we want a program that allows user to give a string to search for, this variable is known at the *run-time*, not compile time.
+
+The nested block can access variables in the outer blocks, but lambda can only access variables either global identifiers, or known at the compile time. Thus, we cannot write this program without using **capture clause**.
+
+### Capture clause
+
+This gives a lambda access to variables available in the surrounding scope that it normally would not have access to. Here is the code:
+
+```{r}
+
+#include <algorithm>
+#include <iostream>
+#include <string>
+#include <array>
+#include <string_view>
+
+int main()
+{
+	std::array<std::string_view, 4> arr{ "apple", "banana", "walnut", "lemon" };
+
+	std::cout << "Search for: ";
+
+	std::string search{};
+	std::cin >> search;
+
+	auto found{ std::find_if(arr.begin(), arr.end(), [search](std::string_view str) {
+		return (str.find(search) != std::string_view::npos);
+	})
+	};
+
+	if (found == arr.end())
+	{
+		std::cout << "Not found\n";
+	}
+	else
+	{
+		std::cout << "Found " << *found << '\n';
+	}
+
+	return 0;
+}
+```
+
+The capture variables are **clones** of the outer scope variables, not **actual variables**. It may not have the same type as the original variable.
+
+When lambda captures, it captures `const value`. It cannot modify the capture variables; if we do that inside lambda, there is compile error.
+
+```{r ilegal_change_capture}
+
+#include <iostream>
+
+int main()
+{
+  int ammo{ 10 };
+
+  #// Define a lambda and store it in a variable called "shoot".
+  auto shoot{
+    [ammo]() {
+      #// Illegal, ammo was captured as a const copy.
+      --ammo;
+
+      std::cout << "Pew! " << ammo << " shot(s) left.\n";
+    }
+  };
+
+  #// Call the lambda
+  shoot();
+
+  std::cout << ammo << " shot(s) left\n";
+
+  return 0;
+}
+```
+
+If we want to modify the captures, we have to use keyword `mutable`:
+
+```{r mutable}
+
+#include <iostream>
+
+int main()
+{
+	int amo{ 10 };
+
+	auto shoot{
+		[amo]() mutable {
+			--amo;
+
+			std::cout << "Pew!" << amo << " shot(s) left.\n";
+		}
+	};
+
+	shoot();
+	shoot();
+
+	std::cout << amo << " outer\n";
+
+	return 0;
+}
+
+#> 9
+#> 8
+#> 10
+```
+
+:::{.callout-warning}
+
+Remember that, captures is a copy of original ones, thus we just changed copier's value inside lambda, the original does not change.
+
+Secondly, capture is a member of lambda object, so its value are persisted across multiple calls to the lambda!
+
+:::
+
+### Capture by reference
+
+Like normal variable, we can capture by reference using `&`; we prefer this whenever we capture *non-fundamental data types*. We modify the code above for reference to `amo`:
+
+```{r capture_reference}
+
+#include <iostream>
+
+int main()
+{
+	int amo{ 10 };
+
+	auto shoot{
+		[&amo]() {
+			--amo;
+
+			std::cout << "Pew!" << amo << " shot(s) left.\n";
+		}
+	};
+
+	shoot();
+	shoot();
+
+	std::cout << amo << " outer\n";
+
+	return 0;
+}
+
+#> 9
+#> 8
+#> 8
+```
+
+
+Here is another example:
+
+```{r capture_ref_2}
+
+#include <iostream>
+#include <algorithm>
+#include <array>
+#include <string>
+
+struct Car
+{
+	std::string make{};
+	std::string model{};
+};
+
+int main()
+{
+	std::array<Car, 3> cars{
+		{
+			{ "Volkswagen", "Golf" },
+			{ "Toyota", "Corolla" },
+			{ "Honda", "Civic" }
+		}
+	};
+
+	int comparision{ 0 };
+
+	std::sort(cars.begin(), cars.end(),
+		[&comparision](const Car& a, const Car& b) {
+			
+			++comparision;
+
+			return a.make < b.make;
+		}
+	);
+
+	std::cout << "Comparisions: " << comparision << '\n';
+
+	for (const auto& car : cars)
+		std::cout << car.make << ' ' << car.model << '\n';
+
+	std::cout << '\n';
+
+	return 0;
+}
+```
+
+We can capture multiple variables by using commas `,`.
+
+### Default capture
+
+A **default capture** captures all variables that are mentioned inside lambda.
+
+* To capture all used variables by value, we use `=`.
+* To capture all used variables by reference, we use `&`.
+* We can mixed normal capture and default capture. But put default capture before normal one
+
+The code below is an example:
+
+```{r default_cap}
+
+#include <iostream>
+#include <array>
+
+int main()
+{
+	std::array areas{ 100, 25, 121, 40, 56 };
+
+	int width{};
+	int heigth{};
+
+	std::cout << "Enter width and height: ";
+	std::cin >> width >> heigth;
+
+	auto found{ std::find_if(areas.begin(), areas.end(),
+		[=](int known_area) { // will default capture width and heigth by value
+			return (width * heigth == known_area);
+		})
+	};
+
+	if (found == areas.end())
+		std::cout << "Cannot found.\n";
+	else
+		std::cout << "Area found.\n";
+
+	return 0;
+}
+```
+
+Here is the mixing rules:
+
+```{r mixing_cap}
+
+int health{ 33 };
+int armor{ 100 };
+std::vector<CEnemy> enemies{};
+
+#// Capture health and armor by value, and enemies by reference.
+[health, armor, &enemies](){};
+
+#// Capture enemies by reference and everything else by value.
+[=, &enemies](){};
+
+#// Capture armor by value and everything else by reference.
+[&, armor](){};
+
+#// Illegal, we already said we want to capture everything by reference.
+[&, &armor](){};
+
+#// Illegal, we already said we want to capture everything by value.
+[=, armor](){};
+
+#// Illegal, armor appears twice.
+[armor, &health, &armor](){};
+
+#// Illegal, the default capture has to be the first element in the capture group.
+[armor, &](){};
+```
+
+We can define a new variable inside the capture. This variable is only visible to the lambda. Only define if its value is short and their type is obvious, otherwise, best to define outside of the lambda and capture it.
+
+:::{.callout-warning}
+
+Be extra careful when you capture variables by reference, especially with a default reference capture. The captured variables must outlive the lambda.
+
+:::
+
+### Unintended copies of mutable lambdas
+
+Lambda is an object, it can be copied; this property sometimes causes problems.
+

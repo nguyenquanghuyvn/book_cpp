@@ -1051,13 +1051,14 @@ Error handling: gracefully handle case that could happen (rarely). There may or 
 #### `static_assert`
 
 A `static_assert` checks the condition at the compile-time. It formula is `static_assert(condition, diagnostic_message)`.
+
 ## Introduction to random numer generation
 
 Computer are generally incapable of generating truly random numbers. It simulates randomness using an algorithm.
 
 ### Algorithms and state
 
-#### Algorithm:
+**Algorithm**:
 
 *   It is an instruction's sequence to solve a demand and provide useful results.
 *   It is reusable
@@ -1114,6 +1115,147 @@ When PRNG is instantiated, an initial value called a **random seed** can be prov
 * It should represent the distribution of number
 * It should have a high period for all seed
     - All PRNG are periodic: the sequence of numbers will repeated itself. The length of sequence before a PRNG begins to repeat itself is known as the **period**.
+* It should be efficient
+    
+   
+
+
+### Randomization in C++
+
+We use via `<random>` header with the following PRNG families:
+
+![PRNG families in C++](figure/prng_cpp.PNG){width=120%}
+
+### Generating random numbers using Mersenne Twister
+
+We use the `<ramdon>` header. There are two Mersenne Twister types:
+
+* `mt19937`: generates 32-bit unsigned integer
+* `mt19937_64`: generates 64-bit unsigned integer
+
+```{r example-mt19937}
+
+#include <random>
+
+int randomMT()
+{
+	std::mt19937 mt{};
+
+	for (int count{ 1 }; count <= 40; ++count)
+	{
+		std::cout << mt() << '\t';
+
+		if (count % 5 == 0)
+			std::cout << '\n';
+	}
+
+	return 0;
+}
+
+```
+
+#### Rolling a dice using MT
+
+We use the **uniform distribution** that produces output between two numbers X and Y with equal probability.
+
+Here is the code:
+
+```{r}
+#include <random>
+#include <iostream>
+
+void dice()
+{
+	std::mt19937 mt{};
+
+	std::uniform_int_distribution die6{ 1, 6 };
+
+	for (int count{ 1 }; count <= 40; ++count)
+	{
+		std::cout << die6(mt) << '\t';
+
+		if (count % 5 == 0)
+			std::cout << '\n';
+	}
+}
+```
+
+The dice sequence is not random. If we ran many times, we see that it is the same because we initialized our MT so it has the same seed every time the program is run.
+
+To deal with this we usually use the seed from:
+
+* The system clock
+* The system's random device
+
+#### Seeding with the system clock
+
+We use the system clock to initialize the seed for PRNG. This is from the `<chrono>` header and the function `static_cast<unsigned int>(std::chrono::steady_clock::now().time_since_epoch().count())`. Let see the example below:
+
+```{r random-systemClock}
+
+void diceSystemClock()
+{
+	std::mt19937 mt{ static_cast<unsigned int>(
+		std::chrono::steady_clock::now().time_since_epoch().count()
+		) };
+
+	std::uniform_int_distribution die6{ 1, 6 };
+
+	for (int count{ 1 }; count <= 40; ++count)
+	{
+		std::cout << die6(mt) << '\t';
+
+		if (count % 10 == 0)
+			std::cout << '\n';
+	}
+}
+```
+
+#### Seeding with the random device
+
+We use the code `std::random_device()`. It will ask the OS for a random number. One potential *problem* is that it it not required to be non-deterministic. But, the lasted version support proper implementation of `std::random_device()`.
+
+:::{.callout-tip}
+
+Use `std::random_device()` to seed PRNGs.
+
+Only seed a given PRNG once, do not reseed it.
+
+:::
+
+```{r repeated-seed}
+
+int getCard()
+{
+	std::mt19937 mt{ std::random_device{}() };
+	std::uniform_int_distribution card{ 1, 52 };
+
+	return card(mt);
+}
+```
+
+Everytime we call `getCard()`, the program creates a new seed. This is inefficient at best and cause poor random results.
+
+#### Random numbers across multiple functions
+
+To use this, we create an `std::mt19937` object with `std:random_device()` in a namespace. This is an exception that we use non-const global variables.
+
+```{r}
+
+#include <random>
+#include <iostream>
+
+namespace Random
+{
+    std::mt19937 mt{std::random_device{}()};
+    
+    int get(int min, int max)
+    {
+        std::uniform_int_distribution die{min, max};
+        return die(mt);
+    }
     
     
+}
+```
 

@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Tutorial on C++ - 13&nbsp; Function</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./summary.html" rel="next">
+<link href="./c11_arrays_1.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Function</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Tutorial on C++</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./intro.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C1_Introduction.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Introduction to C++</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./C2_function_file.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Funtions and Files</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c3_data_type.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Fundamental Data Types</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c4_debug.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Debugging C++ Programs</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c5_operators.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Operators</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c6_scope_duration_linkage.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Scope, duration and linkage</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c7_flow_error.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Control flow and Error Handling</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c8_implicit_conversion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Type conversion and Funcion Overloading</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c9_intro_compound_data.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Introduction to compound data types</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c10_enums_structs.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Compound Types: Enums and Structs</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c11_arrays_1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Arrays (Part 1)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./c12_function.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Function</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./summary.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Summary</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#function-pointers" id="toc-function-pointers" class="nav-link active" data-scroll-target="#function-pointers"><span class="toc-section-number">13.1</span>  Function pointers</a>
+  <ul class="collapse">
+  <li><a href="#passing-functions-as-arguments-to-other-functions" id="toc-passing-functions-as-arguments-to-other-functions" class="nav-link" data-scroll-target="#passing-functions-as-arguments-to-other-functions">Passing functions as arguments to other functions</a></li>
+  <li><a href="#using-stdfunction" id="toc-using-stdfunction" class="nav-link" data-scroll-target="#using-stdfunction">Using <code>std::function</code></a></li>
+  <li><a href="#exercsise" id="toc-exercsise" class="nav-link" data-scroll-target="#exercsise">Exercsise</a></li>
+  </ul></li>
+  <li><a href="#the-stack-and-the-heap" id="toc-the-stack-and-the-heap" class="nav-link" data-scroll-target="#the-stack-and-the-heap"><span class="toc-section-number">13.2</span>  The stack and the heap</a>
+  <ul class="collapse">
+  <li><a href="#the-heap-segment" id="toc-the-heap-segment" class="nav-link" data-scroll-target="#the-heap-segment">The heap segment</a></li>
+  <li><a href="#the-call-stack" id="toc-the-call-stack" class="nav-link" data-scroll-target="#the-call-stack">The call stack</a></li>
+  </ul></li>
+  <li><a href="#stdvector-capacity-and-stack-behavior" id="toc-stdvector-capacity-and-stack-behavior" class="nav-link" data-scroll-target="#stdvector-capacity-and-stack-behavior"><span class="toc-section-number">13.3</span>  <code>std::vector</code> capacity and stack behavior</a>
+  <ul class="collapse">
+  <li><a href="#stack-behavior-with-stdvector" id="toc-stack-behavior-with-stdvector" class="nav-link" data-scroll-target="#stack-behavior-with-stdvector">Stack behavior with <code>std::vector</code></a></li>
+  </ul></li>
+  <li><a href="#recursion" id="toc-recursion" class="nav-link" data-scroll-target="#recursion"><span class="toc-section-number">13.4</span>  Recursion</a></li>
+  <li><a href="#command-line-arguments" id="toc-command-line-arguments" class="nav-link" data-scroll-target="#command-line-arguments"><span class="toc-section-number">13.5</span>  Command line arguments</a>
+  <ul class="collapse">
+  <li><a href="#using-command-line-arguments" id="toc-using-command-line-arguments" class="nav-link" data-scroll-target="#using-command-line-arguments">Using command line arguments</a></li>
+  </ul></li>
+  <li><a href="#ellisis-and-why-to-avoid-them" id="toc-ellisis-and-why-to-avoid-them" class="nav-link" data-scroll-target="#ellisis-and-why-to-avoid-them"><span class="toc-section-number">13.6</span>  Ellisis (and why to avoid them)</a>
+  <ul class="collapse">
+  <li><a href="#an-ellipsis-example" id="toc-an-ellipsis-example" class="nav-link" data-scroll-target="#an-ellipsis-example">An ellipsis example</a></li>
+  <li><a href="#why-using-ellipsis-is-dangerous" id="toc-why-using-ellipsis-is-dangerous" class="nav-link" data-scroll-target="#why-using-ellipsis-is-dangerous">Why using ellipsis is dangerous</a></li>
+  </ul></li>
+  <li><a href="#introduction-to-lambdas-anonymous-functions" id="toc-introduction-to-lambdas-anonymous-functions" class="nav-link" data-scroll-target="#introduction-to-lambdas-anonymous-functions"><span class="toc-section-number">13.7</span>  Introduction to lambdas (anonymous functions)</a>
+  <ul class="collapse">
+  <li><a href="#type-of-a-lambda" id="toc-type-of-a-lambda" class="nav-link" data-scroll-target="#type-of-a-lambda">Type of a lambda</a></li>
+  <li><a href="#generic-lambdas" id="toc-generic-lambdas" class="nav-link" data-scroll-target="#generic-lambdas">Generic lambdas</a></li>
+  </ul></li>
+  <li><a href="#lambda-capture" id="toc-lambda-capture" class="nav-link" data-scroll-target="#lambda-capture"><span class="toc-section-number">13.8</span>  Lambda capture</a>
+  <ul class="collapse">
+  <li><a href="#capture-clause" id="toc-capture-clause" class="nav-link" data-scroll-target="#capture-clause">Capture clause</a></li>
+  <li><a href="#capture-by-reference" id="toc-capture-by-reference" class="nav-link" data-scroll-target="#capture-by-reference">Capture by reference</a></li>
+  <li><a href="#default-capture" id="toc-default-capture" class="nav-link" data-scroll-target="#default-capture">Default capture</a></li>
+  <li><a href="#unintended-copies-of-mutable-lambdas" id="toc-unintended-copies-of-mutable-lambdas" class="nav-link" data-scroll-target="#unintended-copies-of-mutable-lambdas">Unintended copies of mutable lambdas</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Function</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="function-pointers" class="level2" data-number="13.1">
+<h2 data-number="13.1" class="anchored" data-anchor-id="function-pointers"><span class="header-section-number">13.1</span> Function pointers</h2>
+<p>Let consider the following function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">foo</span>()</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">5</span>;</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> foo <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;   <span class="co">#// print function's address</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> reinterpret_cast<span class="sc">&lt;</span>void<span class="sc">*</span><span class="er">&gt;</span>(foo) <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">#// force the compiler print function's address</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 00009F3CB</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Identifer <code>foo</code> is the function’s name. It has its own <code>l-value</code> function type which is function that return an <code>int</code> and takes no parameters.</p>
+<p>Like a variable, system <strong>assigns an address to a function</strong>.</p>
+<p>When we use the <code>operator()</code>, the program jumps to an address of called function to execute. If we send a function without calling it (omit the operator<code>()</code>) to <code>std::cout</code>, we get function’s address instead. We added an example to the chunk <code>foo</code> above.</p>
+<section id="pointers-to-functions" class="level4">
+<h4 class="anchored" data-anchor-id="pointers-to-functions">Pointers to functions</h4>
+<p>Here is a code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">int</span> (<span class="sc">*</span>fcnPtr)()</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#// this is a pointer to a function that takes no parameter and return an integer</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#// remember to put in parentheses</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">int</span> (<span class="sc">*</span>const fcnPtr)();</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#// const function pointer</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="assigning-a-function-to-a-function-pointer" class="level4">
+<h4 class="anchored" data-anchor-id="assigning-a-function-to-a-function-pointer">Assigning a function to a function pointer</h4>
+<p>Function pointers can be initialized with a function (a non-const function pointer can be assgined a function).</p>
+<p>The pointer function has to same return type and parameters with the function pointed. Here is an example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">foo</span>()</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">5</span>;</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>double <span class="fu">goo</span>()</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    return <span class="fl">6.0</span>;</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>int <span class="fu">hoo</span>(int x)</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    return x;</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> foo <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">int</span> (<span class="sc">*</span>f_ptr1)() { <span class="sc">&amp;</span>foo };</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">double</span> (<span class="sc">*</span>f_ptr2)() { <span class="sc">&amp;</span>goo };</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">int</span> (<span class="sc">*</span>f_ptr3)(int) { <span class="sc">&amp;</span>hoo };</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">#// C++ implicitly convert a function into a function pointer</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">int</span> (<span class="sc">*</span>f_ptr4)(){foo};   <span class="co">#// do not need use "&amp;"</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Function pointers can also be initialzed or assgined to <code>nullptr</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">int</span> (<span class="sc">*</span>fcnptr)() {nullptr};</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="calling-a-function-using-a-function-pointer" class="level4">
+<h4 class="anchored" data-anchor-id="calling-a-function-using-a-function-pointer">Calling a function using a function pointer</h4>
+<p>There are two ways: explicit dereference and implicit dereference. Here is the code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#// Explicitly:</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>(<span class="sc">*</span>f_ptr3)(<span class="dv">5</span>);</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#// Implicitly:</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">f_ptr3</span>(<span class="dv">5</span>);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Note:</strong> the default parameter cannot work with function call by a pointer. Because default parameter is evaluated at compile-time, while function pointers are at run-time. We need to explicitly give the value to the function pointers.</p>
+</section>
+<section id="passing-functions-as-arguments-to-other-functions" class="level3">
+<h3 class="anchored" data-anchor-id="passing-functions-as-arguments-to-other-functions">Passing functions as arguments to other functions</h3>
+<p>We can <strong>pass a function as an argument of other function</strong>, that arguments is <strong>callback functions</strong>.</p>
+<p>With this, we can make a function more flexible by letting user’s put their function. An example for this is the <em>sorting function</em>.</p>
+<p>We write a sorting program that allow the users to sort the list ascending or descending. This function use a function as its parameter; the callback function work on how to sort the list by varying the comparison between two elements.</p>
+<p>This is a code that does not use the function pointer:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;utility&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>bool <span class="fu">ascending</span>(int x, int y)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    return x <span class="sc">&gt;</span> y;</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>void <span class="fu">selection_sort</span>( int<span class="sc">*</span> array, int size )</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (int start_index{ <span class="dv">0</span> }; start_index <span class="sc">&lt;</span> size <span class="sc">-</span> <span class="dv">1</span>; <span class="sc">++</span>start_index)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        int smallest_index{ start_index };</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (int current_index{ start_index <span class="sc">+</span> <span class="dv">1</span> }; current_index <span class="sc">&lt;</span> size; <span class="sc">++</span>current_index)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (<span class="fu">ascending</span>(array[smallest_index], array[current_index]))</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>                smallest_index <span class="ot">=</span> current_index;</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span><span class="fu">swap</span>(array[start_index], array[smallest_index]);</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We want the caller decide how the sorting will be done, we can use the function pointer. In the above code, the comparison returns a boolean object, thus we create a pointer to a boolean function that takes two <code>int</code> parameters:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bool</span> (<span class="sc">*</span>compare_fcn)(int, int)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Thus we rewrite the code as:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;utility&gt;  #\\ using the `std::swap`</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>bool <span class="fu">ascending</span>(int x, int y)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    return x <span class="sc">&gt;</span> y;</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>bool <span class="fu">descending</span>(int x, int y)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    return x <span class="sc">&lt;</span> y;</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">#// We can add many customization function:</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>bool <span class="fu">even_first</span>(int x, int y)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> ((x <span class="sc">% 2 == 0) &amp;&amp; !(y %</span> <span class="dv">2</span> <span class="sc">==</span> <span class="dv">0</span>))</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>        return false;</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span>(x <span class="sc">% 2 == 0) &amp;&amp; (y %</span> <span class="dv">2</span> <span class="sc">==</span> <span class="dv">0</span>))</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>        return true;</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>    return <span class="fu">ascending</span>(x, y);</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>void <span class="fu">selection_sort</span>( int<span class="sc">*</span> array, int size, <span class="fu">bool</span> (<span class="sc">*</span>compare_fcn)(int, int))</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (int start_index{ <span class="dv">0</span> }; start_index <span class="sc">&lt;</span> size <span class="sc">-</span> <span class="dv">1</span>; <span class="sc">++</span>start_index)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>        int smallest_index{ start_index };</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> (int current_index{ start_index <span class="sc">+</span> <span class="dv">1</span> }; current_index <span class="sc">&lt;</span> size; <span class="sc">++</span>current_index)</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> (<span class="fu">compare_fcn</span>(array[smallest_index], array[current_index]))</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>                smallest_index <span class="ot">=</span> current_index;</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span><span class="fu">swap</span>(array[start_index], array[smallest_index]);</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>    int array[<span class="dv">11</span>]{ <span class="dv">3</span>, <span class="dv">7</span>, <span class="dv">0</span> ,<span class="dv">5</span> ,<span class="dv">8</span>, <span class="dv">9</span> ,<span class="dv">10</span>, <span class="dv">2</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">15</span> };</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>    <span class="fu">selection_sort</span>(array, <span class="dv">11</span>, ascending);</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(array, <span class="dv">11</span>);</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>    <span class="fu">selection_sort</span>(array, <span class="dv">11</span>, descending);</span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(array, <span class="dv">11</span>);</span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>    <span class="fu">selection_sort</span>(array, <span class="dv">11</span>, even_first);</span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print</span>(array, <span class="dv">11</span>);</span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can provide <strong>default functions</strong> to a function pointer parameter:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>void <span class="fu">selection_sort</span>( int<span class="sc">*</span> array, int size, <span class="fu">bool</span> (<span class="sc">*</span>compare_fcn)(int, int) <span class="ot">=</span> ascending);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can make function pointer prettier with type aliases:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#// Name alias for function pointer type</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>using Validate_fcn <span class="ot">=</span> <span class="fu">bool</span>(<span class="sc">*</span>)(int, int);</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#// The the sorting function is rewrite as:</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>void <span class="fu">selection_sort</span>( int<span class="sc">*</span> array, int size, Validate_fcn <span class="at">pfcn =</span> ascending);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="using-stdfunction" class="level3">
+<h3 class="anchored" data-anchor-id="using-stdfunction">Using <code>std::function</code></h3>
+<p>We use <code>std::function</code> from header <code>functional</code> header like this:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;functional&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>std<span class="sc">::</span><span class="cf">function</span><span class="sc">&lt;</span><span class="fu">bool</span>(int, int) <span class="sc">&gt;</span> fcnPtr{};</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>fcnPtr <span class="ot">=</span> <span class="er">&amp;</span>ascending;</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#// Using alias name for clear code</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>using validate_fcn <span class="ot">=</span> std<span class="sc">::</span><span class="cf">function</span><span class="sc">&lt;</span><span class="fu">bool</span>(int, int)<span class="sc">&gt;</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We only use implicit dereference with <code>std::function</code>.</p>
+<p>From C++17, compiler can deduce the return type and parameter of pointer function from pointed function initializer. But, this does not work with <em>type alias</em>.</p>
+<p>We can use keyword <code>auto</code> with function pointer, but this is not recommended because we easily make mistakes.</p>
+</section>
+<section id="exercsise" class="level3">
+<h3 class="anchored" data-anchor-id="exercsise">Exercsise</h3>
+<p>Here is the full code of the exercise for this session:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;functional&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;cassert&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>struct Inputs</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    int first{};</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    int second{};</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    char op{};</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>};</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>int <span class="fu">get_integer</span>()</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>    int x{};</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cin <span class="sc">&gt;</span><span class="er">&gt;</span> x;</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> (std<span class="sc">::</span><span class="fu">cin.fail</span>())</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span><span class="fu">cin.clear</span>();</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span><span class="fu">cin.ignore</span>(std<span class="sc">::</span>numeric_limits<span class="sc">&lt;</span>std<span class="sc">::</span>streamsize<span class="sc">&gt;</span><span class="er">::</span><span class="fu">max</span>(), <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>);</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout </span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>            <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Invalid integer. "</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>            <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Please enter again your integer: "</span>;</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cin <span class="sc">&gt;</span><span class="er">&gt;</span> x;</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span><span class="fu">cin.ignore</span>(std<span class="sc">::</span>numeric_limits<span class="sc">&lt;</span>std<span class="sc">::</span>streamsize<span class="sc">&gt;</span><span class="er">::</span><span class="fu">max</span>(), <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>);</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>    return x;</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a>auto <span class="fu">get_operator</span>()</span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>    char op{};</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>    do</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Please enter your operators ( +, -, *, /): "</span>;</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cin <span class="sc">&gt;</span><span class="er">&gt;</span> op;</span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">while</span> (op <span class="sc">!=</span> <span class="st">'+'</span> <span class="sc">&amp;&amp;</span> op <span class="sc">!=</span> <span class="st">'-'</span> <span class="sc">&amp;&amp;</span> op <span class="sc">!=</span> <span class="st">'*'</span> <span class="sc">&amp;&amp;</span> op <span class="sc">!=</span> <span class="st">'/'</span>);</span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>    return op;</span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>Then, we create a function to take the operator:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>auto <span class="fu">add</span>(int x, int y)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    return x <span class="sc">+</span> y;</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>auto <span class="fu">substract</span>(int x, int y)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    return x <span class="sc">-</span> y;</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>auto <span class="fu">multiply</span>(int x, int y)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>    return x <span class="sc">*</span> y;</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>auto <span class="fu">divide</span>(int x, int y)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">assert</span>(y <span class="sc">!=</span> <span class="dv">0</span> <span class="sc">&amp;&amp;</span> <span class="st">"Cannot devide by zero! Return error."</span>);</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>    return x <span class="sc">/</span> y;</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Create a pointer function to get the arithmetic function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>using Arithmetic_fcn <span class="ot">=</span> std<span class="sc">::</span><span class="cf">function</span><span class="sc">&lt;</span><span class="fu">int</span>(int, int)<span class="sc">&gt;</span>;</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>Arithmetic_fcn <span class="fu">get_arithmetic_fcn</span>(char op)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span> (op)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    case <span class="st">'+'</span><span class="sc">:</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>        return <span class="sc">&amp;</span>add;</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    case <span class="st">'-'</span><span class="sc">:</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>        return <span class="sc">&amp;</span>substract;</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>    case <span class="st">'*'</span><span class="sc">:</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>        return  <span class="sc">&amp;</span>multiply;</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    case <span class="st">'/'</span><span class="sc">:</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>        return <span class="sc">&amp;</span>divide;</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    default<span class="sc">:</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>        return nullptr;</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Please enter your first integer: "</span>;</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>    auto first{ <span class="fu">get_integer</span>() };</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Please enter your second integer: "</span>;</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    auto second{ <span class="fu">get_integer</span>() };</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Please enter your operator: "</span>;</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>    auto op{ <span class="fu">get_operator</span>() };</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>    Arithmetic_fcn fcn{ <span class="fu">get_arithmetic_fcn</span>(op) };</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (fcn)</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>            <span class="sc">&lt;</span><span class="er">&lt;</span> first <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">' '</span> <span class="sc">&lt;</span><span class="er">&lt;</span> op <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">' '</span> <span class="sc">&lt;</span><span class="er">&lt;</span> second <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" = "</span></span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>            <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="fu">fcn</span>(first, second) <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Error: cannot execute your request.</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="the-stack-and-the-heap" class="level2" data-number="13.2">
+<h2 data-number="13.2" class="anchored" data-anchor-id="the-stack-and-the-heap"><span class="header-section-number">13.2</span> The stack and the heap</h2>
+<section id="the-heap-segment" class="level3">
+<h3 class="anchored" data-anchor-id="the-heap-segment">The heap segment</h3>
+<p><strong>Heap segment</strong> (also called “free store”) keeps track of memory used for <em>dynamic memory allocation</em>.</p>
+<p>In C, using <code>new</code> operator results in the allocation in <em>heap segment</em>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>int<span class="sc">*</span> ptr{new int};</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>int<span class="sc">*</span> array{new int[<span class="dv">10</span>]}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Subsequent call the memory allocation, does not guarantee sequential memory address. For example, <code>ptr</code> and <code>array</code> may not have sequential addresses.</p>
+<p>The heap has advantage and disadvantages:</p>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<section id="avantages" class="level4 quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<h4 class="anchored" data-anchor-id="avantages">Avantages</h4>
+<ul>
+<li>Do not need to assign size at the compile time</li>
+<li>Large arrays, structures, or classes can be allocated there.</li>
+</ul>
+</section>
+<section id="disavantages" class="level4 quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<h4 class="anchored" data-anchor-id="disavantages">Disavantages</h4>
+<ul>
+<li>Comparatively slow</li>
+<li>Need to be deallocated or application ends</li>
+<li>Must be accessed through a pointer</li>
+</ul>
+</section>
+</div>
+</div>
+</section>
+<section id="the-call-stack" class="level3">
+<h3 class="anchored" data-anchor-id="the-call-stack">The call stack</h3>
+<p>The <strong>call stack</strong> keeps track of all the active functions from the start of the program to the current point of execution, and handles allocation of all function parameters and local variables.</p>
+<p>It is a <em>stack data structure</em>.</p>
+<section id="the-stack-data-structure" class="level4">
+<h4 class="anchored" data-anchor-id="the-stack-data-structure">The stack data structure</h4>
+<p>A <strong>data structure</strong> is a programming mechanism for organizing data so that it can be used efficiently.</p>
+<p>Example of data structure is arrays and structs. And <strong>stack</strong> is one of these.</p>
+<p>Let image stack as a stack of plates. In computer programming, a stack contains multiple variables (much like an array). A stack is more limited that we can not access and modify as we wish. We only perform on stack three things:</p>
+<ol type="1">
+<li>Look at the top item on the stack: <code>top()</code> or sometimes <code>peek()</code>.</li>
+<li>Take the top item off of the stack: <code>pop()</code>.</li>
+<li>Put a new item on top of the stack: <code>push()</code>.</li>
+</ol>
+<p>A stack is “last-in, first-out”. Let use an analogy: mailboxes. Each mailbox holds one item, they are stacked together. Each mailbox nails to the mailbox below, so the number of mailboxes cannot be changed.</p>
+<p>We use a <em>marker</em> to keep track of where the bottom-most empty mailbox is. When we push an item onto our mailbox stack, we put in the mailbox that is marked, and move the marker up on mailbox; when we pop an item off, we move the <em>marker</em> down one mailbox</p>
+<p>Anything below the mailbox is <strong>on the stack</strong>; anything at the marker or above the marker is <strong>not on the stack</strong>.</p>
+<p>When program encounter a function call, it pushes the function onto the call stack. When a function ends, function is popped off the call stack. We see all of the functions that were called to get to the current point of execution.</p>
+<p>The stack itself is a fixed-sized chunk of memory addresses. The mailboxes are memory addresses, and the items pushing or popping out on the stack are call <strong>stack frame</strong>.</p>
+<p>A stack frame keeps track of all of data associated with one function call. The “marker” is a register as a the stack pointer.</p>
+</section>
+<section id="the-call-stack-in-action" class="level4">
+<h4 class="anchored" data-anchor-id="the-call-stack-in-action">The call stack in action</h4>
+<p>When a function is called:</p>
+<ol type="1">
+<li>The program encounters a function call</li>
+<li>A <strong>stack frame</strong> is constructed and pushed on the stack. The stack frame consists of:
+<ul>
+<li><strong>Return address</strong>: the address of the instruction where to return after the called function exits.</li>
+<li>All functions arguments</li>
+<li>Memory fo any local variables</li>
+<li>Saved copies of any registers modified by the function that need to be restored when the function returns.</li>
+</ul></li>
+<li>The CPU jumps to the function’s start point</li>
+<li>The instructions inside of the function begin executing.</li>
+</ol>
+<p>When the function terminates:</p>
+<ol start="5" type="1">
+<li>Registers are restored from the call stack</li>
+<li>The stack frame is popped off the stack (free local variables, arguments).</li>
+<li>The return value is handled</li>
+<li>The CPU resumes executions at the return address.</li>
+</ol>
+</section>
+<section id="stack-overflow" class="level4">
+<h4 class="anchored" data-anchor-id="stack-overflow">Stack overflow</h4>
+<p><strong>Stack overflow</strong> happens when all the memory in the stack has been allocated.</p>
+</section>
+</section>
+</section>
+<section id="stdvector-capacity-and-stack-behavior" class="level2" data-number="13.3">
+<h2 data-number="13.3" class="anchored" data-anchor-id="stdvector-capacity-and-stack-behavior"><span class="header-section-number">13.3</span> <code>std::vector</code> capacity and stack behavior</h2>
+<p><code>std::vector</code> is a dynamic array that both remembers its length and be resized as required. This array has another attribute, it is <strong>capacity</strong>: how many elements were allocated in memory; <strong>length</strong> is how many elements are being used in the array.</p>
+<p>Look at the code below to see the difference between <strong>length</strong> and <strong>capacity</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;vector&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>vector<span class="sc">&lt;</span>int<span class="sc">&gt;</span> array{};</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    array <span class="ot">=</span> { <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span> };   <span class="sc">/</span><span class="er">/</span> array of length <span class="dv">5</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Length :"</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="fu">array.size</span>()</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">". Capacity: "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="fu">array.capacity</span>() <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>    array <span class="ot">=</span> { <span class="dv">9</span>, <span class="dv">8</span>, <span class="dv">7</span> };</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Length :"</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="fu">array.size</span>()</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">". Capacity: "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="fu">array.capacity</span>() <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Length: 6. Capacity: 6</span></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Length: 3. Capacity: 6</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Notice that range for subscript operator(<code>[]</code>) and <code>at()</code> is from vector’s length, not the capacity.</p>
+<section id="stack-behavior-with-stdvector" class="level3">
+<h3 class="anchored" data-anchor-id="stack-behavior-with-stdvector">Stack behavior with <code>std::vector</code></h3>
+<p><code>std::vector</code> can also be used as a stack with 3 functions:</p>
+<ul>
+<li><code>push_back()</code>: pushes an element on the stack</li>
+<li><code>back()</code>: returns the value of the top element on the stack</li>
+<li><code>pop_back()</code>: pops an element off the stack</li>
+</ul>
+<p>Unlike the array subscript or <code>at()</code>, the stack-based function resizes the <code>std::vector</code> if necessary. But, resizing is expensive. We avoid by allocating a certain amount of <strong>capacity up front</strong> using the function <code>reserve()</code> function.</p>
+<p>Here is a code for the above ideas:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;vector&gt;</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>void <span class="fu">print_stack</span>(const std<span class="sc">::</span>vector<span class="sc">&lt;</span>int<span class="sc">&gt;</span><span class="er">&amp;</span> stack)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (auto element <span class="sc">:</span> stack)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> element <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">' '</span>;</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout </span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"(cap "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="fu">stack.capacity</span>() </span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>        <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" length "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="fu">stack.size</span>() <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">")</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>vector<span class="sc">&lt;</span>int<span class="sc">&gt;</span> stack{};</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stack.reserve</span>(<span class="dv">5</span>);</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print_stack</span>(stack);</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stack.push_back</span>(<span class="dv">5</span>);</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print_stack</span>(stack);</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stack.push_back</span>(<span class="dv">4</span>);</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print_stack</span>(stack);</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stack.push_back</span>(<span class="dv">3</span>);</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print_stack</span>(stack);</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"top: "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="fu">stack.back</span>() <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stack.pop_back</span>();</span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print_stack</span>(stack);</span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stack.pop_back</span>();</span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>    <span class="fu">print_stack</span>(stack);</span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>When vector resizes, it may allocate more capacity than needed; this is called “breathing room”. For example, when we use the <code>push_back()</code> another element, it would not need to resize immediately.</p>
+</section>
+</section>
+<section id="recursion" class="level2" data-number="13.4">
+<h2 data-number="13.4" class="anchored" data-anchor-id="recursion"><span class="header-section-number">13.4</span> Recursion</h2>
+<p>A <strong>recursion function</strong> in C++ is a function that calls itself. It works like a normal function, but we must include a <strong>recursive termination condition</strong>, or they will run “forever”.</p>
+<p>A <strong>recursive termination</strong> is condition that, when met, will cause the recursive function to stop calling itself. We usually use the <code>if statement</code>.</p>
+<p>Here is the example code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>void <span class="fu">count_down</span>(int count)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"push "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> count <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (count <span class="sc">&gt;</span> <span class="dv">1</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">count_down</span>(count <span class="sc">-</span> <span class="dv">1</span>);</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"pop: "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> count <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">count_down</span>(<span class="dv">5</span>);</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; push 5</span></span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; push 4</span></span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; push 3</span></span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; push 2</span></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; push 1</span></span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; pop 1</span></span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; pop 2</span></span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; pop 3</span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; pop 4</span></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; pop 5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here is another example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>auto <span class="fu">sum_to</span>(int sumto)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (sumto <span class="sc">&lt;=</span> <span class="dv">0</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>        return <span class="dv">0</span>;</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (sumto <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>        return <span class="dv">1</span>;</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    return <span class="fu">sum_to</span>(sumto <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">+</span> sumto;</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Recursion uses to catch the fibonacci numbers:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>auto <span class="fu">fibonacci</span>(int count)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (count <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>        return <span class="dv">0</span>;</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (count <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>        return <span class="dv">1</span>;</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>    return <span class="fu">fibonacci</span>(count <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="fu">fibonacci</span>(count <span class="sc">-</span> <span class="dv">2</span>);</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The above code call too many functions, so it is inefficiently. One technique called, <strong>memorization</strong>, caches the results of expensive function calls so the results can be returned when the same input occurs again:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>int <span class="fu">fibonacci_memo</span>(int count)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    static std<span class="sc">::</span>vector results{ <span class="dv">0</span>, <span class="dv">1</span> };</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (count <span class="sc">&lt;</span> static_cast<span class="sc">&lt;</span>int<span class="sc">&gt;</span>(std<span class="sc">::</span><span class="fu">size</span>(results)))</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>        return results[count];</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">results.push_back</span>(<span class="fu">fibonacci_memo</span>(count <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">+</span> <span class="fu">fibonacci</span>(count <span class="sc">-</span> <span class="dv">2</span>));</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    return results[count];</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (int count{ <span class="dv">0</span> }; count <span class="sc">&lt;</span> <span class="dv">15</span>; <span class="sc">++</span>count)</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="fu">fibonacci_memo</span>(count) <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">' '</span>;</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The recursion is a good choice when most of following are true:</p>
+<ul>
+<li>The code is much simpler to implement</li>
+<li>The recursion depth can be limited</li>
+<li>The iterative version of the algorithm requires managing stack of data</li>
+<li>This is not a performance-critical section of code</li>
+</ul>
+</section>
+<section id="command-line-arguments" class="level2" data-number="13.5">
+<h2 data-number="13.5" class="anchored" data-anchor-id="command-line-arguments"><span class="header-section-number">13.5</span> Command line arguments</h2>
+<p>When a program is run, execution starts at the top of the function <code>main()</code>. We have seen that <code>main()</code> takes no parameters. However, some programs need parameters to run.</p>
+<p><strong>Command line arguments</strong> are optional string arguments that are passed by the operating system to the program when it is launched. The program can use them as inputs or ignore them.</p>
+<p>Muck like function parameters provide a way for a function to provide inputs to another functions, command line arguments provide a way for people or programs to provide inputs to a program.</p>
+<section id="using-command-line-arguments" class="level3">
+<h3 class="anchored" data-anchor-id="using-command-line-arguments">Using command line arguments</h3>
+<p>After providing the command line arguments, we can access them from C++ program. We define a new form of <code>main()</code> such as</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>(int argc, char<span class="sc">*</span> argv[])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><strong>argc</strong> is an integer containing the count of the number of arguments passed to the program.</li>
+<li><strong>argv</strong> is where the actual argument values are stored as an array of C-style strings, the length of array is <code>argc</code>.</li>
+</ul>
+<p>Here is a simple program use the command line:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>(int argc, char<span class="sc">*</span> argv[])</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"There are "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> argc <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" arguments:</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (int count{ <span class="dv">0</span> }; count <span class="sc">&lt;</span><span class="er">&lt;</span> argc; <span class="sc">++</span>count)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> count <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">' '</span> <span class="sc">&lt;</span><span class="er">&lt;</span> argv[count] <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The command line arguments are as strings, if we want to use them as numeric type, we need to cover it.</p>
+<p>Here is an example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#// Program: MyArgs</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;sstream&gt;      // use std::stringstream</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;string&gt;</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>(int argc, char<span class="sc">*</span> argv[])</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"There are "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> argc <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" arguments:</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (argc <span class="sc">&lt;=</span> <span class="dv">1</span>)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (argv[<span class="dv">0</span>])</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>            std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Usage: "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> argv[<span class="dv">0</span>] <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"&lt;number&gt;"</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>            std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Usage: &lt;program name&gt; &lt;number&gt;"</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>        return <span class="dv">1</span>;</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>stringstream covert{ argv[<span class="dv">1</span>] };</span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>    int my_int{};</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span>(covert <span class="sc">&gt;</span><span class="er">&gt;</span> my_int))</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>        my_int <span class="ot">=</span> <span class="dv">0</span>;</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Got integer: "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> my_int <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="ellisis-and-why-to-avoid-them" class="level2" data-number="13.6">
+<h2 data-number="13.6" class="anchored" data-anchor-id="ellisis-and-why-to-avoid-them"><span class="header-section-number">13.6</span> Ellisis (and why to avoid them)</h2>
+<p>The number of function’s parameters must be known in advance. But, some cases where it can be useful to be able to pass a variable number of parameters. C++ provide a special specifier known as ellipsis <code>...</code> to do it precisely.</p>
+<p>The authors recommended avoid using ellipsis.</p>
+<p>Here is a way to declare:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>return_type <span class="fu">function_name</span>(parameter_list, ...)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The ellipsis captures additional arguments and it like an array that contains the parameters</p>
+<section id="an-ellipsis-example" class="level3">
+<h3 class="anchored" data-anchor-id="an-ellipsis-example">An ellipsis example</h3>
+<p>We write a program to return an average of a list of integer.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;cstdarg&gt;  // use ellipsis: std::va_list, va_start, va_arg, va_end</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>auto <span class="fu">mean</span>(int count, ...)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    int sum{ <span class="dv">0</span> };</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>va_list list;</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">va_start</span>(list, count);</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (int i{ <span class="dv">0</span> }; i <span class="sc">&lt;</span> count; <span class="sc">++</span>i)</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>        sum <span class="sc">+</span><span class="er">=</span> <span class="fu">va_arg</span>(list, int);   <span class="co">#// va_arg: point to the next arg in list</span></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">va_end</span>(list);</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>    return static_cast<span class="sc">&lt;</span>double<span class="sc">&gt;</span>(sum) <span class="sc">/</span> count;</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"mean: "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="fu">mean</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>) <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb26-27"><a href="#cb26-27" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="why-using-ellipsis-is-dangerous" class="level3">
+<h3 class="anchored" data-anchor-id="why-using-ellipsis-is-dangerous">Why using ellipsis is dangerous</h3>
+<ul>
+<li><p>Type checking on the parameters is suspended. In some cases, our program will just produce garbage or crash.</p></li>
+<li><p>Ellipsis don’t know how many parameters were passed. Thus, to keep track of parameters’ numbers, there are three ways:</p>
+<ul>
+<li>Method 1: Pass a length parameter like above example</li>
+<li>Method 2: use a sentinel value. A <em>sentinel</em> value terminates a loop when it is encountered such as <code>\0</code> for string. For ellipsis,the sentinel is passed in as the last parameter.For example, we assign <code>-1</code> to the last parameter in ellipsis:</li>
+</ul></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;cstdarg&gt;  // use ellipsis: std::va_list, va_start, va_arg, va_end</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>auto <span class="fu">mean</span>(int first, ...)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    int sum{ first };</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>va_list list;</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">va_start</span>(list, first);</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>    int count{ <span class="dv">1</span> };</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> (true)</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>        int arg{ <span class="fu">va_arg</span>(list, int) };</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (arg <span class="sc">==</span> <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span>;</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>        sum <span class="sc">+</span><span class="er">=</span> arg;</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>        <span class="sc">++</span>count;</span>
+<span id="cb27-23"><a href="#cb27-23" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb27-24"><a href="#cb27-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-25"><a href="#cb27-25" aria-hidden="true" tabindex="-1"></a>    <span class="fu">va_end</span>(list);</span>
+<span id="cb27-26"><a href="#cb27-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-27"><a href="#cb27-27" aria-hidden="true" tabindex="-1"></a>    return static_cast<span class="sc">&lt;</span>double<span class="sc">&gt;</span>(sum) <span class="sc">/</span> count;</span>
+<span id="cb27-28"><a href="#cb27-28" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb27-29"><a href="#cb27-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-30"><a href="#cb27-30" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb27-31"><a href="#cb27-31" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb27-32"><a href="#cb27-32" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"mean: "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="fu">mean</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="sc">-</span><span class="dv">1</span>) <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb27-33"><a href="#cb27-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-34"><a href="#cb27-34" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb27-35"><a href="#cb27-35" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="introduction-to-lambdas-anonymous-functions" class="level2" data-number="13.7">
+<h2 data-number="13.7" class="anchored" data-anchor-id="introduction-to-lambdas-anonymous-functions"><span class="header-section-number">13.7</span> Introduction to lambdas (anonymous functions)</h2>
+<p><strong>Lambda expression</strong> allows us to define an anonymous function inside another function. This is the structure:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>[ capture clause] (parameters) <span class="ot">-&gt;</span> <span class="fu">returnType</span>(<span class="co">#//optional)</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>        statements;</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here is an example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;algorithm&gt;</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;array&gt;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;string_view&gt;</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    constexpr std<span class="sc">::</span>array<span class="sc">&lt;</span>std<span class="sc">::</span>string_view, <span class="dv">4</span><span class="sc">&gt;</span> arr{ <span class="st">"apple"</span>, <span class="st">"banana"</span>, <span class="st">"walnut"</span>, <span class="st">"lemon"</span> };</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>    const auto found</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>find_if</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>        (</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>            <span class="fu">arr.begin</span>(), <span class="fu">arr.end</span>(),</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>            [](std<span class="sc">::</span>string_view str)</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>            {</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>                <span class="fu">return</span> (<span class="fu">str.find</span>(<span class="st">"nut"</span>) <span class="sc">!=</span> std<span class="sc">::</span>string_view<span class="sc">::</span>npos);</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>    };</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (found <span class="sc">==</span> <span class="fu">arr.end</span>())</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Cannot found</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Found "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="er">*</span>found <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="type-of-a-lambda" class="level3">
+<h3 class="anchored" data-anchor-id="type-of-a-lambda">Type of a lambda</h3>
+<p>Like in the above example, we defined lambda right where it was needed; we called this <strong>function literal</strong>.</p>
+<p>We can make the code clearer by initializing a <strong>lambda variable</strong> with a <strong>lambda definition</strong> and then use it later.</p>
+<p>Here is an example for lambda variable named <code>l_found</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>auto l_found</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    [](std<span class="sc">::</span>string_view str)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span> (<span class="fu">str.find</span>(<span class="st">"nut"</span>) <span class="sc">!=</span> std<span class="sc">::</span>string_view<span class="sc">::</span>npos);</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>};</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="co">#// Then we use it in function `find_if`</span></span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>const auto found{ std<span class="sc">::</span><span class="fu">find_if</span>(<span class="fu">arr.begin</span>(), <span class="fu">arr.end</span>(), l_found) };</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Lambda does not have a type that we can explicitly use. Lambda is not a function (to avoid the limitation of C++ not supporting nested functions). Lambda is a special kind of object called <strong>functor</strong>, with an overloaded <code>operator()</code> callable like a function.</p>
+<p>If the <em>capture clause</em> is empty, we can use normal function pointer, <code>std::function</code> or type deduction <code>auto</code> (from C++20) to define lambda variable. Here is an example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;functional&gt;</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span><span class="cf">function</span> add_number</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>        [](double a, double b)</span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>            return a <span class="sc">+</span> b;</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>    };</span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_number</span>(<span class="dv">2</span>, <span class="dv">3</span>);</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>    auto add_number2{</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>        [](double a, double b) {</span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>            return a <span class="sc">+</span> b;</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a>    };</span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">add_number2</span>(<span class="dv">5</span>, <span class="dv">6</span>);</span>
+<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In cases, we pass lambda to a function’s parameter, we define the function parameter by <code>std::function</code> which works with regular functions and lambdas:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>void <span class="cf">repeat</span>(int repetitions, const std<span class="sc">::</span><span class="cf">function</span><span class="sc">&lt;</span><span class="fu">void</span>(int)<span class="sc">&gt;</span><span class="er">&amp;</span> fn)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (int i{ <span class="dv">0</span> }; i <span class="sc">&lt;</span> repetitions; <span class="sc">++</span>i)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">fn</span>(i);</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a>    auto l_print{</span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>        [](int i) {</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>            std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> i <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>    };</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">repeat</span>(<span class="dv">5</span>, [](int i) {</span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> i <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>        });</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">repeat</span>(<span class="dv">2</span>, l_print); <span class="co">#// From C++20</span></span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout-tip callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>When storing a lambda in a variable, use <code>auto</code>.</p>
+<p>When passing a lambda to a function:</p>
+<ul>
+<li>If C++20, use <code>auto</code> as parameter’s type</li>
+<li>Otherwise, use <code>std::function</code>.</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<section id="generic-lambdas" class="level3">
+<h3 class="anchored" data-anchor-id="generic-lambdas">Generic lambdas</h3>
+<p>We can use <code>auto</code> keyword for the parameters in the lambda. This is call <strong>generic lambdas</strong>.</p>
+<section id="return-type-deduction-and-trailing-return-types" class="level4">
+<h4 class="anchored" data-anchor-id="return-type-deduction-and-trailing-return-types">Return type deduction and trailing return types</h4>
+<p>If in lambda, we call <code>return</code> keyword more than one times and the return types are different. It is better to explicitly specify return type for the lambda.</p>
+<p>Here is an example from using <strong>lambdas</strong>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;algorithm&gt;</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;array&gt;</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;string_view&gt;</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>struct Season </span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>string_view name{};</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    double averageTemperature{};</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>};</span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>array<span class="sc">&lt;</span>Season, <span class="dv">4</span><span class="sc">&gt;</span> seasons{</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>            { <span class="st">"Spring"</span>, <span class="fl">285.0</span> },</span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>            { <span class="st">"Summer"</span>, <span class="fl">296.0</span> },</span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>            { <span class="st">"Fall"</span>, <span class="fl">288.0</span> },</span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>            { <span class="st">"Winter"</span>, <span class="fl">263.0</span> }</span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a>    };</span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span><span class="fu">sort</span>(<span class="fu">seasons.begin</span>(), <span class="fu">seasons.end</span>(),</span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>        [](Season<span class="sc">&amp;</span> a, Season<span class="sc">&amp;</span> b) {</span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>            return a.averageTemperature <span class="sc">&lt;</span> b.averageTemperature;</span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>        });</span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (const auto<span class="sc">&amp;</span> season <span class="sc">:</span> seasons)</span>
+<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> season.name <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="lambda-capture" class="level2" data-number="13.8">
+<h2 data-number="13.8" class="anchored" data-anchor-id="lambda-capture"><span class="header-section-number">13.8</span> Lambda capture</h2>
+<p>If we want a program that allows user to give a string to search for, this variable is known at the <em>run-time</em>, not compile time.</p>
+<p>The nested block can access variables in the outer blocks, but lambda can only access variables either global identifiers, or known at the compile time. Thus, we cannot write this program without using <strong>capture clause</strong>.</p>
+<section id="capture-clause" class="level3">
+<h3 class="anchored" data-anchor-id="capture-clause">Capture clause</h3>
+<p>This gives a lambda access to variables available in the surrounding scope that it normally would not have access to. Here is the code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;algorithm&gt;</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;string&gt;</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;array&gt;</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;string_view&gt;</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>array<span class="sc">&lt;</span>std<span class="sc">::</span>string_view, <span class="dv">4</span><span class="sc">&gt;</span> arr{ <span class="st">"apple"</span>, <span class="st">"banana"</span>, <span class="st">"walnut"</span>, <span class="st">"lemon"</span> };</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Search for: "</span>;</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>string search{};</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cin <span class="sc">&gt;</span><span class="er">&gt;</span> search;</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>    auto found{ std<span class="sc">::</span><span class="fu">find_if</span>(<span class="fu">arr.begin</span>(), <span class="fu">arr.end</span>(), [search](std<span class="sc">::</span>string_view str) {</span>
+<span id="cb34-17"><a href="#cb34-17" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span> (<span class="fu">str.find</span>(search) <span class="sc">!=</span> std<span class="sc">::</span>string_view<span class="sc">::</span>npos);</span>
+<span id="cb34-18"><a href="#cb34-18" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb34-19"><a href="#cb34-19" aria-hidden="true" tabindex="-1"></a>    };</span>
+<span id="cb34-20"><a href="#cb34-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-21"><a href="#cb34-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (found <span class="sc">==</span> <span class="fu">arr.end</span>())</span>
+<span id="cb34-22"><a href="#cb34-22" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb34-23"><a href="#cb34-23" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Not found</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb34-24"><a href="#cb34-24" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb34-25"><a href="#cb34-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb34-26"><a href="#cb34-26" aria-hidden="true" tabindex="-1"></a>    {</span>
+<span id="cb34-27"><a href="#cb34-27" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Found "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="er">*</span>found <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb34-28"><a href="#cb34-28" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb34-29"><a href="#cb34-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-30"><a href="#cb34-30" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb34-31"><a href="#cb34-31" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The capture variables are <strong>clones</strong> of the outer scope variables, not <strong>actual variables</strong>. It may not have the same type as the original variable.</p>
+<p>When lambda captures, it captures <code>const value</code>. It cannot modify the capture variables; if we do that inside lambda, there is compile error.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  int ammo{ <span class="dv">10</span> };</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#// Define a lambda and store it in a variable called "shoot".</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  auto shoot{</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>    [ammo]() {</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>      <span class="co">#// Illegal, ammo was captured as a const copy.</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>      <span class="sc">--</span>ammo;</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>      std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Pew! "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> ammo <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" shot(s) left.</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>  };</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>  <span class="co">#// Call the lambda</span></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">shoot</span>();</span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>  std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> ammo <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" shot(s) left</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>  return <span class="dv">0</span>;</span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If we want to modify the captures, we have to use keyword <code>mutable</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    int amo{ <span class="dv">10</span> };</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>    auto shoot{</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>        [amo]() mutable {</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>            <span class="sc">--</span>amo;</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>            std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Pew!"</span> <span class="sc">&lt;</span><span class="er">&lt;</span> amo <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" shot(s) left.</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>    };</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">shoot</span>();</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">shoot</span>();</span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> amo <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" outer</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9</span></span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8</span></span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout-warning callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Remember that, captures is a copy of original ones, thus we just changed copier’s value inside lambda, the original does not change.</p>
+<p>Secondly, capture is a member of lambda object, so its value are persisted across multiple calls to the lambda!</p>
+</div>
+</div>
+</div>
+</section>
+<section id="capture-by-reference" class="level3">
+<h3 class="anchored" data-anchor-id="capture-by-reference">Capture by reference</h3>
+<p>Like normal variable, we can capture by reference using <code>&amp;</code>; we prefer this whenever we capture <em>non-fundamental data types</em>. We modify the code above for reference to <code>amo</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    int amo{ <span class="dv">10</span> };</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    auto shoot{</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>        [<span class="sc">&amp;</span>amo]() {</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>            <span class="sc">--</span>amo;</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>            std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Pew!"</span> <span class="sc">&lt;</span><span class="er">&lt;</span> amo <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" shot(s) left.</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>    };</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">shoot</span>();</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">shoot</span>();</span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> amo <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">" outer</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 9</span></span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8</span></span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 8</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here is another example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;algorithm&gt;</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;array&gt;</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;string&gt;</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>struct Car</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>string make{};</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>string model{};</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>};</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>array<span class="sc">&lt;</span>Car, <span class="dv">3</span><span class="sc">&gt;</span> cars{</span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>        {</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>            { <span class="st">"Volkswagen"</span>, <span class="st">"Golf"</span> },</span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>            { <span class="st">"Toyota"</span>, <span class="st">"Corolla"</span> },</span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>            { <span class="st">"Honda"</span>, <span class="st">"Civic"</span> }</span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a>    };</span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a>    int comparision{ <span class="dv">0</span> };</span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span><span class="fu">sort</span>(<span class="fu">cars.begin</span>(), <span class="fu">cars.end</span>(),</span>
+<span id="cb38-25"><a href="#cb38-25" aria-hidden="true" tabindex="-1"></a>        [<span class="sc">&amp;</span>comparision](const Car<span class="sc">&amp;</span> a, const Car<span class="sc">&amp;</span> b) {</span>
+<span id="cb38-26"><a href="#cb38-26" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb38-27"><a href="#cb38-27" aria-hidden="true" tabindex="-1"></a>            <span class="sc">++</span>comparision;</span>
+<span id="cb38-28"><a href="#cb38-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-29"><a href="#cb38-29" aria-hidden="true" tabindex="-1"></a>            return a.make <span class="sc">&lt;</span> b.make;</span>
+<span id="cb38-30"><a href="#cb38-30" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb38-31"><a href="#cb38-31" aria-hidden="true" tabindex="-1"></a>    );</span>
+<span id="cb38-32"><a href="#cb38-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-33"><a href="#cb38-33" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Comparisions: "</span> <span class="sc">&lt;</span><span class="er">&lt;</span> comparision <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb38-34"><a href="#cb38-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-35"><a href="#cb38-35" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (const auto<span class="sc">&amp;</span> car <span class="sc">:</span> cars)</span>
+<span id="cb38-36"><a href="#cb38-36" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> car.make <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">' '</span> <span class="sc">&lt;</span><span class="er">&lt;</span> car.model <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb38-37"><a href="#cb38-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-38"><a href="#cb38-38" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">'</span><span class="sc">\n</span><span class="st">'</span>;</span>
+<span id="cb38-39"><a href="#cb38-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-40"><a href="#cb38-40" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb38-41"><a href="#cb38-41" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can capture multiple variables by using commas <code>,</code>.</p>
+</section>
+<section id="default-capture" class="level3">
+<h3 class="anchored" data-anchor-id="default-capture">Default capture</h3>
+<p>A <strong>default capture</strong> captures all variables that are mentioned inside lambda.</p>
+<ul>
+<li>To capture all used variables by value, we use <code>=</code>.</li>
+<li>To capture all used variables by reference, we use <code>&amp;</code>.</li>
+<li>We can mixed normal capture and default capture. But put default capture before normal one</li>
+</ul>
+<p>The code below is an example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;iostream&gt;</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="co">#include &lt;array&gt;</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>int <span class="fu">main</span>()</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>array areas{ <span class="dv">100</span>, <span class="dv">25</span>, <span class="dv">121</span>, <span class="dv">40</span>, <span class="dv">56</span> };</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>    int width{};</span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a>    int heigth{};</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Enter width and height: "</span>;</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a>    std<span class="sc">::</span>cin <span class="sc">&gt;</span><span class="er">&gt;</span> width <span class="sc">&gt;</span><span class="er">&gt;</span> heigth;</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>    auto found{ std<span class="sc">::</span><span class="fu">find_if</span>(<span class="fu">areas.begin</span>(), <span class="fu">areas.end</span>(),</span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>        [<span class="ot">=</span>](int known_area) { <span class="sc">/</span><span class="er">/</span> will default capture width and heigth by value</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>            <span class="fu">return</span> (width <span class="sc">*</span> heigth <span class="sc">==</span> known_area);</span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>        })</span>
+<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a>    };</span>
+<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-20"><a href="#cb39-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (found <span class="sc">==</span> <span class="fu">areas.end</span>())</span>
+<span id="cb39-21"><a href="#cb39-21" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Cannot found.</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb39-22"><a href="#cb39-22" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb39-23"><a href="#cb39-23" aria-hidden="true" tabindex="-1"></a>        std<span class="sc">::</span>cout <span class="sc">&lt;</span><span class="er">&lt;</span> <span class="st">"Area found.</span><span class="sc">\n</span><span class="st">"</span>;</span>
+<span id="cb39-24"><a href="#cb39-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-25"><a href="#cb39-25" aria-hidden="true" tabindex="-1"></a>    return <span class="dv">0</span>;</span>
+<span id="cb39-26"><a href="#cb39-26" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here is the mixing rules:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>int health{ <span class="dv">33</span> };</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>int armor{ <span class="dv">100</span> };</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>std<span class="sc">::</span>vector<span class="sc">&lt;</span>CEnemy<span class="sc">&gt;</span> enemies{};</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="co">#// Capture health and armor by value, and enemies by reference.</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>[health, armor, <span class="sc">&amp;</span>enemies](){};</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="co">#// Capture enemies by reference and everything else by value.</span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>[<span class="ot">=</span>, <span class="sc">&amp;</span>enemies](){};</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="co">#// Capture armor by value and everything else by reference.</span></span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>[<span class="sc">&amp;</span>, armor](){};</span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a><span class="co">#// Illegal, we already said we want to capture everything by reference.</span></span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>[<span class="sc">&amp;</span>, <span class="sc">&amp;</span>armor](){};</span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a><span class="co">#// Illegal, we already said we want to capture everything by value.</span></span>
+<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a>[<span class="ot">=</span>, armor](){};</span>
+<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a><span class="co">#// Illegal, armor appears twice.</span></span>
+<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>[armor, <span class="sc">&amp;</span>health, <span class="sc">&amp;</span>armor](){};</span>
+<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a><span class="co">#// Illegal, the default capture has to be the first element in the capture group.</span></span>
+<span id="cb40-24"><a href="#cb40-24" aria-hidden="true" tabindex="-1"></a>[armor, <span class="sc">&amp;</span>](){};</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can define a new variable inside the capture. This variable is only visible to the lambda. Only define if its value is short and their type is obvious, otherwise, best to define outside of the lambda and capture it.</p>
+<div class="callout-warning callout callout-style-simple">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Be extra careful when you capture variables by reference, especially with a default reference capture. The captured variables must outlive the lambda.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="unintended-copies-of-mutable-lambdas" class="level3">
+<h3 class="anchored" data-anchor-id="unintended-copies-of-mutable-lambdas">Unintended copies of mutable lambdas</h3>
+<p>Lambda is an object, it can be copied; this property sometimes causes problems.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./c11_arrays_1.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Arrays (Part 1)</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./summary.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Summary</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
